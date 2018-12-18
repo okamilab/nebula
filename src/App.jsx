@@ -7,7 +7,7 @@ import {
 import Account from './components/Account';
 import ContactList from './components/ContactList';
 import Chat from './components/Chat';
-import { addContact, getContact } from './storage';
+import { get, set } from './storage';
 import './App.css';
 import logo from './logo.png';
 
@@ -62,10 +62,12 @@ class App extends Component {
     await client.pss.setPeerPublicKey(key, contactTopic);
     const message = {
       type: 'contact_request',
-      username: undefined,
-      message: 'test',
-      topic: sharedTopic,
-      overlay_address: account.overlayAddress,
+      payload: {
+        username: undefined,
+        message: 'test',
+        topic: sharedTopic,
+        overlay_address: account.overlayAddress,
+      },
       utc_timestamp: Date.now()
     };
     await client.pss.sendAsym(key, contactTopic, message);
@@ -88,7 +90,7 @@ class App extends Component {
         <Container fluid>
           <Row>
             <Col sm={4}>
-              <Account account={account} /> 
+              <Account account={account} />
               <ContactList onContactRequest={this.onContactRequest} />
             </Col>
             <Col sm={8}>

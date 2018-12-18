@@ -52,6 +52,7 @@ class ContactInvite extends Component {
                 onClick={(e) => {
                   e.stopPropagation();
                   this.props.onRequest(e, this.state.publicKey);
+                  //TODO: close modal when everything is ok, if not, show error message
                 }}>Send Request</Button>
             </ModalFooter>
           </Form>

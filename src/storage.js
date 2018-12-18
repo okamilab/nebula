@@ -1,10 +1,10 @@
 
 export default {
-    addContact(data) {
+    set(data) {
         localStorage.setItem('swarm_messenger', data);
     },
 
-    getContact() {
+    get() {
         localStorage.setItem('swarm_messenger');
     }
 }
