@@ -1,10 +1,13 @@
+const STORAGE_KEY = 'swarm_messenger';
 
 export default {
     set(data) {
-        localStorage.setItem('swarm_messenger', data);
+        const value = JSON.stringify(data);
+        localStorage.setItem(STORAGE_KEY, value);
     },
 
     get() {
-        localStorage.setItem('swarm_messenger');
+        const value = localStorage.getItem(STORAGE_KEY);
+        return JSON.parse(value || '{}');
     }
 }

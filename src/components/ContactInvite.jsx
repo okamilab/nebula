@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {
   Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  Form, FormGroup, Label, Input
+  Form, FormGroup, Label, Input, Alert
 } from 'reactstrap';
 
 class ContactInvite extends Component {
@@ -9,7 +9,8 @@ class ContactInvite extends Component {
     super(props);
     this.state = {
       modal: false,
-      publicKey: ''
+      publicKey: '',
+      error: ''
     };
 
     this.toggle = this.toggle.bind(this);
@@ -31,11 +32,12 @@ class ContactInvite extends Component {
   render() {
     return (
       <Fragment>
-        <Button color="primary" onClick={this.toggle} block>Invite contact</Button>
+        <Button color="primary" onClick={this.toggle} size="sm" className="float-right">+ Invite contact</Button>
         <Modal isOpen={this.state.modal} centered>
           <Form className="pt-3">
             <ModalHeader>Invite contact</ModalHeader>
             <ModalBody>
+              {this.state.error ? <Alert color="danger">{this.state.error}</Alert> : null}
               <FormGroup>
                 <Label for="contactPublicKey">Contact public key</Label>
                 <Input
@@ -49,10 +51,13 @@ class ContactInvite extends Component {
             <ModalFooter>
               <Button color="light" onClick={this.toggle}>Cancel</Button>
               <Button color="primary"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
-                  this.props.onRequest(e, this.state.publicKey);
-                  //TODO: close modal when everything is ok, if not, show error message
+
+                  const { error } = await this.props.onRequest(e, this.state.publicKey);
+                  if (error) {
+                    this.setState({ error });
+                  }
                 }}>Send Request</Button>
             </ModalFooter>
           </Form>
