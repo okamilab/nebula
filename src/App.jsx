@@ -12,6 +12,7 @@ import ChatsIcon from './components/ChatsIcon';
 import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
+import { groupBy } from './base/fn';
 
 import './App.css';
 import logo from './logo.png';
@@ -28,6 +29,8 @@ class App extends Component {
     };
 
     this.onContactRequest = this.onContactRequest.bind(this);
+    this.onAcceptContact = this.onAcceptContact.bind(this);
+    this.onDeclineContact = this.onDeclineContact.bind(this);
   }
 
   async init() {
@@ -53,8 +56,7 @@ class App extends Component {
     keyUtils.isValidPubKey(value, account.publicKey, contacts);
 
     const key = hexValueType(value);
-    const { contactTopic, sharedTopic } =
-      await this.messenger.sendContactRequest(key, account.overlayAddress);
+    const { contactTopic, sharedTopic } = await this.messenger.sendContactRequest(key);
 
     const list = [
       ...contacts,
@@ -76,9 +78,35 @@ class App extends Component {
     return sharedTopic;
   }
 
-  onReceiveContactEvent = (e) => {
-    console.log("onReceiveContactEvent", e);
+  async sendContactResponse(key, accepted) {
+    await this.messenger.sendContactResponse(key, accepted);
 
+    const { account, contacts } = this.state;
+    const existing = contacts.find(c => c.key === key);
+
+    const contact = {
+      ...existing,
+      type: accepted ? 'added' : 'received_declined'
+    }
+
+    const list = [...contacts.filter(c => c.key !== key), contact];
+    this.setState({ contacts: list });
+    storage.set({
+      [account.publicKey]: {
+        contacts: list
+      }
+    });
+  }
+
+  async onAcceptContact(key) {
+    await this.sendContactResponse(key, true);
+  }
+
+  async onDeclineContact(key) {
+    await this.sendContactResponse(key, false);
+  }
+
+  onReceiveContactEvent = (e) => {
     const { account, contacts } = this.state;
     const existing = contacts.find(c => c.key === e.key);
 
@@ -111,9 +139,6 @@ class App extends Component {
         username: e.payload.username,
         address: e.payload.overlay_address,
       }
-      // if (contact.type === 'added') {
-      //   createChat = contact
-      // }
 
       list = [...contacts.filter(c => c.key !== e.key), contact];
     } else {
@@ -131,7 +156,8 @@ class App extends Component {
   }
 
   render() {
-    const { account } = this.state;
+    const { account, contacts } = this.state;
+    const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
 
     return (
       <Fragment>
@@ -153,7 +179,7 @@ class App extends Component {
                 borderBottomStyle: 'solid'
               }} className='pt-4' fill>
                 <NavItem className='p-2' style={{ background: '#282c34' }}>
-                  <ContactsIcon active></ContactsIcon>
+                  <ContactsIcon active requests={requests}></ContactsIcon>
                 </NavItem>
                 <NavItem className='p-2'>
                   <ChatsIcon></ChatsIcon>
@@ -161,7 +187,9 @@ class App extends Component {
               </Nav>
               <ContactList
                 list={this.state.contacts}
-                onContactRequest={this.onContactRequest} />
+                onContactRequest={this.onContactRequest}
+                onAcceptContact={this.onAcceptContact}
+                onDeclineContact={this.onDeclineContact} />
             </Col>
             <Col lg={9} md={8}>
               <Chat />

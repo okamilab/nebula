@@ -35,7 +35,7 @@ export default class Messanger {
       .slice(2);
   }
 
-  async sendContactRequest(key, overlayAddress) {
+  async sendContactRequest(key) {
     const [contactTopic, sharedTopic] = await Promise.all([
       this.client.pss.stringToTopic(key),
       this.client.pss.stringToTopic(this.createRandomString()),
@@ -48,13 +48,35 @@ export default class Messanger {
         username: undefined,
         message: 'Hi there',
         topic: sharedTopic,
-        overlay_address: overlayAddress,
+        overlay_address: this.account.overlayAddress,
       },
       utc_timestamp: Date.now()
     };
     await this.client.pss.sendAsym(key, contactTopic, message);
 
     return { contactTopic, sharedTopic };
+  }
+
+  async sendContactResponse(key, accept, data = {}) {
+    let payload
+    if (accept) {
+      payload = {
+        contact: true,
+        overlay_address: this.account.overlayAddress,
+        username: data.username,
+      };
+    } else {
+      payload = { contact: false };
+    }
+
+    const topic = await this.client.pss.stringToTopic(key);
+    await this.client.pss.setPeerPublicKey(key, topic);
+    const message = {
+      type: 'contact_response',
+      payload,
+      utc_timestamp: Date.now()
+    };
+    await this.client.pss.sendAsym(key, topic, message);
   }
 
   decodePssEvent(data) {
