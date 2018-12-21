@@ -12,22 +12,28 @@ class ContactList extends Component {
     onContactRequest: PropTypes.func.isRequired,
     onAcceptContact: PropTypes.func.isRequired,
     onDeclineContact: PropTypes.func.isRequired,
+    onStartChat: PropTypes.func.isRequired,
   };
 
   render() {
-    const { list, onContactRequest, onAcceptContact, onDeclineContact } = this.props;
+    const {
+      list,
+      onContactRequest,
+      onAcceptContact,
+      onDeclineContact,
+      onStartChat
+    } = this.props;
     const map = groupBy(list, 'type');
-
     return (
-      <div className="pt-3">
+      <div className='pt-3'>
         <h5>
           All
           <ContactInvite onRequest={onContactRequest} />
         </h5>
-        <ContactListGroup list={map['sent_request']} title="Sent" />
+        <ContactListGroup list={map['sent_request']} title='Sent' />
         <ContactListGroup
           list={map['received_request']}
-          title="Received"
+          title='Received'
           renderItem={(c, i) => <ContactRequest
             key={i}
             value={c.key}
@@ -35,7 +41,15 @@ class ContactList extends Component {
             onDecline={onDeclineContact}>
           </ContactRequest>}>
         </ContactListGroup>
-        <ContactListGroup list={map['added']} />
+        <ContactListGroup list={map['added']}
+          renderItem={(c, i) =>
+            <div
+              key={i}
+              className='text-truncate'
+              onClick={() => { onStartChat(c); }}>
+              {c.key}
+            </div>}>
+        </ContactListGroup>
       </div>
     );
   }

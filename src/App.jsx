@@ -25,12 +25,15 @@ class App extends Component {
 
     this.state = {
       account: {},
-      contacts: []
+      contacts: [],
+      chats: [],
+      selectedChat: {}
     };
 
     this.onContactRequest = this.onContactRequest.bind(this);
     this.onAcceptContact = this.onAcceptContact.bind(this);
     this.onDeclineContact = this.onDeclineContact.bind(this);
+    this.onStartChat = this.onStartChat.bind(this);
   }
 
   async init() {
@@ -44,7 +47,7 @@ class App extends Component {
     this.setState({
       account,
       ...state[account.publicKey],
-    }, () => { console.log("STATE", this.state) });
+    }, () => { console.log('STATE', this.state) });
   }
 
   componentDidMount() {
@@ -132,7 +135,7 @@ class App extends Component {
       (existing.type === 'sent_declined' ||
         existing.type === 'sent_request')
     ) {
-      // Response from contact, set type to "added" or "sent_declined" accordingly
+      // Response from contact, set type to 'added' or 'sent_declined' accordingly
       const contact = {
         ...existing,
         type: e.payload.contact === true ? 'added' : 'sent_declined',
@@ -142,7 +145,7 @@ class App extends Component {
 
       list = [...contacts.filter(c => c.key !== e.key), contact];
     } else {
-      console.error("unhandled event", e);
+      console.error('unhandled event', e);
       return;
     }
 
@@ -153,6 +156,28 @@ class App extends Component {
         contacts: list
       }
     });
+  }
+
+  onStartChat(contact) {
+    console.log('onStartChat', contact);
+    const { account, chats } = this.state;
+
+    const chat = { key: contact.key };
+    const list = [
+      ...chats,
+      chat
+    ];
+
+    this.setState({
+      chats: list,
+      selectedChat: chat
+    });
+
+    // storage.set({
+    //   [account.publicKey]: {
+    //     chats: list
+    //   }
+    // });
   }
 
   render() {
@@ -189,10 +214,11 @@ class App extends Component {
                 list={this.state.contacts}
                 onContactRequest={this.onContactRequest}
                 onAcceptContact={this.onAcceptContact}
-                onDeclineContact={this.onDeclineContact} />
+                onDeclineContact={this.onDeclineContact}
+                onStartChat={this.onStartChat} />
             </Col>
             <Col lg={9} md={8}>
-              <Chat />
+              <Chat selected={this.state.selectedChat} />
             </Col>
           </Row>
         </Container>
