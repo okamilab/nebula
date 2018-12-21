@@ -52,12 +52,16 @@ class ContactInvite extends Component {
               <Button color="light" onClick={this.toggle}>Cancel</Button>
               <Button color="primary"
                 onClick={async (e) => {
-                  e.stopPropagation();
-
-                  const { error } = await this.props.onRequest(e, this.state.publicKey);
-                  if (error) {
-                    this.setState({ error });
+                  try {
+                    await this.props.onRequest(e, this.state.publicKey);
+                  } catch (error) {
+                    if (error) {
+                      this.setState({ error: error.message });
+                      return;
+                    }
                   }
+
+                  this.toggle();
                 }}>Send Request</Button>
             </ModalFooter>
           </Form>
