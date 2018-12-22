@@ -41,7 +41,8 @@ class ContactList extends Component {
             onDecline={onDeclineContact}>
           </ContactRequest>}>
         </ContactListGroup>
-        <ContactListGroup list={map['added']}
+        <ContactListGroup
+          list={map['added']}
           renderItem={(c, i) =>
             <div
               key={i}

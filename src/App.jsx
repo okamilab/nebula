@@ -7,6 +7,7 @@ import sum from 'hash-sum';
 
 import Account from './components/Account';
 import ContactList from './components/ContactList';
+import ChatList from './components/ChatList';
 import Chat from './components/Chat';
 import ContactsIcon from './components/ContactsIcon';
 import ChatsIcon from './components/ChatsIcon';
@@ -28,7 +29,8 @@ class App extends Component {
       account: {},
       contacts: [],
       chats: [],
-      selectedChatId: {}
+      selectedChatId: {},
+      selectedChat: false
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -89,7 +91,7 @@ class App extends Component {
   async sendContactResponse(key, accepted) {
     await this.messenger.sendContactResponse(key, accepted);
 
-    const { contacts } = this.state;
+    const { contacts, chats } = this.state;
     const existing = contacts.find(c => c.key === key);
 
     const contact = {
@@ -97,10 +99,20 @@ class App extends Component {
       type: accepted ? 'added' : 'received_declined'
     }
 
-    this.setState(
-      { contacts: [...contacts.filter(c => c.key !== key), contact] },
-      this.saveState);
+    if (accepted) {
+      await this.messenger.subscribeChat(contact, this.onReceiveChatEvent);
+    }
 
+    this.setState(
+      {
+        contacts: [...contacts.filter(c => c.key !== key), contact],
+        chats: accepted ? [...chats, {
+          key: contact.key,
+          topic: contact.topic,
+          messages: {}
+        }] : chats,
+      },
+      this.saveState);
   }
 
   async onAcceptContact(key) {
@@ -111,26 +123,27 @@ class App extends Component {
     await this.sendContactResponse(key, false);
   }
 
-  onReceiveContactEvent(e) {
-    const { contacts } = this.state;
+  async onReceiveContactEvent(e) {
+    const { contacts, chats } = this.state;
     const existing = contacts.find(c => c.key === e.key);
 
-    let list = [];
     if (
       e.type === 'contact_request' &&
       (existing == null || existing.type === 'received_request')
     ) {
       // New contact or update existing with new payload
-      list = [
-        ...contacts.filter(c => c.key !== e.key),
-        {
-          key: e.key,
-          type: 'received_request',
-          topic: e.payload.topic,
-          username: e.payload.username,
-          address: e.payload.overlay_address,
-        },
-      ];
+      this.setState({
+        contacts: [
+          ...contacts.filter(c => c.key !== e.key),
+          {
+            key: e.key,
+            type: 'received_request',
+            topic: e.payload.topic,
+            username: e.payload.username,
+            address: e.payload.overlay_address,
+          },
+        ]
+      }, this.saveState);
     } else if (
       e.type === 'contact_response' &&
       existing != null &&
@@ -145,13 +158,22 @@ class App extends Component {
         address: e.payload.overlay_address,
       }
 
-      list = [...contacts.filter(c => c.key !== e.key), contact];
+      if (e.payload.contact) {
+        await this.messenger.subscribeChat(contact, this.onReceiveChatEvent);
+      }
+
+      this.setState({
+        contacts: [...contacts.filter(c => c.key !== e.key), contact],
+        chats: e.payload.contact ? [...chats, {
+          key: contact.key,
+          topic: contact.topic,
+          messages: {}
+        }] : chats,
+      }, this.saveState);
     } else {
       console.error('unhandled event', e);
       return;
     }
-
-    this.setState({ contacts: list }, this.saveState);
   }
 
   onReceiveChatEvent(e) {
@@ -163,16 +185,12 @@ class App extends Component {
       throw new Error('Chat is not found');
     }
 
-    const id = sum(e);
-    existing.messages = [
-      ...existing.messages,
-      {
-        id,
-        sender: e.key,
-        isRead: false,
-        text: e.payload.text,
-        timestamp: e.utc_timestamp,
-      }];
+    existing.messages[sum(e)] = {
+      sender: e.key,
+      isRead: false,
+      text: e.payload.text,
+      timestamp: e.utc_timestamp,
+    };
 
     this.setState({
       chats: [...chats.filter(c => c.key !== e.key), existing],
@@ -185,20 +203,22 @@ class App extends Component {
     const chat = {
       key: contact.key,
       topic: contact.topic,
-      messages: []
+      messages: {}
     };
 
     const existing = chats.find(c => c.key === contact.key);
     if (existing) {
-      this.setState({ selectedChatId: contact.key });
+      this.setState({
+        selectedChatId: contact.key,
+        selectedChat: true,
+      });
       return;
     }
 
-    const list = [...chats, chat];
-
     this.setState({
-      chats: list,
-      selectedChatId: contact.key
+      chats: [...chats, chat],
+      selectedChatId: contact.key,
+      selectedChat: true,
     }, this.saveState);
   }
 
@@ -218,49 +238,62 @@ class App extends Component {
   }
 
   render() {
-    const { account, contacts, chats, selectedChatId } = this.state;
+    const { account, contacts, chats, selectedChat, selectedChatId } = this.state;
     const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
     const chat = chats.find(c => c.key === selectedChatId);
+    const activeContactsStyle = !selectedChat ? { background: '#282c34' } : null;
+    const activeChatsStyle = selectedChat ? { background: '#282c34' } : null;
 
     return (
-      <Fragment>
-        <header className='App-header'>
-          <Navbar expand='md'>
+      <Container fluid className='h-100 d-flex flex-column'>
+        <Row className='flex-shrink-0 header'>
+          <Navbar expand='md' className='w-100'>
             <NavbarBrand href='/'>
               <img src={logo} alt='Swarm Messenger'></img>
               <span className='pl-3 text-white'>Swarm Messenger</span>
             </NavbarBrand>
           </Navbar>
-        </header>
-        <Container fluid>
-          <Row>
-            <Col lg={3} md={4}>
-              <Account account={account} />
-              <Nav style={{
-                borderBottomColor: '#282c34',
-                borderBottomWidth: 3,
-                borderBottomStyle: 'solid'
-              }} className='pt-4' fill>
-                <NavItem className='p-2' style={{ background: '#282c34' }}>
-                  <ContactsIcon active requests={requests} />
-                </NavItem>
-                <NavItem className='p-2'>
-                  <ChatsIcon />
-                </NavItem>
-              </Nav>
-              <ContactList
-                list={this.state.contacts}
-                onContactRequest={this.onContactRequest}
-                onAcceptContact={this.onAcceptContact}
-                onDeclineContact={this.onDeclineContact}
-                onStartChat={this.onStartChat} />
-            </Col>
-            <Col lg={9} md={8}>
-              <Chat data={chat} />
-            </Col>
-          </Row>
-        </Container>
-      </Fragment>
+        </Row>
+        <Row className='flex-grow-1'>
+          <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
+            <Account account={account} />
+            <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
+              <NavItem
+                className='p-2'
+                style={activeContactsStyle}
+                onClick={() => {
+                  this.setState({
+                    selectedChatId: undefined,
+                    selectedChat: false
+                  })
+                }}>
+                <ContactsIcon active={!selectedChat} requests={requests} />
+              </NavItem>
+              <NavItem
+                className='p-2'
+                style={activeChatsStyle}
+                onClick={() => { this.setState({ selectedChat: true }) }}>
+                <ChatsIcon active={selectedChat} />
+              </NavItem>
+            </Nav>
+            {
+              selectedChat ?
+                <ChatList
+                  list={this.state.chats}
+                  onStartChat={this.onStartChat} /> :
+                <ContactList
+                  list={this.state.contacts}
+                  onContactRequest={this.onContactRequest}
+                  onAcceptContact={this.onAcceptContact}
+                  onDeclineContact={this.onDeclineContact}
+                  onStartChat={this.onStartChat} />
+            }
+          </Col>
+          <Col lg={9} md={8}>
+            <Chat data={chat} />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

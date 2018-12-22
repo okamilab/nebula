@@ -29,6 +29,15 @@ export default class Messanger {
     })();
   }
 
+  async getAccount() {
+    const [publicKey, overlayAddress] = await Promise.all([
+      this.client.pss.getPublicKey(),
+      this.client.pss.baseAddr(),
+    ]);
+
+    return { publicKey, overlayAddress };
+  }
+
   async subscribe(config) {
     if (config.onReceiveContactEvent) {
       const subscription = await this.createContactSubscription(this.account.publicKey);
@@ -37,25 +46,20 @@ export default class Messanger {
     }
 
     if (config.onReceiveChatEvent && config.chats) {
-      config.chats.map(async (c) => {
-        const subscription = await this.createChatSubscription(c.key, c.topic);
-        const chatSub = subscription.subscribe(config.onReceiveChatEvent);
-        this._subscriptions.push(chatSub);
+      config.chats.map(async (chat) => {
+        await this.subscribeChat(chat, config.onReceiveChatEvent);
       });
     }
   }
 
-  unsubscribe() {
-    this._subscriptions.map(s => s.unsubscribe());
+  async subscribeChat(chat, onReceiveChatEvent) {
+    const subscription = await this.createChatSubscription(chat.key, chat.topic);
+    const chatSub = subscription.subscribe(onReceiveChatEvent);
+    this._subscriptions.push(chatSub);
   }
 
-  async getAccount() {
-    const [publicKey, overlayAddress] = await Promise.all([
-      this.client.pss.getPublicKey(),
-      this.client.pss.baseAddr(),
-    ]);
-
-    return { publicKey, overlayAddress };
+  unsubscribe() {
+    this._subscriptions.map(s => s.unsubscribe());
   }
 
   async sendContactRequest(key) {

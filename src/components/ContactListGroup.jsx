@@ -25,7 +25,7 @@ class ContactListGroup extends Component {
 }
 
 ContactListGroup.defaultProps = {
-  renderItem: (c, i) => <div key={i} className="text-truncate">{c.key}</div>
+  renderItem: (c, i) => <div key={i} className='text-truncate'>{c.key}</div>
 };
 
 export default ContactListGroup;
