@@ -1,23 +1,52 @@
 import { map, filter } from 'rxjs/operators';
 import { SwarmClient } from '@erebos/swarm-browser';
 
+function createRandomString() {
+  return Math.random()
+    .toString(36)
+    .slice(2);
+}
+
+function decodePssEvent(data) {
+  return {
+    key: data.key,
+    data: data.msg.toObject(),
+  }
+}
+
 export default class Messanger {
-  client = undefined
-  account = {}
+  _subscriptions = [];
+
+  client = undefined;
+  account = {};
 
   constructor(config) {
     this.client = new SwarmClient({ ws: config.ws });
 
     return (async () => {
       this.account = await this.getAccount();
-
-      if (config.onReceiveContactEvent) {
-        const subscription = await this.createContactSubscription(this.account.publicKey);
-        subscription.subscribe(config.onReceiveContactEvent);
-      }
-
       return this;
     })();
+  }
+
+  async subscribe(config) {
+    if (config.onReceiveContactEvent) {
+      const subscription = await this.createContactSubscription(this.account.publicKey);
+      const contactSub = subscription.subscribe(config.onReceiveContactEvent);
+      this._subscriptions.push(contactSub);
+    }
+
+    if (config.onReceiveChatEvent && config.chats) {
+      config.chats.map(async (c) => {
+        const subscription = await this.createChatSubscription(c.key, c.topic);
+        const chatSub = subscription.subscribe(config.onReceiveChatEvent);
+        this._subscriptions.push(chatSub);
+      });
+    }
+  }
+
+  unsubscribe() {
+    this._subscriptions.map(s => s.unsubscribe());
   }
 
   async getAccount() {
@@ -29,16 +58,10 @@ export default class Messanger {
     return { publicKey, overlayAddress };
   }
 
-  createRandomString() {
-    return Math.random()
-      .toString(36)
-      .slice(2);
-  }
-
   async sendContactRequest(key) {
     const [contactTopic, sharedTopic] = await Promise.all([
       this.client.pss.stringToTopic(key),
-      this.client.pss.stringToTopic(this.createRandomString()),
+      this.client.pss.stringToTopic(createRandomString()),
     ]);
 
     await this.client.pss.setPeerPublicKey(key, contactTopic);
@@ -79,19 +102,11 @@ export default class Messanger {
     await this.client.pss.sendAsym(key, topic, message);
   }
 
-  decodePssEvent(data) {
-    console.log(data);
-    return {
-      key: data.key,
-      data: data.msg.toObject(),
-    }
-  }
-
   async createContactSubscription(publicKey) {
     const topic = await this.client.pss.stringToTopic(publicKey);
     const subscription = await this.client.pss.createTopicSubscription(topic);
     return subscription.pipe(
-      map(this.decodePssEvent),
+      map(decodePssEvent),
       filter((event) => {
         return (
           (event.data.type === 'contact_request' &&
@@ -104,6 +119,28 @@ export default class Messanger {
         (event) => ({
           key: event.key,
           type: event.data.type,
+          payload: event.data.payload,
+        }),
+      ),
+    )
+  }
+
+  async createChatSubscription(contactKey, topic) {
+    const [sub] = await Promise.all([
+      this.client.pss.createTopicSubscription(topic),
+      this.client.pss.setPeerPublicKey(contactKey, topic),
+    ])
+    return sub.pipe(
+      map(decodePssEvent),
+      filter((event) => {
+        return event.data.type === 'chat_message' &&
+          event.data.payload != null
+      }),
+      map(
+        (event) => ({
+          key: event.key,
+          type: event.data.type,
+          utc_timestamp: event.data.utc_timestamp,
           payload: event.data.payload,
         }),
       ),

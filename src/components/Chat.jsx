@@ -3,14 +3,18 @@ import PropTypes from 'prop-types';
 
 class Chat extends Component {
   static propTypes = {
-    selected: PropTypes.object,
+    data: PropTypes.object,
   };
 
   render() {
-    const { selected } = this.props;
+    const { data } = this.props;
+    if (!data) {
+      return <div>NaN</div>;
+    }
+
     return (
       <div className='pt-3'>
-        {selected ? <div>{selected.key}</div> : null}
+        {data.messages.map((c, i) => <div key={i}>{c.text}</div>)}
       </div>
     );
   }

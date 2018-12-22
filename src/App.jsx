@@ -3,6 +3,7 @@ import { hexValueType } from '@erebos/swarm-browser';
 import {
   Container, Row, Col, Navbar, NavbarBrand, Nav, NavItem
 } from 'reactstrap';
+import sum from 'hash-sum';
 
 import Account from './components/Account';
 import ContactList from './components/ContactList';
@@ -27,9 +28,11 @@ class App extends Component {
       account: {},
       contacts: [],
       chats: [],
-      selectedChat: {}
+      selectedChatId: {}
     };
 
+    this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
+    this.onReceiveChatEvent = this.onReceiveChatEvent.bind(this);
     this.onContactRequest = this.onContactRequest.bind(this);
     this.onAcceptContact = this.onAcceptContact.bind(this);
     this.onDeclineContact = this.onDeclineContact.bind(this);
@@ -37,54 +40,56 @@ class App extends Component {
   }
 
   async init() {
-    this.messenger = await new Messenger({
-      ws: 'ws://127.0.0.1:8546',
-      onReceiveContactEvent: this.onReceiveContactEvent
-    });
+    this.messenger = await new Messenger({ ws: 'ws://127.0.0.1:8546' });
     const { account } = this.messenger;
     const state = storage.get() || {};
 
     this.setState({
       account,
       ...state[account.publicKey],
-    }, () => { console.log('STATE', this.state) });
+    }, () => {
+      console.log('STATE', this.state);
+
+      this.messenger.subscribe({
+        onReceiveContactEvent: this.onReceiveContactEvent,
+        onReceiveChatEvent: this.onReceiveChatEvent,
+        chats: this.state.chats
+      });
+    });
   }
 
   componentDidMount() {
     this.init();
   }
 
-  async onContactRequest(_, value) {
+  componentWillUnmount() {
+    this.messenger.unsubscribe();
+  }
+
+  async onContactRequest(value) {
     const { account, contacts } = this.state;
     keyUtils.isValidPubKey(value, account.publicKey, contacts);
 
     const key = hexValueType(value);
-    const { contactTopic, sharedTopic } = await this.messenger.sendContactRequest(key);
+    const { sharedTopic } = await this.messenger.sendContactRequest(key);
 
     const list = [
       ...contacts,
       {
         key: key,
-        topic: contactTopic,
+        topic: sharedTopic,
         type: 'sent_request'
       }
     ];
 
-    this.setState({ contacts: list });
-
-    storage.set({
-      [account.publicKey]: {
-        contacts: list
-      }
-    });
-
+    this.setState({ contacts: list }, this.saveState);
     return sharedTopic;
   }
 
   async sendContactResponse(key, accepted) {
     await this.messenger.sendContactResponse(key, accepted);
 
-    const { account, contacts } = this.state;
+    const { contacts } = this.state;
     const existing = contacts.find(c => c.key === key);
 
     const contact = {
@@ -92,13 +97,10 @@ class App extends Component {
       type: accepted ? 'added' : 'received_declined'
     }
 
-    const list = [...contacts.filter(c => c.key !== key), contact];
-    this.setState({ contacts: list });
-    storage.set({
-      [account.publicKey]: {
-        contacts: list
-      }
-    });
+    this.setState(
+      { contacts: [...contacts.filter(c => c.key !== key), contact] },
+      this.saveState);
+
   }
 
   async onAcceptContact(key) {
@@ -109,8 +111,8 @@ class App extends Component {
     await this.sendContactResponse(key, false);
   }
 
-  onReceiveContactEvent = (e) => {
-    const { account, contacts } = this.state;
+  onReceiveContactEvent(e) {
+    const { contacts } = this.state;
     const existing = contacts.find(c => c.key === e.key);
 
     let list = [];
@@ -149,40 +151,76 @@ class App extends Component {
       return;
     }
 
-    this.setState({ contacts: list });
+    this.setState({ contacts: list }, this.saveState);
+  }
 
-    storage.set({
-      [account.publicKey]: {
-        contacts: list
-      }
-    });
+  onReceiveChatEvent(e) {
+    console.log('onReceiveChatEvent', e);
+
+    const { chats } = this.state;
+    const existing = chats.find(c => c.key === e.key);
+    if (!existing) {
+      throw new Error('Chat is not found');
+    }
+
+    const id = sum(e);
+    existing.messages = [
+      ...existing.messages,
+      {
+        id,
+        sender: e.key,
+        isRead: false,
+        text: e.payload.text,
+        timestamp: e.utc_timestamp,
+      }];
+
+    this.setState({
+      chats: [...chats.filter(c => c.key !== e.key), existing],
+    }, this.saveState);
   }
 
   onStartChat(contact) {
     console.log('onStartChat', contact);
-    const { account, chats } = this.state;
+    const { chats } = this.state;
+    const chat = {
+      key: contact.key,
+      topic: contact.topic,
+      messages: []
+    };
 
-    const chat = { key: contact.key };
-    const list = [
-      ...chats,
-      chat
-    ];
+    const existing = chats.find(c => c.key === contact.key);
+    if (existing) {
+      this.setState({ selectedChatId: contact.key });
+      return;
+    }
+
+    const list = [...chats, chat];
 
     this.setState({
       chats: list,
-      selectedChat: chat
-    });
+      selectedChatId: contact.key
+    }, this.saveState);
+  }
 
-    // storage.set({
-    //   [account.publicKey]: {
-    //     chats: list
-    //   }
-    // });
+  saveState() {
+    const { account, contacts, chats } = this.state;
+    const { publicKey } = account || {};
+    if (!publicKey) {
+      return;
+    }
+
+    storage.set({
+      [publicKey]: {
+        contacts: contacts,
+        chats: chats
+      }
+    });
   }
 
   render() {
-    const { account, contacts } = this.state;
+    const { account, contacts, chats, selectedChatId } = this.state;
     const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
+    const chat = chats.find(c => c.key === selectedChatId);
 
     return (
       <Fragment>
@@ -204,10 +242,10 @@ class App extends Component {
                 borderBottomStyle: 'solid'
               }} className='pt-4' fill>
                 <NavItem className='p-2' style={{ background: '#282c34' }}>
-                  <ContactsIcon active requests={requests}></ContactsIcon>
+                  <ContactsIcon active requests={requests} />
                 </NavItem>
                 <NavItem className='p-2'>
-                  <ChatsIcon></ChatsIcon>
+                  <ChatsIcon />
                 </NavItem>
               </Nav>
               <ContactList
@@ -218,7 +256,7 @@ class App extends Component {
                 onStartChat={this.onStartChat} />
             </Col>
             <Col lg={9} md={8}>
-              <Chat selected={this.state.selectedChat} />
+              <Chat data={chat} />
             </Col>
           </Row>
         </Container>

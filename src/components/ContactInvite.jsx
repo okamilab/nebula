@@ -53,7 +53,7 @@ class ContactInvite extends Component {
               <Button color="primary"
                 onClick={async (e) => {
                   try {
-                    await this.props.onRequest(e, this.state.publicKey);
+                    await this.props.onRequest(this.state.publicKey);
                   } catch (error) {
                     if (error) {
                       this.setState({ error: error.message });

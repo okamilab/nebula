@@ -6,6 +6,7 @@
     "@erebos/api-pss": "^0.5.3",
     "@erebos/swarm-browser": "^0.5.3",
     "bootstrap": "^4.1.3",
+    "hash-sum": "^1.0.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
