@@ -1,10 +1,15 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import {
-  Button, Modal, ModalHeader, ModalBody, ModalFooter,
-  Form, FormGroup, Label, Input, Alert
+  Modal, ModalHeader, ModalBody, ModalFooter,
+  Button, FormGroup, Label, Input, Alert
 } from 'reactstrap';
 
 class ContactInvite extends Component {
+  static propTypes = {
+    onRequest: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

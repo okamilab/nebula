@@ -150,4 +150,13 @@ export default class Messanger {
       ),
     )
   }
+
+  async sendChatMessage(key, topic, data) {
+    const message = {
+      type: 'chat_message',
+      payload: data,
+      utc_timestamp: Date.now()
+    };
+    await this.client.pss.sendAsym(key, topic, message);
+  }
 }

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { hexValueType } from '@erebos/swarm-browser';
 import {
   Container, Row, Col, Navbar, NavbarBrand, Nav, NavItem
@@ -39,6 +39,7 @@ class App extends Component {
     this.onAcceptContact = this.onAcceptContact.bind(this);
     this.onDeclineContact = this.onDeclineContact.bind(this);
     this.onStartChat = this.onStartChat.bind(this);
+    this.onMessageSend = this.onMessageSend.bind(this);
   }
 
   async init() {
@@ -50,8 +51,6 @@ class App extends Component {
       account,
       ...state[account.publicKey],
     }, () => {
-      console.log('STATE', this.state);
-
       this.messenger.subscribe({
         onReceiveContactEvent: this.onReceiveContactEvent,
         onReceiveChatEvent: this.onReceiveChatEvent,
@@ -177,15 +176,13 @@ class App extends Component {
   }
 
   onReceiveChatEvent(e) {
-    console.log('onReceiveChatEvent', e);
-
     const { chats } = this.state;
-    const existing = chats.find(c => c.key === e.key);
-    if (!existing) {
+    const chat = chats.find(c => c.key === e.key);
+    if (!chat) {
       throw new Error('Chat is not found');
     }
 
-    existing.messages[sum(e)] = {
+    chat.messages[sum(e)] = {
       sender: e.key,
       isRead: false,
       text: e.payload.text,
@@ -193,12 +190,11 @@ class App extends Component {
     };
 
     this.setState({
-      chats: [...chats.filter(c => c.key !== e.key), existing],
+      chats: [...chats.filter(c => c.key !== e.key), chat],
     }, this.saveState);
   }
 
   onStartChat(contact) {
-    console.log('onStartChat', contact);
     const { chats } = this.state;
     const chat = {
       key: contact.key,
@@ -219,6 +215,28 @@ class App extends Component {
       chats: [...chats, chat],
       selectedChatId: contact.key,
       selectedChat: true,
+    }, this.saveState);
+  }
+
+  async onMessageSend(key, message) {
+    const { account, chats } = this.state;
+    const chat = chats.find(c => c.key === key);
+    if (!chat) {
+      throw new Error('Chat is not found');
+    }
+
+    await this.messenger.sendChatMessage(chat.key, chat.topic, { text: message });
+
+    const msg = {
+      sender: account.publicKey,
+      isRead: true,
+      text: message,
+      timestamp: Date.now()
+    }
+    chat.messages[sum(msg)] = msg;
+
+    this.setState({
+      chats: [...chats.filter(c => c.key !== key), chat],
     }, this.saveState);
   }
 
@@ -290,7 +308,7 @@ class App extends Component {
             }
           </Col>
           <Col lg={9} md={8}>
-            <Chat data={chat} />
+            <Chat data={chat} onSend={this.onMessageSend} />
           </Col>
         </Row>
       </Container>
