@@ -57,7 +57,11 @@ class Chat extends Component {
           <div className='pt-3'>
             {
               Object.values(data.messages)
-                .map((c, i) => <div key={i}>{c.text}</div>)
+                .map((c, i) => {
+                  return (
+                    <div key={i}>{c.sender.substr(0, 8)}: {c.text}</div>
+                  )
+                })
             }
           </div>
         </Row>
