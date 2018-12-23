@@ -30,7 +30,7 @@ class Chat extends Component {
   }
 
   onKeyPress(e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.msg) {
       this.onSend();
     }
   }
@@ -75,7 +75,8 @@ class Chat extends Component {
             <InputGroupAddon addonType="append">
               <Button
                 color="secondary"
-                onClick={this.onSend}>Send</Button>
+                onClick={this.onSend}
+                disabled={!this.state.msg}>Send</Button>
             </InputGroupAddon>
           </InputGroup>
         </Row>

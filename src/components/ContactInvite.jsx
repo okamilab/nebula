@@ -37,7 +37,7 @@ class ContactInvite extends Component {
   }
 
   onKeyPress(e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.publicKey) {
       this.onRequest();
     }
   }
@@ -76,7 +76,11 @@ class ContactInvite extends Component {
           </ModalBody>
           <ModalFooter>
             <Button color='light' onClick={this.toggle}>Cancel</Button>
-            <Button type='button' color='primary' onClick={this.onRequest}>Send Request</Button>
+            <Button
+              type='button'
+              color='primary'
+              onClick={this.onRequest}
+              disabled={!this.state.publicKey}>Send Request</Button>
           </ModalFooter>
         </Modal>
       </Fragment>
