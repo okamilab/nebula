@@ -6,6 +6,7 @@ import {
 import sum from 'hash-sum';
 
 import Account from './components/Account';
+import Settings from './components/Settings';
 import ContactList from './components/ContactList';
 import ChatList from './components/ChatList';
 import Chat from './components/Chat';
@@ -30,7 +31,8 @@ class App extends Component {
       contacts: [],
       chats: [],
       selectedChatId: {},
-      selectedChat: false
+      selectedChat: false,
+      showSettings: false,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -207,6 +209,7 @@ class App extends Component {
       this.setState({
         selectedChatId: contact.key,
         selectedChat: true,
+        showSettings: false
       });
       return;
     }
@@ -215,6 +218,7 @@ class App extends Component {
       chats: [...chats, chat],
       selectedChatId: contact.key,
       selectedChat: true,
+      showSettings: false
     }, this.saveState);
   }
 
@@ -256,7 +260,14 @@ class App extends Component {
   }
 
   render() {
-    const { account, contacts, chats, selectedChat, selectedChatId } = this.state;
+    const {
+      account,
+      contacts,
+      chats,
+      selectedChat,
+      selectedChatId,
+      showSettings
+    } = this.state;
     const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
     const chat = chats.find(c => c.key === selectedChatId);
     const activeContactsStyle = !selectedChat ? { background: '#282c34' } : null;
@@ -274,7 +285,7 @@ class App extends Component {
         </Row>
         <Row className='flex-grow-1'>
           <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
-            <Account account={account} />
+            <Account account={account} onClick={() => this.setState({ showSettings: true })} />
             <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
               <NavItem
                 className='p-2'
@@ -282,7 +293,8 @@ class App extends Component {
                 onClick={() => {
                   this.setState({
                     selectedChatId: undefined,
-                    selectedChat: false
+                    selectedChat: false,
+                    showSettings: false
                   })
                 }}>
                 <ContactsIcon active={!selectedChat} requests={requests} />
@@ -290,7 +302,12 @@ class App extends Component {
               <NavItem
                 className='p-2'
                 style={activeChatsStyle}
-                onClick={() => { this.setState({ selectedChat: true }) }}>
+                onClick={() => {
+                  this.setState({
+                    selectedChat: true,
+                    showSettings: false
+                  })
+                }}>
                 <ChatsIcon active={selectedChat} />
               </NavItem>
             </Nav>
@@ -308,7 +325,11 @@ class App extends Component {
             }
           </Col>
           <Col lg={9} md={8}>
-            <Chat data={chat} onSend={this.onMessageSend} />
+            {
+              showSettings ?
+                <Settings /> :
+                <Chat data={chat} onSend={this.onMessageSend} />
+            }
           </Col>
         </Row>
       </Container>

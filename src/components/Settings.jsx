@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { Container } from 'reactstrap';
+import {
+  Container, Row
+} from 'reactstrap';
 
 class Settings extends Component {
   render() {
     return (
       <Container fluid>
-        Settings
+        <Row className='pt-3'>
+          <h3>Settings</h3>
+        </Row>
       </Container>
     );
   }
