@@ -14,7 +14,6 @@ import ChatsIcon from './components/ChatsIcon';
 import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
-import { groupBy } from './base/fn';
 
 import './App.css';
 import logo from './logo.png';
@@ -256,8 +255,7 @@ class App extends Component {
   }
 
   render() {
-    const { account, contacts, chats, selectedChat, selectedChatId } = this.state;
-    const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
+    const { account, chats, selectedChat, selectedChatId } = this.state;
     const chat = chats.find(c => c.key === selectedChatId);
     const activeContactsStyle = !selectedChat ? { background: '#282c34' } : null;
     const activeChatsStyle = selectedChat ? { background: '#282c34' } : null;
@@ -285,7 +283,7 @@ class App extends Component {
                     selectedChat: false
                   })
                 }}>
-                <ContactsIcon active={!selectedChat} requests={requests} />
+                <ContactsIcon active={!selectedChat} />
               </NavItem>
               <NavItem
                 className='p-2'
