@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ContactInvite from './ContactInvite';
 import ContactListGroup from './ContactListGroup';
 import ContactRequest from './ContactRequest';
+import Identicon from './Identicon';
 import { groupBy } from '../base/fn';
 
 class ContactList extends Component {
@@ -46,10 +47,20 @@ class ContactList extends Component {
           renderItem={(c, i) =>
             <div
               key={i}
-              className='text-truncate'
+              style={{ cursor: 'pointer' }}
               onClick={() => { onStartChat(c); }}>
-              {c.key}
-            </div>}>
+              <div className="d-flex flex-row pt-2">
+                <div>
+                  <Identicon publicKey={c.key} size={32} />
+                </div>
+                <div
+                  className='pl-2 text-truncate'
+                  style={{ lineHeight: '32px' }}>
+                  {c.key}
+                </div>
+              </div>
+            </div>
+          }>
         </ContactListGroup>
       </div>
     );
