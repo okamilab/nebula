@@ -72,7 +72,6 @@ export default class Messanger {
     const message = {
       type: 'contact_request',
       payload: {
-        username: undefined,
         message: 'Hi there',
         topic: sharedTopic,
         overlay_address: this.account.overlayAddress,

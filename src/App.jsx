@@ -20,6 +20,8 @@ import { groupBy } from './base/fn';
 import './App.css';
 import logo from './logo.png';
 
+const DEFAULT_ENDPOINT = 'ws://127.0.0.1:8546';
+
 class App extends Component {
   messenger = undefined;
 
@@ -32,7 +34,7 @@ class App extends Component {
       chats: [],
       selectedChatId: {},
       selectedChat: false,
-      showSettings: false,
+      showSettings: true,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -42,16 +44,21 @@ class App extends Component {
     this.onDeclineContact = this.onDeclineContact.bind(this);
     this.onStartChat = this.onStartChat.bind(this);
     this.onMessageSend = this.onMessageSend.bind(this);
+    this.onSettingsSave = this.onSettingsSave.bind(this);
   }
 
   async init() {
-    this.messenger = await new Messenger({ ws: 'ws://127.0.0.1:8546' });
+    const appState = storage.get() || {};
+    const { endpoint = DEFAULT_ENDPOINT } = appState;
+
+    this.messenger = await new Messenger({ ws: endpoint });
     const { account } = this.messenger;
-    const state = storage.get() || {};
+    const sessionState = appState[account.publicKey];
 
     this.setState({
+      endpoint,
       account,
-      ...state[account.publicKey],
+      ...sessionState,
     }, () => {
       this.messenger.subscribe({
         onReceiveContactEvent: this.onReceiveContactEvent,
@@ -244,15 +251,32 @@ class App extends Component {
     }, this.saveState);
   }
 
+  onSettingsSave(endpoint, username) {
+    this.setState({
+      endpoint,
+      account: {
+        ...this.state.account,
+        username
+      }
+    }, this.saveState);
+  }
+
   saveState() {
-    const { account, contacts, chats } = this.state;
-    const { publicKey } = account || {};
+    const {
+      endpoint,
+      account,
+      contacts,
+      chats } = this.state;
+    const { publicKey, username } = account || {};
     if (!publicKey) {
+      storage.set({ endpoint });
       return;
     }
 
     storage.set({
+      endpoint,
       [publicKey]: {
+        username,
         contacts: contacts,
         chats: chats
       }
@@ -261,7 +285,9 @@ class App extends Component {
 
   render() {
     const {
+      endpoint,
       account,
+      username,
       contacts,
       chats,
       selectedChat,
@@ -327,7 +353,11 @@ class App extends Component {
           <Col lg={9} md={8}>
             {
               showSettings ?
-                <Settings /> :
+                <Settings
+                  endpoint={endpoint}
+                  username={username}
+                  localStorage={storage.getRaw()}
+                  onSave={this.onSettingsSave} /> :
                 <Chat data={chat} onSend={this.onMessageSend} />
             }
           </Col>
