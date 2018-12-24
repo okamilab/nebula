@@ -9,7 +9,9 @@ class Settings extends Component {
     super(props)
 
     this.state = {};
+
     this.onSave = this.onSave.bind(this);
+    this.onReset = this.onReset.bind(this);
   }
 
   onSave() {
@@ -18,11 +20,17 @@ class Settings extends Component {
     this.props.onSave(endpoint, username);
   }
 
+  async onReset() {
+    await this.props.onReset();
+    const { endpoint } = this.props;
+    this.setState({ endpoint });
+  }
+
   render() {
     const {
       endpoint,
       username,
-      localStorage,
+      localStorage
     } = this.props;
 
     return (
@@ -39,10 +47,9 @@ class Settings extends Component {
               type='text'
               id='endpoint'
               placeholder='endpoint'
-              onChange={(e) => this.setState({ endpoint: e.target.value })}
               autoFocus
-              defaultValue={endpoint}
-            />
+              onChange={(e) => this.setState({ endpoint: e.target.value })}
+              defaultValue={endpoint} />
           </Col>
           <Col sm={12}>
             After updating the field you need to restart the app (refresh page)
@@ -69,10 +76,16 @@ class Settings extends Component {
             {pretty((localStorage || '').length)}
           </Col>
         </FormGroup>
-        <div className="pt-3">
+        <div className='pt-3'>
           <Button
-            color="success"
-            onClick={this.onSave}>
+            color='second'
+            onClick={this.onReset}>
+            Reset
+          </Button>
+          <Button
+            color='success'
+            onClick={this.onSave}
+            className='ml-3'>
             Save
           </Button>
         </div>

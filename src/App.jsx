@@ -45,6 +45,7 @@ class App extends Component {
     this.onStartChat = this.onStartChat.bind(this);
     this.onMessageSend = this.onMessageSend.bind(this);
     this.onSettingsSave = this.onSettingsSave.bind(this);
+    this.onSettingsResest = this.onSettingsResest.bind(this);
   }
 
   async init() {
@@ -261,6 +262,12 @@ class App extends Component {
     }, this.saveState);
   }
 
+  onSettingsResest() {
+    this.setState({
+      endpoint: DEFAULT_ENDPOINT
+    }, this.saveState);
+  }
+
   saveState() {
     const {
       endpoint,
@@ -357,7 +364,8 @@ class App extends Component {
                   endpoint={endpoint}
                   username={username}
                   localStorage={storage.getRaw()}
-                  onSave={this.onSettingsSave} /> :
+                  onSave={this.onSettingsSave}
+                  onReset={this.onSettingsResest} /> :
                 <Chat data={chat} onSend={this.onMessageSend} />
             }
           </Col>
