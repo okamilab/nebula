@@ -34,7 +34,7 @@ class App extends Component {
       chats: [],
       selectedChatId: {},
       selectedChat: false,
-      showSettings: true,
+      showSettings: false,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
