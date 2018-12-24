@@ -14,9 +14,6 @@ class Account extends Component {
     const { account, username, onClick } = this.props;
 
     return (
-      // <div className='pt-3 text-truncate' onClick={this.props.onClick}>
-      //   {this.props.account.publicKey}
-      // </div>
       <div
         className='pt-3'
         style={{ cursor: 'pointer' }}
