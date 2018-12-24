@@ -6,6 +6,7 @@ import {
 import sum from 'hash-sum';
 
 import Account from './components/Account';
+import Settings from './components/Settings';
 import ContactList from './components/ContactList';
 import ChatList from './components/ChatList';
 import Chat from './components/Chat';
@@ -19,6 +20,8 @@ import { groupBy } from './base/fn';
 import './App.css';
 import logo from './logo.png';
 
+const DEFAULT_ENDPOINT = 'ws://127.0.0.1:8546';
+
 class App extends Component {
   messenger = undefined;
 
@@ -30,7 +33,8 @@ class App extends Component {
       contacts: [],
       chats: [],
       selectedChatId: {},
-      selectedChat: false
+      selectedChat: false,
+      showSettings: true,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -40,16 +44,22 @@ class App extends Component {
     this.onDeclineContact = this.onDeclineContact.bind(this);
     this.onStartChat = this.onStartChat.bind(this);
     this.onMessageSend = this.onMessageSend.bind(this);
+    this.onSettingsSave = this.onSettingsSave.bind(this);
+    this.onSettingsResest = this.onSettingsResest.bind(this);
   }
 
   async init() {
-    this.messenger = await new Messenger({ ws: 'ws://127.0.0.1:8546' });
+    const appState = storage.get() || {};
+    const { endpoint = DEFAULT_ENDPOINT } = appState;
+
+    this.messenger = await new Messenger({ ws: endpoint });
     const { account } = this.messenger;
-    const state = storage.get() || {};
+    const sessionState = appState[account.publicKey];
 
     this.setState({
+      endpoint,
       account,
-      ...state[account.publicKey],
+      ...sessionState,
     }, () => {
       this.messenger.subscribe({
         onReceiveContactEvent: this.onReceiveContactEvent,
@@ -207,6 +217,7 @@ class App extends Component {
       this.setState({
         selectedChatId: contact.key,
         selectedChat: true,
+        showSettings: false
       });
       return;
     }
@@ -215,6 +226,7 @@ class App extends Component {
       chats: [...chats, chat],
       selectedChatId: contact.key,
       selectedChat: true,
+      showSettings: false
     }, this.saveState);
   }
 
@@ -240,15 +252,38 @@ class App extends Component {
     }, this.saveState);
   }
 
+  onSettingsSave(endpoint, username) {
+    this.setState({
+      endpoint,
+      account: {
+        ...this.state.account,
+        username
+      }
+    }, this.saveState);
+  }
+
+  onSettingsResest() {
+    this.setState({
+      endpoint: DEFAULT_ENDPOINT
+    }, this.saveState);
+  }
+
   saveState() {
-    const { account, contacts, chats } = this.state;
-    const { publicKey } = account || {};
+    const {
+      endpoint,
+      account,
+      contacts,
+      chats } = this.state;
+    const { publicKey, username } = account || {};
     if (!publicKey) {
+      storage.set({ endpoint });
       return;
     }
 
     storage.set({
+      endpoint,
       [publicKey]: {
+        username,
         contacts: contacts,
         chats: chats
       }
@@ -256,7 +291,16 @@ class App extends Component {
   }
 
   render() {
-    const { account, contacts, chats, selectedChat, selectedChatId } = this.state;
+    const {
+      endpoint,
+      account,
+      username,
+      contacts,
+      chats,
+      selectedChat,
+      selectedChatId,
+      showSettings
+    } = this.state;
     const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
     const chat = chats.find(c => c.key === selectedChatId);
     const activeContactsStyle = !selectedChat ? { background: '#282c34' } : null;
@@ -274,7 +318,7 @@ class App extends Component {
         </Row>
         <Row className='flex-grow-1'>
           <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
-            <Account account={account} />
+            <Account account={account} onClick={() => this.setState({ showSettings: true })} />
             <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
               <NavItem
                 className='p-2'
@@ -282,7 +326,8 @@ class App extends Component {
                 onClick={() => {
                   this.setState({
                     selectedChatId: undefined,
-                    selectedChat: false
+                    selectedChat: false,
+                    showSettings: false
                   })
                 }}>
                 <ContactsIcon active={!selectedChat} requests={requests} />
@@ -290,7 +335,12 @@ class App extends Component {
               <NavItem
                 className='p-2'
                 style={activeChatsStyle}
-                onClick={() => { this.setState({ selectedChat: true }) }}>
+                onClick={() => {
+                  this.setState({
+                    selectedChat: true,
+                    showSettings: false
+                  })
+                }}>
                 <ChatsIcon active={selectedChat} />
               </NavItem>
             </Nav>
@@ -308,7 +358,16 @@ class App extends Component {
             }
           </Col>
           <Col lg={9} md={8}>
-            <Chat data={chat} onSend={this.onMessageSend} />
+            {
+              showSettings ?
+                <Settings
+                  endpoint={endpoint}
+                  username={username}
+                  localStorage={storage.getRaw()}
+                  onSave={this.onSettingsSave}
+                  onReset={this.onSettingsResest} /> :
+                <Chat data={chat} onSend={this.onMessageSend} />
+            }
           </Col>
         </Row>
       </Container>
