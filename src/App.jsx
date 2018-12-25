@@ -259,10 +259,7 @@ class App extends Component {
   onSettingsSave(endpoint, username) {
     this.setState({
       endpoint,
-      account: {
-        ...this.state.account,
-        username
-      }
+      username
     }, this.saveState);
   }
 
@@ -275,10 +272,11 @@ class App extends Component {
   saveState() {
     const {
       endpoint,
+      username,
       account,
       contacts,
       chats } = this.state;
-    const { publicKey, username } = account || {};
+    const { publicKey } = account || {};
     if (!publicKey) {
       storage.set({ endpoint });
       return;
@@ -307,8 +305,8 @@ class App extends Component {
     } = this.state;
     const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
     const chat = chats.find(c => c.key === selectedChatId);
-    const activeContactsStyle = !selectedChat ? { background: '#282c34' } : null;
-    const activeChatsStyle = selectedChat ? { background: '#282c34' } : null;
+    const activeContactsStyle = !selectedChat ? { background: '#282c34' } : {};
+    const activeChatsStyle = selectedChat ? { background: '#282c34' } : {};
 
     return (
       <Container fluid className='h-100 d-flex flex-column'>
@@ -322,11 +320,14 @@ class App extends Component {
         </Row>
         <Row className='flex-grow-1'>
           <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
-            <Account account={account} onClick={() => this.setState({ showSettings: true })} />
+            <Account
+              account={account}
+              username={username}
+              onClick={() => this.setState({ showSettings: true })} />
             <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
               <NavItem
                 className='p-2'
-                style={activeContactsStyle}
+                style={{ ...activeContactsStyle, cursor: 'pointer' }}
                 onClick={() => {
                   this.setState({
                     selectedChatId: undefined,
@@ -338,7 +339,7 @@ class App extends Component {
               </NavItem>
               <NavItem
                 className='p-2'
-                style={activeChatsStyle}
+                style={{ ...activeChatsStyle, cursor: 'pointer' }}
                 onClick={() => {
                   this.setState({
                     selectedChat: true,
