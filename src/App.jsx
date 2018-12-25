@@ -193,7 +193,7 @@ class App extends Component {
     }
 
     chat.messages[sum(e)] = {
-      sender: e.key,
+      sender: sum(e.key),
       isRead: false,
       text: e.payload.text,
       timestamp: e.utc_timestamp,
@@ -205,10 +205,14 @@ class App extends Component {
   }
 
   onStartChat(contact) {
-    const { chats } = this.state;
+    const { account, chats } = this.state;
     const chat = {
       key: contact.key,
       topic: contact.topic,
+      participants: {
+        [sum(contact.key)]: contact.key,
+        [sum(account.publicKey)]: account.publicKey,
+      },
       messages: {}
     };
 
@@ -240,7 +244,7 @@ class App extends Component {
     await this.messenger.sendChatMessage(chat.key, chat.topic, { text: message });
 
     const msg = {
-      sender: account.publicKey,
+      sender: sum(account.publicKey),
       isRead: true,
       text: message,
       timestamp: Date.now()
