@@ -53,7 +53,9 @@ class Chat extends Component {
 
     return (
       <Container fluid className='h-100 d-flex flex-column'>
-        <Row className='flex-grow-1'>
+        <Row
+          className='flex-grow-1'
+          style={{ overflowX: 'hidden', overflowY: 'scroll' }}>
           <div className='pt-3'>
             {
               Object.values(data.messages)
