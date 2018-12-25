@@ -25,6 +25,7 @@ class ContactList extends Component {
       onStartChat
     } = this.props;
     const map = groupBy(list, 'type');
+
     return (
       <div className='pt-3'>
         <h5>
