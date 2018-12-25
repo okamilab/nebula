@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Container, Row, Col, FormGroup, Label, Input, Button
 } from 'reactstrap';
 import pretty from 'prettysize';
 
 class Settings extends Component {
+  static propTypes = {
+    onSave: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    endpoint: PropTypes.string,
+  };
+
   constructor(props) {
     super(props)
 
@@ -15,9 +22,9 @@ class Settings extends Component {
   }
 
   onSave() {
-    const { endpoint, username } =
+    const { endpoint } =
       Object.assign({}, this.props, this.state);
-    this.props.onSave(endpoint, username);
+    this.props.onSave(endpoint);
   }
 
   async onReset() {
@@ -29,7 +36,6 @@ class Settings extends Component {
   render() {
     const {
       endpoint,
-      username,
       localStorage
     } = this.props;
 
@@ -51,21 +57,10 @@ class Settings extends Component {
               onChange={(e) => this.setState({ endpoint: e.target.value })}
               defaultValue={endpoint} />
           </Col>
-          <Col sm={12}>
+          <Col sm={12}
+            className='pt-1 text-secondary'
+            style={{fontSize: 13}}>
             After updating the field you need to restart the app (refresh page)
-          </Col>
-        </FormGroup>
-        <FormGroup className='row pt-3'>
-          <Col sm={3}>
-            <Label for='username'>User name</Label>
-          </Col>
-          <Col sm={9}>
-            <Input
-              type='text'
-              id='username'
-              placeholder='username'
-              onChange={(e) => this.setState({ username: e.target.value })}
-              defaultValue={username} />
           </Col>
         </FormGroup>
         <FormGroup className='row pt-3'>

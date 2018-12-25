@@ -12,6 +12,7 @@ import ChatList from './components/ChatList';
 import Chat from './components/Chat';
 import ContactsIcon from './components/ContactsIcon';
 import ChatsIcon from './components/ChatsIcon';
+import Profile from './components/Profile';
 import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
@@ -34,6 +35,7 @@ class App extends Component {
       selectedChatId: {},
       selectedChat: false,
       showSettings: false,
+      showProfile: false,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -45,6 +47,7 @@ class App extends Component {
     this.onMessageSend = this.onMessageSend.bind(this);
     this.onSettingsSave = this.onSettingsSave.bind(this);
     this.onSettingsResest = this.onSettingsResest.bind(this);
+    this.onProfileSave = this.onProfileSave.bind(this);
   }
 
   async init() {
@@ -214,7 +217,8 @@ class App extends Component {
       this.setState({
         selectedChatId: contact.key,
         selectedChat: true,
-        showSettings: false
+        showSettings: false,
+        showProfile: false
       });
       return;
     }
@@ -259,16 +263,21 @@ class App extends Component {
     }, this.saveState);
   }
 
-  onSettingsSave(endpoint, username) {
+  onSettingsSave(endpoint) {
     this.setState({
-      endpoint,
-      username
+      endpoint
     }, this.saveState);
   }
 
   onSettingsResest() {
     this.setState({
       endpoint: DEFAULT_ENDPOINT
+    }, this.saveState);
+  }
+
+  onProfileSave(username) {
+    this.setState({
+      username
     }, this.saveState);
   }
 
@@ -304,7 +313,8 @@ class App extends Component {
       chats,
       selectedChat,
       selectedChatId,
-      showSettings
+      showSettings,
+      showProfile,
     } = this.state;
 
     const requests = Object.values(contacts)
@@ -329,7 +339,11 @@ class App extends Component {
             <Account
               account={account}
               username={username}
-              onClick={() => this.setState({ showSettings: true })} />
+              onSettingsClick={() => this.setState({ showSettings: true })}
+              onProfileClick={() => this.setState({
+                showSettings: false,
+                showProfile: true
+              })} />
             <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
               <NavItem
                 className='p-2'
@@ -338,7 +352,8 @@ class App extends Component {
                   this.setState({
                     selectedChatId: undefined,
                     selectedChat: false,
-                    showSettings: false
+                    showSettings: false,
+                    showProfile: false,
                   })
                 }}>
                 <ContactsIcon active={!selectedChat} requests={requests} />
@@ -349,7 +364,8 @@ class App extends Component {
                 onClick={() => {
                   this.setState({
                     selectedChat: true,
-                    showSettings: false
+                    showSettings: false,
+                    showProfile: false
                   })
                 }}>
                 <ChatsIcon active={selectedChat} />
@@ -373,11 +389,15 @@ class App extends Component {
               showSettings ?
                 <Settings
                   endpoint={endpoint}
-                  username={username}
                   localStorage={storage.getRaw()}
                   onSave={this.onSettingsSave}
                   onReset={this.onSettingsResest} /> :
-                <Chat data={chat} onSend={this.onMessageSend} />
+                showProfile && account ?
+                  <Profile
+                    username={username}
+                    publicKey={account.publicKey || ''}
+                    onSave={this.onProfileSave} /> :
+                  <Chat data={chat} onSend={this.onMessageSend} />
             }
           </Col>
         </Row>
