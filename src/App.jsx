@@ -15,7 +15,6 @@ import ChatsIcon from './components/ChatsIcon';
 import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
-import { groupBy } from './base/fn';
 
 import './App.css';
 import logo from './logo.png';
@@ -30,7 +29,7 @@ class App extends Component {
 
     this.state = {
       account: {},
-      contacts: [],
+      contacts: {},
       chats: [],
       selectedChatId: {},
       selectedChat: false,
@@ -79,21 +78,20 @@ class App extends Component {
 
   async onContactRequest(value) {
     const { account, contacts } = this.state;
-    keyUtils.isValidPubKey(value, account.publicKey, contacts);
-
     const key = hexValueType(value);
+    keyUtils.isValidPubKey(key, account.publicKey, contacts[sum(key)]);
+
     const { sharedTopic } = await this.messenger.sendContactRequest(key);
 
-    const list = [
-      ...contacts,
-      {
-        key: key,
-        topic: sharedTopic,
-        type: 'sent_request'
-      }
-    ];
+    const contact = {
+      key: key,
+      topic: sharedTopic,
+      type: 'sent_request'
+    };
 
-    this.setState({ contacts: list }, this.saveState);
+    this.setState({
+      contacts: { ...contacts, [sum(key)]: contact }
+    }, this.saveState);
     return sharedTopic;
   }
 
@@ -101,12 +99,12 @@ class App extends Component {
     await this.messenger.sendContactResponse(key, accepted);
 
     const { contacts, chats } = this.state;
-    const existing = contacts.find(c => c.key === key);
+    const hash = sum(key);
 
     const contact = {
-      ...existing,
+      ...contacts[hash],
       type: accepted ? 'added' : 'received_declined'
-    }
+    };
 
     if (accepted) {
       await this.messenger.subscribeChat(contact, this.onReceiveChatEvent);
@@ -114,7 +112,7 @@ class App extends Component {
 
     this.setState(
       {
-        contacts: [...contacts.filter(c => c.key !== key), contact],
+        contacts: { ...contacts, [hash]: contact },
         chats: accepted ? [...chats, {
           key: contact.key,
           topic: contact.topic,
@@ -133,8 +131,9 @@ class App extends Component {
   }
 
   async onReceiveContactEvent(e) {
-    const { contacts, chats } = this.state;
-    const existing = contacts.find(c => c.key === e.key);
+    const { account, contacts, chats } = this.state;
+    const hash = sum(e.key);
+    const existing = contacts[hash];
 
     if (
       e.type === 'contact_request' &&
@@ -142,16 +141,15 @@ class App extends Component {
     ) {
       // New contact or update existing with new payload
       this.setState({
-        contacts: [
-          ...contacts.filter(c => c.key !== e.key),
-          {
+        contacts: {
+          ...contacts, [hash]: {
             key: e.key,
             type: 'received_request',
             topic: e.payload.topic,
             username: e.payload.username,
             address: e.payload.overlay_address,
-          },
-        ]
+          }
+        }
       }, this.saveState);
     } else if (
       e.type === 'contact_response' &&
@@ -172,10 +170,14 @@ class App extends Component {
       }
 
       this.setState({
-        contacts: [...contacts.filter(c => c.key !== e.key), contact],
+        contacts: { ...contacts, [hash]: contact },
         chats: e.payload.contact ? [...chats, {
           key: contact.key,
           topic: contact.topic,
+          participants: {
+            [sum(contact.key)]: contact.key,
+            [sum(account.publicKey)]: account.publicKey,
+          },
           messages: {}
         }] : chats,
       }, this.saveState);
@@ -193,7 +195,7 @@ class App extends Component {
     }
 
     chat.messages[sum(e)] = {
-      sender: e.key,
+      sender: sum(e.key),
       isRead: false,
       text: e.payload.text,
       timestamp: e.utc_timestamp,
@@ -205,12 +207,7 @@ class App extends Component {
   }
 
   onStartChat(contact) {
-    const { chats } = this.state;
-    const chat = {
-      key: contact.key,
-      topic: contact.topic,
-      messages: {}
-    };
+    const { account, chats } = this.state;
 
     const existing = chats.find(c => c.key === contact.key);
     if (existing) {
@@ -221,6 +218,16 @@ class App extends Component {
       });
       return;
     }
+
+    const chat = {
+      key: contact.key,
+      topic: contact.topic,
+      participants: {
+        [sum(contact.key)]: contact.key,
+        [sum(account.publicKey)]: account.publicKey,
+      },
+      messages: {}
+    };
 
     this.setState({
       chats: [...chats, chat],
@@ -240,7 +247,7 @@ class App extends Component {
     await this.messenger.sendChatMessage(chat.key, chat.topic, { text: message });
 
     const msg = {
-      sender: account.publicKey,
+      sender: sum(account.publicKey),
       isRead: true,
       text: message,
       timestamp: Date.now()
@@ -299,7 +306,10 @@ class App extends Component {
       selectedChatId,
       showSettings
     } = this.state;
-    const requests = (groupBy(contacts, 'type')['received_request'] || []).length;
+
+    const requests = Object.values(contacts)
+      .filter(c => c.type === 'received_request')
+      .length;
     const chat = chats.find(c => c.key === selectedChatId);
     const activeContactsStyle = !selectedChat ? { background: '#282c34' } : {};
     const activeChatsStyle = selectedChat ? { background: '#282c34' } : {};
@@ -348,10 +358,10 @@ class App extends Component {
             {
               selectedChat ?
                 <ChatList
-                  list={this.state.chats}
+                  list={chats}
                   onStartChat={this.onStartChat} /> :
                 <ContactList
-                  list={this.state.contacts}
+                  list={Object.values(contacts)}
                   onContactRequest={this.onContactRequest}
                   onAcceptContact={this.onAcceptContact}
                   onDeclineContact={this.onDeclineContact}
