@@ -397,7 +397,10 @@ class App extends Component {
                     username={username}
                     publicKey={account.publicKey || ''}
                     onSave={this.onProfileSave} /> :
-                  <Chat data={chat} onSend={this.onMessageSend} />
+                  <Chat
+                    data={chat}
+                    publicKey={account.publicKey || ''}
+                    onSend={this.onMessageSend} />
             }
           </Col>
         </Row>
