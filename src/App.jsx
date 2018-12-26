@@ -101,7 +101,7 @@ class App extends Component {
   async sendContactResponse(key, accepted) {
     await this.messenger.sendContactResponse(key, accepted);
 
-    const { contacts, chats } = this.state;
+    const { account, contacts, chats } = this.state;
     const hash = sum(key);
 
     const contact = {
@@ -119,6 +119,10 @@ class App extends Component {
         chats: accepted ? [...chats, {
           key: contact.key,
           topic: contact.topic,
+          participants: {
+            [sum(contact.key)]: contact.key,
+            [sum(account.publicKey)]: account.publicKey,
+          },
           messages: {}
         }] : chats,
       },
