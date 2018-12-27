@@ -21,7 +21,7 @@ export default class Messanger {
   account = {};
 
   constructor(config) {
-    this.client = new SwarmClient({ bzz: 'http://localhost:8500', ws: config.ws });
+    this.client = new SwarmClient({ bzz: config.bzz, ws: config.ws });
 
     return (async () => {
       this.account = await this.getAccount();

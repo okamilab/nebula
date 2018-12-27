@@ -95,15 +95,15 @@ class Chat extends Component {
                         i === 0 || !this.isSameDay(time, new Date(messages[i - 1].timestamp)) ?
                           <Col style={{
                             textAlign: 'center',
-                            borderBottom: '1px solid #eee',
-                            lineHeight: '0.1em',
+                            borderBottom: '1px solid #ddd',
+                            lineHeight: '0.3em',
                             margin: '10px 0 20px',
                           }}>
                             <span style={{
                               background: '#fff',
                               padding: '0 6px',
-                              color: '#ddd',
-                              fontSize: 14
+                              color: '#bbb',
+                              fontSize: 12
                             }}>
                               {time.toLocaleDateString()}
                             </span>

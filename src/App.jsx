@@ -22,7 +22,10 @@ import { readFile } from './base/fn';
 import './App.css';
 import logo from './logo.png';
 
-const DEFAULT_ENDPOINT = 'ws://127.0.0.1:8546';
+const DEFAULT_SETTINGS = {
+  pss: 'ws://127.0.0.1:8546',
+  bzz: 'http://127.0.0.1:8500'
+}
 
 class App extends Component {
   messenger = undefined;
@@ -55,14 +58,15 @@ class App extends Component {
 
   async init() {
     const appState = storage.get() || {};
-    const { endpoint = DEFAULT_ENDPOINT } = appState;
+    const { pss, bzz } = { ...DEFAULT_SETTINGS, ...appState };
 
-    this.messenger = await new Messenger({ ws: endpoint });
+    this.messenger = await new Messenger({ ws: pss, bzz });
     const { account } = this.messenger;
     const sessionState = appState[account.publicKey];
 
     this.setState({
-      endpoint,
+      pss,
+      bzz,
       account,
       ...sessionState,
     }, () => {
@@ -270,22 +274,19 @@ class App extends Component {
     }, this.saveState);
   }
 
-  onSettingsSave(endpoint) {
-    this.setState({
-      endpoint
-    }, this.saveState);
+  onSettingsSave(pss, bzz) {
+    this.setState({ pss, bzz }, this.saveState);
   }
 
   onSettingsResest() {
     this.setState({
-      endpoint: DEFAULT_ENDPOINT
+      pss: DEFAULT_SETTINGS.pss,
+      bzz: DEFAULT_SETTINGS.bzz
     }, this.saveState);
   }
 
   onProfileSave(username) {
-    this.setState({
-      username
-    }, this.saveState);
+    this.setState({ username }, this.saveState);
   }
 
   async onFileUpload(e, key) {
@@ -304,19 +305,21 @@ class App extends Component {
 
   saveState() {
     const {
-      endpoint,
+      pss,
+      bzz,
       username,
       account,
       contacts,
       chats } = this.state;
     const { publicKey } = account || {};
     if (!publicKey) {
-      storage.set({ endpoint });
+      storage.set({ pss, bzz });
       return;
     }
 
     storage.set({
-      endpoint,
+      pss,
+      bzz,
       [publicKey]: {
         username,
         contacts: contacts,
@@ -327,7 +330,8 @@ class App extends Component {
 
   render() {
     const {
-      endpoint,
+      pss,
+      bzz,
       account,
       username,
       contacts,
@@ -409,7 +413,8 @@ class App extends Component {
             {
               showSettings ?
                 <Settings
-                  endpoint={endpoint}
+                  pss={pss}
+                  bzz={bzz}
                   localStorage={storage.getRaw()}
                   onSave={this.onSettingsSave}
                   onReset={this.onSettingsResest} /> :
