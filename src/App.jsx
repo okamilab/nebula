@@ -17,6 +17,8 @@ import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
 
+import { readFile } from './base/fn';
+
 import './App.css';
 import logo from './logo.png';
 
@@ -286,9 +288,18 @@ class App extends Component {
     }, this.saveState);
   }
 
-  onFileUpload(e) {
-    const file = e.target.files[0]
-    console.log('file', file)
+  async onFileUpload(e, key) {
+    if (!e.target.files.length) {
+      return;
+    }
+
+    const { bzz } = this.messenger.client;
+    const file = e.target.files[0];
+
+    const readEvent = await readFile(e.target.files[0]);
+    const buffer = readEvent.currentTarget.result
+    const hash = await bzz.uploadFile(buffer, { contentType: file.type });
+    this.onMessageSend(key, 'bzz:/' + hash);
   }
 
   saveState() {

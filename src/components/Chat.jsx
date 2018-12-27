@@ -183,7 +183,7 @@ class Chat extends Component {
                   name='file'
                   id='file'
                   className='inputfile'
-                  onChange={onFileUpload} />
+                  onChange={(e) => onFileUpload(e, data.key)} />
                 <label htmlFor='file'>
                   <FileIcon />
                 </label>
