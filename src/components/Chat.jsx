@@ -6,11 +6,13 @@ import {
 } from 'reactstrap';
 
 import ChatsIcon from './ChatsIcon';
+import FileIcon from './FileIcon';
 import Identicon from './Identicon';
 
 class Chat extends Component {
   static propTypes = {
     onSend: PropTypes.func.isRequired,
+    onFileUpload: PropTypes.func.isRequired,
     data: PropTypes.object,
     publicKey: PropTypes.string,
   };
@@ -61,7 +63,11 @@ class Chat extends Component {
   }
 
   render() {
-    const { data, publicKey } = this.props;
+    const {
+      data,
+      publicKey,
+      onFileUpload } = this.props;
+
     if (!data || !data.key) {
       return (
         <div className='d-flex justify-content-center h-100'>
@@ -126,11 +132,11 @@ class Chat extends Component {
                             <Fragment>
                               {
                                 this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) ?
-                                  <div className="d-flex flex-row" style={{ paddingTop: 2 }}>
+                                  <div className='d-flex flex-row' style={{ paddingTop: 2 }}>
                                     <div>
                                       <Identicon publicKey={sender} size={32} />
                                     </div>
-                                    <div className="pl-2">
+                                    <div className='pl-2'>
                                       <div style={{ fontSize: 12, color: '#bbb' }} >
                                         {sender.substr(0, 8)}..., {time.toLocaleTimeString()}
                                       </div>
@@ -142,9 +148,9 @@ class Chat extends Component {
                                       }}>{m.text}</div>
                                     </div>
                                   </div> :
-                                  <div className="d-flex flex-row" style={{ paddingTop: 2 }}>
+                                  <div className='d-flex flex-row' style={{ paddingTop: 2 }}>
                                     <div style={{ width: 32 }}></div>
-                                    <div className="pl-2">
+                                    <div className='pl-2'>
                                       <div style={{
                                         backgroundColor: '#eee',
                                         display: 'inline-block',
@@ -171,9 +177,18 @@ class Chat extends Component {
                 onChange={this.onChange}
                 onKeyPress={this.onKeyPress}
                 autoFocus />
-              <InputGroupAddon addonType="append">
+              <InputGroupAddon addonType='append'>
+                <input
+                  type='file'
+                  name='file'
+                  id='file'
+                  className='inputfile'
+                  onChange={onFileUpload} />
+                <label htmlFor='file'>
+                  <FileIcon />
+                </label>
                 <Button
-                  color="secondary"
+                  color='secondary'
                   onClick={this.onSend}
                   disabled={!this.state.msg}>Send</Button>
               </InputGroupAddon>

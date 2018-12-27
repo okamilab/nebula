@@ -48,6 +48,7 @@ class App extends Component {
     this.onSettingsSave = this.onSettingsSave.bind(this);
     this.onSettingsResest = this.onSettingsResest.bind(this);
     this.onProfileSave = this.onProfileSave.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
   }
 
   async init() {
@@ -285,6 +286,11 @@ class App extends Component {
     }, this.saveState);
   }
 
+  onFileUpload(e) {
+    const file = e.target.files[0]
+    console.log('file', file)
+  }
+
   saveState() {
     const {
       endpoint,
@@ -404,7 +410,8 @@ class App extends Component {
                   <Chat
                     data={chat}
                     publicKey={account.publicKey || ''}
-                    onSend={this.onMessageSend} />
+                    onSend={this.onMessageSend}
+                    onFileUpload={this.onFileUpload} />
             }
           </Col>
         </Row>
