@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container, Row, Col, Input,
-  Button, InputGroup, InputGroupAddon
+  Row, Col, Input, Button,
+  InputGroup, InputGroupAddon
 } from 'reactstrap';
 
 import ChatsIcon from './ChatsIcon';
