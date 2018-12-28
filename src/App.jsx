@@ -360,7 +360,7 @@ class App extends Component {
           </Navbar>
         </Row>
         <Row className='flex-grow-1'>
-          <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
+          <Col xl={3} lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
             <Account
               account={account}
               username={username}
@@ -409,7 +409,10 @@ class App extends Component {
                   onStartChat={this.onStartChat} />
             }
           </Col>
-          <Col lg={9} md={8}>
+          <Col
+            xl={{ size: 5, offset: 2 }}
+            lg={{ size: 7, offset: 1 }}
+            md={{ size: 8, offset: 0 }}>
             {
               showSettings ?
                 <Settings

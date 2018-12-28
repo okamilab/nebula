@@ -79,7 +79,7 @@ class Chat extends Component {
     const messages = Object.values(data.messages);
 
     return (
-      <div className='h-100 d-flex flex-column'>
+      <div className='h-100 d-flex flex-column pt-3'>
         <div
           className='flex-grow-1'
           style={{ overflowX: 'hidden', overflowY: 'scroll' }}>
