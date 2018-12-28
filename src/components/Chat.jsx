@@ -1,16 +1,21 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Element, scroller } from 'react-scroll';
 import {
   Row, Col, Input, Button,
   InputGroup, InputGroupAddon
 } from 'reactstrap';
 
 import ChatsIcon from './ChatsIcon';
-import Identicon from './Identicon';
+import FileIcon from './FileIcon';
+import ChatDayDivider from './ChatDayDivider';
+import ChatMessage from './ChatMessage';
 
 class Chat extends Component {
   static propTypes = {
     onSend: PropTypes.func.isRequired,
+    onFileUpload: PropTypes.func.isRequired,
+    onFileDownload: PropTypes.func.isRequired,
     data: PropTypes.object,
     publicKey: PropTypes.string,
   };
@@ -24,6 +29,23 @@ class Chat extends Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onSend = this.onSend.bind(this);
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    scroller.scrollTo('bottom', {
+      duration: 400,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+      containerId: 'scroll-container'
+    });
   }
 
   onChange(e) {
@@ -61,7 +83,13 @@ class Chat extends Component {
   }
 
   render() {
-    const { data, publicKey } = this.props;
+    const {
+      data,
+      publicKey,
+      onFileUpload,
+      onFileDownload
+    } = this.props;
+
     if (!data || !data.key) {
       return (
         <div className='d-flex justify-content-center h-100'>
@@ -73,96 +101,36 @@ class Chat extends Component {
     const messages = Object.values(data.messages);
 
     return (
-      <div className='h-100 d-flex flex-column'>
-        <div
+      <div className='h-100 d-flex flex-column pt-3'>
+        <Element
+          id='scroll-container'
           className='flex-grow-1'
-          style={{ overflowX: 'hidden', overflowY: 'scroll' }}>
+          style={{ overflowX: 'hidden', overflowY: 'auto' }}>
           <Row>
             {
               messages
                 .map((m, i) => {
                   const sender = data.participants[m.sender];
-                  const time = new Date(m.timestamp);
+                  const date = new Date(m.timestamp);
+                  const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
                   return (
                     <Fragment key={i}>
-                      {
-                        i === 0 || !this.isSameDay(time, new Date(messages[i - 1].timestamp)) ?
-                          <Col style={{
-                            textAlign: 'center',
-                            borderBottom: '1px solid #eee',
-                            lineHeight: '0.1em',
-                            margin: '10px 0 20px',
-                          }}>
-                            <span style={{
-                              background: '#fff',
-                              padding: '0 6px',
-                              color: '#ddd',
-                              fontSize: 14
-                            }}>
-                              {time.toLocaleDateString()}
-                            </span>
-                          </Col> :
-                          null
-                      }
+                      {showDayDivider ? <ChatDayDivider date={date} /> : null}
                       <Col sm={12}>
-                        {
-                          sender === publicKey ?
-                            <div className='text-right' style={{ paddingBottom: 2, paddingRight: 6 }}>
-                              {
-                                this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) ?
-                                  <div style={{ fontSize: 12, color: '#bbb' }} >
-                                    {time.toLocaleTimeString()}
-                                  </div> :
-                                  null
-                              }
-                              <div
-                                style={{
-                                  backgroundColor: '#eee',
-                                  display: 'inline-block',
-                                  padding: '2px 10px',
-                                  borderRadius: 4
-                                }}>{m.text}</div>
-                            </div> :
-                            <Fragment>
-                              {
-                                this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) ?
-                                  <div className="d-flex flex-row" style={{ paddingTop: 2 }}>
-                                    <div>
-                                      <Identicon publicKey={sender} size={32} />
-                                    </div>
-                                    <div className="pl-2">
-                                      <div style={{ fontSize: 12, color: '#bbb' }} >
-                                        {sender.substr(0, 8)}..., {time.toLocaleTimeString()}
-                                      </div>
-                                      <div style={{
-                                        backgroundColor: '#eee',
-                                        display: 'inline-block',
-                                        padding: '2px 10px',
-                                        borderRadius: 4
-                                      }}>{m.text}</div>
-                                    </div>
-                                  </div> :
-                                  <div className="d-flex flex-row" style={{ paddingTop: 2 }}>
-                                    <div style={{ width: 32 }}></div>
-                                    <div className="pl-2">
-                                      <div style={{
-                                        backgroundColor: '#eee',
-                                        display: 'inline-block',
-                                        padding: '2px 10px',
-                                        borderRadius: 4
-                                      }}>{m.text}</div>
-                                    </div>
-                                  </div>
-                              }
-                            </Fragment>
-                        }
+                        <ChatMessage
+                          message={m}
+                          sender={sender}
+                          isOwn={sender === publicKey}
+                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider}
+                          onDownload={onFileDownload} />
                       </Col>
                     </Fragment>
                   )
                 })
             }
           </Row>
-        </div>
+          <Element name="bottom"></Element>
+        </Element>
         <Row className='flex-shrink-0 pt-3 pb-3'>
           <Col>
             <InputGroup>
@@ -171,9 +139,18 @@ class Chat extends Component {
                 onChange={this.onChange}
                 onKeyPress={this.onKeyPress}
                 autoFocus />
-              <InputGroupAddon addonType="append">
+              <InputGroupAddon addonType='append'>
+                <input
+                  type='file'
+                  name='file'
+                  id='file'
+                  className='inputfile'
+                  onChange={(e) => onFileUpload(e, data.key)} />
+                <label htmlFor='file'>
+                  <FileIcon />
+                </label>
                 <Button
-                  color="secondary"
+                  color='secondary'
                   onClick={this.onSend}
                   disabled={!this.state.msg}>Send</Button>
               </InputGroupAddon>

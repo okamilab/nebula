@@ -9,7 +9,8 @@ class Settings extends Component {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
     onReset: PropTypes.func.isRequired,
-    endpoint: PropTypes.string,
+    pss: PropTypes.string,
+    bzz: PropTypes.string,
   };
 
   constructor(props) {
@@ -22,20 +23,21 @@ class Settings extends Component {
   }
 
   onSave() {
-    const { endpoint } =
+    const { pss, bzz } =
       Object.assign({}, this.props, this.state);
-    this.props.onSave(endpoint);
+    this.props.onSave(pss, bzz);
   }
 
   async onReset() {
     await this.props.onReset();
-    const { endpoint } = this.props;
-    this.setState({ endpoint });
+    const { pss, bzz } = this.props;
+    this.setState({ pss, bzz });
   }
 
   render() {
     const {
-      endpoint,
+      pss,
+      bzz,
       localStorage
     } = this.props;
 
@@ -46,16 +48,32 @@ class Settings extends Component {
         </Row>
         <FormGroup className='row pt-3'>
           <Col sm={3}>
-            <Label for='endpoint'>Swarm endpoint</Label>
+            <Label for='pss'>PSS endpoint (WebSocket)</Label>
           </Col>
           <Col sm={9}>
             <Input
               type='text'
-              id='endpoint'
-              placeholder='endpoint'
+              id='pss'
               autoFocus
-              onChange={(e) => this.setState({ endpoint: e.target.value })}
-              defaultValue={endpoint} />
+              onChange={(e) => this.setState({ pss: e.target.value })}
+              defaultValue={pss} />
+          </Col>
+          <Col sm={12}
+            className='pt-1 text-secondary'
+            style={{fontSize: 13}}>
+            After updating the field you need to restart the app (refresh page)
+          </Col>
+        </FormGroup>
+        <FormGroup className='row pt-3'>
+          <Col sm={3}>
+            <Label for='bzz'>BZZ endpoint</Label>
+          </Col>
+          <Col sm={9}>
+            <Input
+              type='text'
+              id='bzz'
+              onChange={(e) => this.setState({ bzz: e.target.value })}
+              defaultValue={bzz} />
           </Col>
           <Col sm={12}
             className='pt-1 text-secondary'

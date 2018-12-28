@@ -4,6 +4,7 @@ import {
   Container, Row, Col, Navbar, NavbarBrand, Nav, NavItem
 } from 'reactstrap';
 import sum from 'hash-sum';
+import FileSaver from 'file-saver';
 
 import Account from './components/Account';
 import Settings from './components/Settings';
@@ -17,10 +18,15 @@ import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';
 
+import { readFile } from './base/fn';
+
 import './App.css';
 import logo from './logo.png';
 
-const DEFAULT_ENDPOINT = 'ws://127.0.0.1:8546';
+const DEFAULT_SETTINGS = {
+  pss: 'ws://127.0.0.1:8546',
+  bzz: 'http://127.0.0.1:8500'
+}
 
 class App extends Component {
   messenger = undefined;
@@ -48,18 +54,21 @@ class App extends Component {
     this.onSettingsSave = this.onSettingsSave.bind(this);
     this.onSettingsResest = this.onSettingsResest.bind(this);
     this.onProfileSave = this.onProfileSave.bind(this);
+    this.onFileUpload = this.onFileUpload.bind(this);
+    this.onFileDownload = this.onFileDownload.bind(this);
   }
 
   async init() {
     const appState = storage.get() || {};
-    const { endpoint = DEFAULT_ENDPOINT } = appState;
+    const { pss, bzz } = { ...DEFAULT_SETTINGS, ...appState };
 
-    this.messenger = await new Messenger({ ws: endpoint });
+    this.messenger = await new Messenger({ ws: pss, bzz });
     const { account } = this.messenger;
     const sessionState = appState[account.publicKey];
 
     this.setState({
-      endpoint,
+      pss,
+      bzz,
       account,
       ...sessionState,
     }, () => {
@@ -267,39 +276,58 @@ class App extends Component {
     }, this.saveState);
   }
 
-  onSettingsSave(endpoint) {
-    this.setState({
-      endpoint
-    }, this.saveState);
+  onSettingsSave(pss, bzz) {
+    this.setState({ pss, bzz }, this.saveState);
   }
 
   onSettingsResest() {
     this.setState({
-      endpoint: DEFAULT_ENDPOINT
+      pss: DEFAULT_SETTINGS.pss,
+      bzz: DEFAULT_SETTINGS.bzz
     }, this.saveState);
   }
 
   onProfileSave(username) {
-    this.setState({
-      username
-    }, this.saveState);
+    this.setState({ username }, this.saveState);
+  }
+
+  async onFileUpload(e, key) {
+    if (!e.target.files.length) {
+      return;
+    }
+
+    const { bzz } = this.messenger.client;
+    const file = e.target.files[0];
+
+    const readEvent = await readFile(e.target.files[0]);
+    const buffer = readEvent.currentTarget.result
+    const hash = await bzz.uploadFile(buffer, { contentType: file.type });
+    this.onMessageSend(key, 'bzz:/' + hash);
+  }
+
+  async onFileDownload(hash) {
+    const { bzz } = this.messenger.client;
+    const file = await bzz.download(hash);
+    await FileSaver.saveAs(await file.blob());
   }
 
   saveState() {
     const {
-      endpoint,
+      pss,
+      bzz,
       username,
       account,
       contacts,
       chats } = this.state;
     const { publicKey } = account || {};
     if (!publicKey) {
-      storage.set({ endpoint });
+      storage.set({ pss, bzz });
       return;
     }
 
     storage.set({
-      endpoint,
+      pss,
+      bzz,
       [publicKey]: {
         username,
         contacts: contacts,
@@ -310,7 +338,8 @@ class App extends Component {
 
   render() {
     const {
-      endpoint,
+      pss,
+      bzz,
       account,
       username,
       contacts,
@@ -339,7 +368,7 @@ class App extends Component {
           </Navbar>
         </Row>
         <Row className='flex-grow-1'>
-          <Col lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
+          <Col xl={3} lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
             <Account
               account={account}
               username={username}
@@ -388,11 +417,15 @@ class App extends Component {
                   onStartChat={this.onStartChat} />
             }
           </Col>
-          <Col lg={9} md={8}>
+          <Col
+            xl={{ size: 5, offset: 2 }}
+            lg={{ size: 7, offset: 1 }}
+            md={{ size: 8, offset: 0 }}>
             {
               showSettings ?
                 <Settings
-                  endpoint={endpoint}
+                  pss={pss}
+                  bzz={bzz}
                   localStorage={storage.getRaw()}
                   onSave={this.onSettingsSave}
                   onReset={this.onSettingsResest} /> :
@@ -404,7 +437,9 @@ class App extends Component {
                   <Chat
                     data={chat}
                     publicKey={account.publicKey || ''}
-                    onSend={this.onMessageSend} />
+                    onSend={this.onMessageSend}
+                    onFileUpload={this.onFileUpload}
+                    onFileDownload={this.onFileDownload} />
             }
           </Col>
         </Row>

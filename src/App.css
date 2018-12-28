@@ -3,6 +3,31 @@
   color: white;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff; 
+}
+
+::-webkit-scrollbar-track:hover {
+  background: #efefef; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #aaa; 
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -10,4 +35,31 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.inputfile {
+  width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+  z-index: -1;
+  cursor: pointer;
+}
+
+.inputfile + label {
+  font-size: 1.4em;
+  font-weight: 700;
+  display: inline-block;
+  width: 26px;
+  height: auto;
+  position: absolute;
+  right: 66px;
+  z-index: 1000;
+  opacity: .5;
+  cursor: pointer;
+}
+
+.inputfile + label:hover {
+  opacity: 1;
 }
