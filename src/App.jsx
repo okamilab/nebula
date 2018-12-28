@@ -4,6 +4,7 @@ import {
   Container, Row, Col, Navbar, NavbarBrand, Nav, NavItem
 } from 'reactstrap';
 import sum from 'hash-sum';
+import FileSaver from 'file-saver';
 
 import Account from './components/Account';
 import Settings from './components/Settings';
@@ -304,8 +305,10 @@ class App extends Component {
     this.onMessageSend(key, 'bzz:/' + hash);
   }
 
-  onFileDownload(hash) {
-    console.log(hash)
+  async onFileDownload(hash) {
+    const { bzz } = this.messenger.client;
+    const file = await bzz.download(hash);
+    await FileSaver.saveAs(await file.blob());
   }
 
   saveState() {

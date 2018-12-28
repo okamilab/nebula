@@ -65,6 +65,7 @@ class ChatMessage extends Component {
             </div>
           </div>
         );
+
       default:
         return (
           <div style={messageStyles}>
@@ -78,6 +79,7 @@ class ChatMessage extends Component {
     const { message, sender, isOwn, showHeader } = this.props;
     const time = new Date(message.timestamp);
     let header;
+
     switch (isOwn) {
       case true:
         if (showHeader) {
@@ -93,6 +95,7 @@ class ChatMessage extends Component {
             {this.renderMessageContent()}
           </Fragment>
         );
+
       default:
         let identicon = (<div style={{ width: 32 }}></div>);
         if (showHeader) {
