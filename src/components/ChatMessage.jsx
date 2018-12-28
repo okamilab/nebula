@@ -38,10 +38,11 @@ class ChatMessage extends Component {
     sender: PropTypes.string.isRequired,
     isOwn: PropTypes.bool.isRequired,
     showHeader: PropTypes.bool.isRequired,
+    onDownload: PropTypes.func.isRequired,
   };
 
   renderMessageContent() {
-    const { message, isOwn } = this.props;
+    const { message, isOwn, onDownload } = this.props;
     const { text } = message;
     const { own, rest } = styles.message;
     const messageStyles = isOwn ? own : rest;
@@ -59,7 +60,8 @@ class ChatMessage extends Component {
             <hr className='mt-2 mb-2' />
             <div className='text-center pb-2'>
               <Button color='link'
-                className='p-0'>Download</Button>
+                className='p-0'
+                onClick={() => onDownload(text.substr(5))}>Download</Button>
             </div>
           </div>
         );

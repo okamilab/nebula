@@ -54,6 +54,7 @@ class App extends Component {
     this.onSettingsResest = this.onSettingsResest.bind(this);
     this.onProfileSave = this.onProfileSave.bind(this);
     this.onFileUpload = this.onFileUpload.bind(this);
+    this.onFileDownload = this.onFileDownload.bind(this);
   }
 
   async init() {
@@ -303,6 +304,10 @@ class App extends Component {
     this.onMessageSend(key, 'bzz:/' + hash);
   }
 
+  onFileDownload(hash) {
+    console.log(hash)
+  }
+
   saveState() {
     const {
       pss,
@@ -430,7 +435,8 @@ class App extends Component {
                     data={chat}
                     publicKey={account.publicKey || ''}
                     onSend={this.onMessageSend}
-                    onFileUpload={this.onFileUpload} />
+                    onFileUpload={this.onFileUpload}
+                    onFileDownload={this.onFileDownload} />
             }
           </Col>
         </Row>

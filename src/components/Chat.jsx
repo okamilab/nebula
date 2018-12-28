@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Element, scroller } from 'react-scroll';
 import {
   Row, Col, Input, Button,
   InputGroup, InputGroupAddon
@@ -7,12 +8,14 @@ import {
 
 import ChatsIcon from './ChatsIcon';
 import FileIcon from './FileIcon';
+import ChatDayDivider from './ChatDayDivider';
 import ChatMessage from './ChatMessage';
 
 class Chat extends Component {
   static propTypes = {
     onSend: PropTypes.func.isRequired,
     onFileUpload: PropTypes.func.isRequired,
+    onFileDownload: PropTypes.func.isRequired,
     data: PropTypes.object,
     publicKey: PropTypes.string,
   };
@@ -26,6 +29,23 @@ class Chat extends Component {
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onSend = this.onSend.bind(this);
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom() {
+    scroller.scrollTo('bottom', {
+      duration: 400,
+      delay: 0,
+      smooth: 'easeInOutQuart',
+      containerId: 'scroll-container'
+    });
   }
 
   onChange(e) {
@@ -66,7 +86,9 @@ class Chat extends Component {
     const {
       data,
       publicKey,
-      onFileUpload } = this.props;
+      onFileUpload,
+      onFileDownload
+    } = this.props;
 
     if (!data || !data.key) {
       return (
@@ -80,49 +102,35 @@ class Chat extends Component {
 
     return (
       <div className='h-100 d-flex flex-column pt-3'>
-        <div
+        <Element
+          id='scroll-container'
           className='flex-grow-1'
-          style={{ overflowX: 'hidden', overflowY: 'scroll' }}>
+          style={{ overflowX: 'hidden', overflowY: 'auto' }}>
           <Row>
             {
               messages
                 .map((m, i) => {
                   const sender = data.participants[m.sender];
-                  const time = new Date(m.timestamp);
+                  const date = new Date(m.timestamp);
+                  const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
                   return (
                     <Fragment key={i}>
-                      {
-                        i === 0 || !this.isSameDay(time, new Date(messages[i - 1].timestamp)) ?
-                          <Col style={{
-                            textAlign: 'center',
-                            borderBottom: '1px solid #ddd',
-                            lineHeight: '0.3em',
-                            margin: '10px 0 20px',
-                          }}>
-                            <span style={{
-                              background: '#fff',
-                              padding: '0 6px',
-                              color: '#bbb',
-                              fontSize: 12
-                            }}>
-                              {time.toLocaleDateString()}
-                            </span>
-                          </Col> :
-                          null
-                      }
+                      {showDayDivider ? <ChatDayDivider date={date} /> : null}
                       <Col sm={12}>
                         <ChatMessage
                           message={m}
                           sender={sender}
                           isOwn={sender === publicKey}
-                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null)} />
+                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider}
+                          onDownload={onFileDownload} />
                       </Col>
                     </Fragment>
                   )
                 })
             }
           </Row>
-        </div>
+          <Element name="bottom"></Element>
+        </Element>
         <Row className='flex-shrink-0 pt-3 pb-3'>
           <Col>
             <InputGroup>

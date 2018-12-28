@@ -55,4 +55,11 @@
   height: auto;
   position: absolute;
   right: 66px;
+  z-index: 1000;
+  opacity: .5;
+  cursor: pointer;
+}
+
+.inputfile + label:hover {
+  opacity: 1;
 }
