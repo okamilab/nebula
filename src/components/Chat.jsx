@@ -7,7 +7,7 @@ import {
 
 import ChatsIcon from './ChatsIcon';
 import FileIcon from './FileIcon';
-import Identicon from './Identicon';
+import ChatMessage from './ChatMessage';
 
 class Chat extends Component {
   static propTypes = {
@@ -111,57 +111,11 @@ class Chat extends Component {
                           null
                       }
                       <Col sm={12}>
-                        {
-                          sender === publicKey ?
-                            <div className='text-right' style={{ paddingBottom: 2, paddingRight: 6 }}>
-                              {
-                                this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) ?
-                                  <div style={{ fontSize: 12, color: '#bbb' }} >
-                                    {time.toLocaleTimeString()}
-                                  </div> :
-                                  null
-                              }
-                              <div
-                                style={{
-                                  backgroundColor: '#eee',
-                                  display: 'inline-block',
-                                  padding: '2px 10px',
-                                  borderRadius: 4
-                                }}>{m.text}</div>
-                            </div> :
-                            <Fragment>
-                              {
-                                this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) ?
-                                  <div className='d-flex flex-row' style={{ paddingTop: 2 }}>
-                                    <div>
-                                      <Identicon publicKey={sender} size={32} />
-                                    </div>
-                                    <div className='pl-2'>
-                                      <div style={{ fontSize: 12, color: '#bbb' }} >
-                                        {sender.substr(0, 8)}..., {time.toLocaleTimeString()}
-                                      </div>
-                                      <div style={{
-                                        backgroundColor: '#eee',
-                                        display: 'inline-block',
-                                        padding: '2px 10px',
-                                        borderRadius: 4
-                                      }}>{m.text}</div>
-                                    </div>
-                                  </div> :
-                                  <div className='d-flex flex-row' style={{ paddingTop: 2 }}>
-                                    <div style={{ width: 32 }}></div>
-                                    <div className='pl-2'>
-                                      <div style={{
-                                        backgroundColor: '#eee',
-                                        display: 'inline-block',
-                                        padding: '2px 10px',
-                                        borderRadius: 4
-                                      }}>{m.text}</div>
-                                    </div>
-                                  </div>
-                              }
-                            </Fragment>
-                        }
+                        <ChatMessage
+                          message={m}
+                          sender={sender}
+                          isOwn={sender === publicKey}
+                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null)} />
                       </Col>
                     </Fragment>
                   )
