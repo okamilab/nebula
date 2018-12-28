@@ -23,10 +23,10 @@
 }
 
 .inputfile + label {
-  font-size: 1.33em;
+  font-size: 1.4em;
   font-weight: 700;
   display: inline-block;
-  width: 30px;
+  width: 26px;
   height: auto;
   position: absolute;
   right: 66px;
