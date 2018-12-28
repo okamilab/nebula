@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import ContactInvite from './ContactInvite';
 import ContactListGroup from './ContactListGroup';
 import ContactRequest from './ContactRequest';
-import Identicon from './Identicon';
-import { groupBy } from '../base/fn';
+import Identicon from './../common/Identicon';
+import { groupBy } from '../../base/fn';
 
 class ContactList extends Component {
   static propTypes = {

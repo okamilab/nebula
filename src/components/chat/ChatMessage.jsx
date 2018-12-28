@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 
-import Identicon from './Identicon';
+import Identicon from './../common/Identicon';
 
 const styles = {
   container: {

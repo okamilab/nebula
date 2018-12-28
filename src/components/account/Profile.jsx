@@ -4,7 +4,7 @@ import {
   Container, Row, Col, FormGroup, Label, Input, Button
 } from 'reactstrap';
 
-import Identicon from './Identicon';
+import Identicon from '../common/Identicon';
 
 class Profile extends Component {
   static propTypes = {

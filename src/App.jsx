@@ -6,14 +6,14 @@ import {
 import sum from 'hash-sum';
 import FileSaver from 'file-saver';
 
-import Account from './components/Account';
-import Settings from './components/Settings';
-import ContactList from './components/ContactList';
-import ChatList from './components/ChatList';
-import Chat from './components/Chat';
-import ContactsIcon from './components/ContactsIcon';
-import ChatsIcon from './components/ChatsIcon';
-import Profile from './components/Profile';
+import Account from './components/account/Account';
+import Settings from './components/account/Settings';
+import Profile from './components/account/Profile';
+import ContactList from './components/contact/ContactList';
+import ContactsIcon from './components/contact/ContactsIcon';
+import ChatList from './components/chat/ChatList';
+import Chat from './components/chat/Chat';
+import ChatsIcon from './components/chat/ChatsIcon';
 import storage from './base/storage';
 import Messenger from './base/messenger';
 import keyUtils from './base/key';

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Identicon from './Identicon';
+import Identicon from './../common/Identicon';
 
 class ChatList extends Component {
   static propTypes = {
