@@ -109,11 +109,10 @@ class App extends Component {
   }
 
   async sendContactResponse(key, accepted) {
-    await this.messenger.sendContactResponse(key, accepted);
+    const { account, username, contacts, chats } = this.state;
+    await this.messenger.sendContactResponse(key, accepted, { username });
 
-    const { account, contacts, chats } = this.state;
     const hash = sum(key);
-
     const contact = {
       ...contacts[hash],
       type: accepted ? 'added' : 'received_declined'
@@ -140,8 +139,7 @@ class App extends Component {
   }
 
   async onAcceptContact(key) {
-    const { username } = this.state;
-    await this.sendContactResponse(key, true, { username });
+    await this.sendContactResponse(key, true);
   }
 
   async onDeclineContact(key) {
