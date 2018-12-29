@@ -7,27 +7,28 @@ const STORAGE_KEY = 'swarm_messenger';
 // {
 //   endpoint: 'ws://127.0.0.1:8546',
 //   [publicKey]: {
-//       username: '',
-//       contacts: {
-//           [hash(publicKey)]: {},
-//           ...
+//     username: '',
+//     contacts: {
+//       [hash(publicKey)]: {},
+//       ...
+//     },
+//     chats: [
+//       {
+//          key: publicKey,
+//          participants: {
+//            [hash(publicKey)]: publicKey,
+//            ...
+//          },
+//          messeges: {
+//            [hash(event)]: {
+//               sender: [hash(publicKey)],
+//               ...
+//            },
+//            ...
+//          }
 //       },
-//       chats: [
-//           {
-//               participants: {
-//                    [hash(publicKey)]: publicKey,
-//                    ...
-//               },
-//               messeges: {
-//                   [hash(event)]: {
-//                       sender: [hash(publicKey)],
-//                       ...
-//                   },
-//                   ...
-//               }
-//           },
-//           ...
-//       ]
+//       ...
+//     ]
 //   }
 // }
 

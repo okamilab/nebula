@@ -57,7 +57,7 @@ class ContactList extends Component {
                 <div
                   className='pl-2 text-truncate'
                   style={{ lineHeight: '32px' }}>
-                  {c.key}
+                  {c.username || c.key}
                 </div>
               </div>
             </div>

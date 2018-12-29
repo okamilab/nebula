@@ -89,11 +89,12 @@ class App extends Component {
   }
 
   async onContactRequest(value) {
-    const { account, contacts } = this.state;
+    const { account, username, contacts } = this.state;
     const key = hexValueType(value);
     keyUtils.isValidPubKey(key, account.publicKey, contacts[sum(key)]);
 
-    const { sharedTopic } = await this.messenger.sendContactRequest(key);
+    const { sharedTopic } =
+      await this.messenger.sendContactRequest(key, username);
 
     const contact = {
       key: key,
@@ -139,7 +140,8 @@ class App extends Component {
   }
 
   async onAcceptContact(key) {
-    await this.sendContactResponse(key, true);
+    const { username } = this.state;
+    await this.sendContactResponse(key, true, { username });
   }
 
   async onDeclineContact(key) {

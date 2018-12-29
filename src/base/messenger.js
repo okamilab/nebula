@@ -62,7 +62,7 @@ export default class Messanger {
     this._subscriptions.map(s => s.unsubscribe());
   }
 
-  async sendContactRequest(key) {
+  async sendContactRequest(key, username) {
     const [contactTopic, sharedTopic] = await Promise.all([
       this.client.pss.stringToTopic(key),
       this.client.pss.stringToTopic(createRandomString()),
@@ -72,7 +72,8 @@ export default class Messanger {
     const message = {
       type: 'contact_request',
       payload: {
-        message: 'Hi there',
+        username,
+        message: null,
         topic: sharedTopic,
         overlay_address: this.account.overlayAddress,
       },
@@ -88,8 +89,8 @@ export default class Messanger {
     if (accept) {
       payload = {
         contact: true,
-        overlay_address: this.account.overlayAddress,
         username: data.username,
+        overlay_address: this.account.overlayAddress,
       };
     } else {
       payload = { contact: false };
