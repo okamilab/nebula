@@ -35,7 +35,7 @@ const styles = {
 class ChatMessage extends Component {
   static propTypes = {
     message: PropTypes.object.isRequired,
-    sender: PropTypes.string.isRequired,
+    sender: PropTypes.object.isRequired,
     isOwn: PropTypes.bool.isRequired,
     showHeader: PropTypes.bool.isRequired,
     onDownload: PropTypes.func.isRequired,
@@ -98,15 +98,16 @@ class ChatMessage extends Component {
 
       default:
         let identicon = (<div style={{ width: 32 }}></div>);
+        const { key, username } = sender;
         if (showHeader) {
           identicon = (
             <div>
-              <Identicon publicKey={sender} size={32} />
+              <Identicon publicKey={key} size={32} />
             </div>
           );
           header = (
             <div style={{ fontSize: 12, color: '#bbb' }} >
-              {sender.substr(0, 8)}..., {time.toLocaleTimeString()}
+              {username || key.substr(0, 8) + '...'}, {time.toLocaleTimeString()}
             </div>
           );
         }

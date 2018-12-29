@@ -13,11 +13,13 @@ import ChatMessage from './ChatMessage';
 
 class Chat extends Component {
   static propTypes = {
+    id: PropTypes.string.isRequired,
+    messages: PropTypes.object.isRequired,
+    participants: PropTypes.object.isRequired,
+    publicKey: PropTypes.string.isRequired,
     onSend: PropTypes.func.isRequired,
     onFileUpload: PropTypes.func.isRequired,
     onFileDownload: PropTypes.func.isRequired,
-    data: PropTypes.object,
-    publicKey: PropTypes.string,
   };
 
   constructor(props) {
@@ -61,8 +63,8 @@ class Chat extends Component {
   }
 
   onSend() {
-    const { data, onSend } = this.props;
-    onSend(data.key, this.state.msg);
+    const { id, onSend } = this.props;
+    onSend(id, this.state.msg);
     this.setState({ msg: '' });
   }
 
@@ -84,13 +86,15 @@ class Chat extends Component {
 
   render() {
     const {
-      data,
+      id,
+      messages,
+      participants,
       publicKey,
       onFileUpload,
       onFileDownload
     } = this.props;
 
-    if (!data || !data.key) {
+    if (!id) {
       return (
         <div className='d-flex justify-content-center h-100'>
           <ChatsIcon fill='#ccc' style={{ width: 92, height: 'auto' }} />
@@ -98,7 +102,7 @@ class Chat extends Component {
       );
     }
 
-    const messages = Object.values(data.messages);
+    const list = Object.values(messages);
 
     return (
       <div className='h-100 d-flex flex-column pt-3'>
@@ -108,11 +112,11 @@ class Chat extends Component {
           style={{ overflowX: 'hidden', overflowY: 'auto' }}>
           <Row>
             {
-              messages
+              list
                 .map((m, i) => {
-                  const sender = data.participants[m.sender];
+                  const sender = participants[m.sender];
                   const date = new Date(m.timestamp);
-                  const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
+                  const showDayDivider = i === 0 || !this.isSameDay(date, new Date(list[i - 1].timestamp));
                   return (
                     <Fragment key={i}>
                       {showDayDivider ? <ChatDayDivider date={date} /> : null}
@@ -120,8 +124,8 @@ class Chat extends Component {
                         <ChatMessage
                           message={m}
                           sender={sender}
-                          isOwn={sender === publicKey}
-                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider}
+                          isOwn={sender.key === publicKey}
+                          showHeader={this.showMsgHeader(i, m, i > 0 ? list[i - 1] : null) || showDayDivider}
                           onDownload={onFileDownload} />
                       </Col>
                     </Fragment>
@@ -145,7 +149,7 @@ class Chat extends Component {
                   name='file'
                   id='file'
                   className='inputfile'
-                  onChange={(e) => onFileUpload(e, data.key)} />
+                  onChange={(e) => onFileUpload(e, id)} />
                 <label htmlFor='file'>
                   <FileIcon />
                 </label>

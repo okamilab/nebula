@@ -336,6 +336,30 @@ class App extends Component {
     });
   }
 
+  getChatParticipants(chat) {
+    if (!chat) {
+      return [];
+    }
+
+    const { account, contacts } = this.state;
+    const { publicKey } = account;
+
+    const participants = {
+      [sum(publicKey)]: { key: publicKey }
+    };
+
+    Object.keys(chat.participants)
+      .forEach(k => {
+        const contact = contacts[k];
+        if (!contact) {
+          return;
+        }
+        participants[k] = contacts[k];
+      });
+
+    return participants;
+  }
+
   render() {
     const {
       pss,
@@ -434,12 +458,16 @@ class App extends Component {
                     username={username}
                     publicKey={account.publicKey || ''}
                     onSave={this.onProfileSave} /> :
-                  <Chat
-                    data={chat}
-                    publicKey={account.publicKey || ''}
-                    onSend={this.onMessageSend}
-                    onFileUpload={this.onFileUpload}
-                    onFileDownload={this.onFileDownload} />
+                  chat ?
+                    <Chat
+                      id={chat.key}
+                      messages={chat.messages}
+                      participants={this.getChatParticipants(chat)}
+                      publicKey={account.publicKey || ''}
+                      onSend={this.onMessageSend}
+                      onFileUpload={this.onFileUpload}
+                      onFileDownload={this.onFileDownload} /> :
+                    null
             }
           </Col>
         </Row>
