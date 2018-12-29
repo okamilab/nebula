@@ -14,6 +14,7 @@ class ContactList extends Component {
     onAcceptContact: PropTypes.func.isRequired,
     onDeclineContact: PropTypes.func.isRequired,
     onStartChat: PropTypes.func.isRequired,
+    onOpenInfo: PropTypes.func.isRequired,
   };
 
   render() {
@@ -22,7 +23,8 @@ class ContactList extends Component {
       onContactRequest,
       onAcceptContact,
       onDeclineContact,
-      onStartChat
+      onStartChat,
+      onOpenInfo
     } = this.props;
     const map = groupBy(list, 'type');
 
@@ -48,17 +50,18 @@ class ContactList extends Component {
           renderItem={(c, i) =>
             <div
               key={i}
-              style={{ cursor: 'pointer' }}
-              onClick={() => { onStartChat(c); }}>
+              style={{ cursor: 'pointer' }}>
               <div className="d-flex flex-row pt-2">
-                <div>
+                <div onClick={() => { onStartChat(c); }}>
                   <Identicon publicKey={c.key} size={32} />
                 </div>
                 <div
-                  className='pl-2 text-truncate'
-                  style={{ lineHeight: '32px' }}>
+                  className='flex-grow-1 pl-2 text-truncate'
+                  style={{ lineHeight: '32px' }}
+                  onClick={() => { onStartChat(c); }}>
                   {c.username || c.key}
                 </div>
+                <div onClick={() => { onOpenInfo(c.key) }}>. . .</div>
               </div>
             </div>
           }>

@@ -11,6 +11,7 @@ import Settings from './components/account/Settings';
 import Profile from './components/account/Profile';
 import ContactList from './components/contact/ContactList';
 import ContactsIcon from './components/contact/ContactsIcon';
+import Contact from './components/contact/Contact';
 import ChatList from './components/chat/ChatList';
 import Chat from './components/chat/Chat';
 import ChatsIcon from './components/chat/ChatsIcon';
@@ -38,10 +39,12 @@ class App extends Component {
       account: {},
       contacts: {},
       chats: [],
-      selectedChatId: {},
+      selectedChatId: undefined,
       selectedChat: false,
       showSettings: false,
       showProfile: false,
+      selectedContactKey: undefined,
+      showContact: false,
     };
 
     this.onReceiveContactEvent = this.onReceiveContactEvent.bind(this);
@@ -56,6 +59,7 @@ class App extends Component {
     this.onProfileSave = this.onProfileSave.bind(this);
     this.onFileUpload = this.onFileUpload.bind(this);
     this.onFileDownload = this.onFileDownload.bind(this);
+    this.onOpenContactInfo = this.onOpenContactInfo.bind(this);
   }
 
   async init() {
@@ -231,7 +235,8 @@ class App extends Component {
         selectedChatId: contact.key,
         selectedChat: true,
         showSettings: false,
-        showProfile: false
+        showProfile: false,
+        showContact: false,
       });
       return;
     }
@@ -250,7 +255,8 @@ class App extends Component {
       chats: [...chats, chat],
       selectedChatId: contact.key,
       selectedChat: true,
-      showSettings: false
+      showSettings: false,
+      showContact: false
     }, this.saveState);
   }
 
@@ -336,6 +342,15 @@ class App extends Component {
     });
   }
 
+  onOpenContactInfo(key) {
+    this.setState({
+      selectedContactKey: key,
+      selectedChat: false,
+      showSettings: false,
+      showContact: true
+    });
+  }
+
   getChatParticipants(chat) {
     if (!chat) {
       return [];
@@ -372,6 +387,8 @@ class App extends Component {
       selectedChatId,
       showSettings,
       showProfile,
+      selectedContactKey,
+      showContact
     } = this.state;
 
     const requests = Object.values(contacts)
@@ -380,6 +397,7 @@ class App extends Component {
     const chat = chats.find(c => c.key === selectedChatId);
     const activeContactsStyle = !selectedChat ? { background: '#282c34' } : {};
     const activeChatsStyle = selectedChat ? { background: '#282c34' } : {};
+    const selectedContact = selectedContactKey ? contacts[sum(selectedContactKey)] : undefined;
 
     return (
       <Container fluid className='h-100 d-flex flex-column'>
@@ -411,6 +429,7 @@ class App extends Component {
                     selectedChat: false,
                     showSettings: false,
                     showProfile: false,
+                    showContact: false
                   })
                 }}>
                 <ContactsIcon active={!selectedChat} requests={requests} />
@@ -422,7 +441,8 @@ class App extends Component {
                   this.setState({
                     selectedChat: true,
                     showSettings: false,
-                    showProfile: false
+                    showProfile: false,
+                    showContact: false
                   })
                 }}>
                 <ChatsIcon active={selectedChat} />
@@ -438,7 +458,8 @@ class App extends Component {
                   onContactRequest={this.onContactRequest}
                   onAcceptContact={this.onAcceptContact}
                   onDeclineContact={this.onDeclineContact}
-                  onStartChat={this.onStartChat} />
+                  onStartChat={this.onStartChat}
+                  onOpenInfo={this.onOpenContactInfo} />
             }
           </Col>
           <Col
@@ -458,16 +479,21 @@ class App extends Component {
                     username={username}
                     publicKey={account.publicKey || ''}
                     onSave={this.onProfileSave} /> :
-                  chat ?
-                    <Chat
-                      id={chat.key}
-                      messages={chat.messages}
-                      participants={this.getChatParticipants(chat)}
-                      publicKey={account.publicKey || ''}
-                      onSend={this.onMessageSend}
-                      onFileUpload={this.onFileUpload}
-                      onFileDownload={this.onFileDownload} /> :
-                    null
+                  showContact && selectedContact ?
+                    <Contact
+                      username={selectedContact.username}
+                      publicKey={selectedContact.key}
+                      onSave={() => console.log} /> :
+                    chat ?
+                      <Chat
+                        id={chat.key}
+                        messages={chat.messages}
+                        participants={this.getChatParticipants(chat)}
+                        publicKey={account.publicKey || ''}
+                        onSend={this.onMessageSend}
+                        onFileUpload={this.onFileUpload}
+                        onFileDownload={this.onFileDownload} /> :
+                      null
             }
           </Col>
         </Row>
