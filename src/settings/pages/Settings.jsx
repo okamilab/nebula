@@ -104,17 +104,13 @@ class Settings extends Component {
 
 export default compose(
   connect((state) => {
-    const { appState } = state || {
-      appState: {
+    const { settings } = state || {
+      settings: {
         pss: '',
         bzz: '',
         raw: ''
       }
     };
-    return {
-      pss: appState.pss,
-      bzz: appState.bzz,
-      raw: appState.raw
-    };
+    return settings;
   })
 )(Settings);

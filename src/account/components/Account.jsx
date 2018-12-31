@@ -29,19 +29,25 @@ class Account extends Component {
       <div
         className='pt-3'
         style={{ cursor: 'pointer' }}>
-        <div className='d-flex flex-row'>
-          <div>
-            {
-              publicKey ?
-                <Identicon publicKey={publicKey} size={48} /> :
-                null
-            }
-          </div>
-          <div
-            className='flex-grow-1 pl-2 text-truncate font-weight-bold'
-            style={{ lineHeight: '48px' }}>
-            {username || publicKey}
-          </div>          
+        <div>
+          <Button
+            className='btn-primary-outline text-primary d-flex flex-row'
+            tag={Link} to='/profile'>
+            <div>
+              {
+                publicKey ?
+                  <Identicon publicKey={publicKey} size={48} /> :
+                  null
+              }
+            </div>
+            <div
+              className='flex-grow-1 pl-2 text-truncate font-weight-bold'
+              style={{ lineHeight: '48px' }}>
+              {username || publicKey}
+            </div>
+          </Button>
+        </div>
+        <div>
           <Button className='btn-primary-outline p-2' tag={Link} to='/settings'>
             <GearIcon />
           </Button>
