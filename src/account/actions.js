@@ -1,5 +1,6 @@
 import * as api from './../api/account';
 import { restoreSettings } from './../settings/actions';
+import { restoreContacts } from './../contacts/actions';
 
 export const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';
 export const ACCOUNT_RECEIVE = 'ACCOUNT_RECEIVE';
@@ -11,6 +12,7 @@ export function fetchAccount() {
     const account = await api.fetchAccount(client);
     dispatch(receiveAccount(account));
     dispatch(restoreSettings());
+    dispatch(restoreContacts(account.publicKey));
   };
 }
 
