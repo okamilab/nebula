@@ -3,6 +3,7 @@ import { restoreSettings } from './../settings/actions';
 
 export const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';
 export const ACCOUNT_RECEIVE = 'ACCOUNT_RECEIVE';
+export const ACCOUNT_MUTATE = 'ACCOUNT_MUTATE';
 
 export function fetchAccount() {
   return async (dispatch, _, client) => {
@@ -23,5 +24,14 @@ function receiveAccount(account) {
   return {
     type: ACCOUNT_RECEIVE,
     account
+  };
+}
+
+export function updateUsername(username) {
+  return async (dispatch) => {
+    dispatch({
+      type: ACCOUNT_MUTATE,
+      account: { username }
+    });
   };
 }

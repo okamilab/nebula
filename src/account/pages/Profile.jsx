@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
+import { updateUsername } from './../actions';
 
 class Profile extends Component {
   static propTypes = {
@@ -18,12 +19,6 @@ class Profile extends Component {
     super(props)
 
     this.state = {};
-  }
-
-  onSave() {
-    const { username } =
-      Object.assign({}, this.props, this.state);
-    this.props.onSave(username);
   }
 
   render() {
@@ -76,13 +71,19 @@ class Profile extends Component {
         <div className='pt-3'>
           <Button
             color='success'
-            onClick={this.onSave}>
+            onClick={this.save}>
             Save
           </Button>
         </div>
       </Container>
     );
   }
+
+  save = async () => {
+    const { username } =
+      Object.assign({}, this.props, this.state);
+    await this.props.dispatch(updateUsername(username));
+  };
 }
 
 export default compose(

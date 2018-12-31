@@ -1,6 +1,7 @@
 import {
   ACCOUNT_REQUEST,
-  ACCOUNT_RECEIVE
+  ACCOUNT_RECEIVE,
+  ACCOUNT_MUTATE
 } from './actions';
 
 export const initialState = {
@@ -20,6 +21,11 @@ export default function reduce(state = initialState, action) {
     case ACCOUNT_RECEIVE: {
       return Object.assign({}, state, {
         isLoading: false,
+        ...action.account
+      });
+    }
+    case ACCOUNT_MUTATE: {
+      return Object.assign({}, state, {
         ...action.account
       });
     }
