@@ -397,94 +397,95 @@ class App extends Component {
     const selectedContact = selectedContactKey ? contacts[sum(selectedContactKey)] : undefined;
 
     return (
-      <Row className='flex-grow-1'>
-        <Col xl={3} lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
-          <Account
-            account={account}
-            username={username}
-            onSettingsClick={() => this.setState({ showSettings: true })}
-            onProfileClick={() => this.setState({
-              showSettings: false,
-              showProfile: true
-            })} />
-          <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
-            <NavItem
-              className='p-2'
-              style={{ ...activeContactsStyle, cursor: 'pointer' }}
-              onClick={() => {
-                this.setState({
-                  selectedChatId: undefined,
-                  selectedChat: false,
-                  showSettings: false,
-                  showProfile: false,
-                  showContact: false
-                })
-              }}>
-              <ContactsIcon active={!selectedChat} requests={requests} />
-            </NavItem>
-            <NavItem
-              className='p-2'
-              style={{ ...activeChatsStyle, cursor: 'pointer' }}
-              onClick={() => {
-                this.setState({
-                  selectedChat: true,
-                  showSettings: false,
-                  showProfile: false,
-                  showContact: false
-                })
-              }}>
-              <ChatsIcon active={selectedChat} />
-            </NavItem>
-          </Nav>
-          {
-            selectedChat ?
-              <ChatList
-                list={chats}
-                onStartChat={this.onStartChat} /> :
-              <ContactList
-                list={Object.values(contacts)}
-                onContactRequest={this.onContactRequest}
-                onAcceptContact={this.onAcceptContact}
-                onDeclineContact={this.onDeclineContact}
-                onStartChat={this.onStartChat}
-                onOpenInfo={this.onOpenContactInfo} />
-          }
-        </Col>
-        <Col
-          xl={{ size: 5, offset: 2 }}
-          lg={{ size: 7, offset: 1 }}
-          md={{ size: 8, offset: 0 }}>
-          {
-            showSettings ?
-              <Settings
-                pss={pss}
-                bzz={bzz}
-                localStorage={storage.getRaw()}
-                onSave={this.onSettingsSave}
-                onReset={this.onSettingsResest} /> :
-              showProfile && account ?
-                <Profile
-                  username={username}
-                  publicKey={account.publicKey || ''}
-                  onSave={this.onProfileSave} /> :
-                showContact && selectedContact ?
-                  <Contact
-                    username={selectedContact.username}
-                    publicKey={selectedContact.key}
-                    onSave={() => console.log} /> :
-                  chat ?
-                    <Chat
-                      id={chat.key}
-                      messages={chat.messages}
-                      participants={this.getChatParticipants(chat)}
-                      publicKey={account.publicKey || ''}
-                      onSend={this.onMessageSend}
-                      onFileUpload={this.onFileUpload}
-                      onFileDownload={this.onFileDownload} /> :
-                    null
-          }
-        </Col>
-      </Row>
+      // <Row className='flex-grow-1'>
+      //   <Col xl={3} lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
+      //     <Account
+      //       account={account}
+      //       username={username}
+      //       onSettingsClick={() => this.setState({ showSettings: true })}
+      //       onProfileClick={() => this.setState({
+      //         showSettings: false,
+      //         showProfile: true
+      //       })} />
+      //     <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
+      //       <NavItem
+      //         className='p-2'
+      //         style={{ ...activeContactsStyle, cursor: 'pointer' }}
+      //         onClick={() => {
+      //           this.setState({
+      //             selectedChatId: undefined,
+      //             selectedChat: false,
+      //             showSettings: false,
+      //             showProfile: false,
+      //             showContact: false
+      //           })
+      //         }}>
+      //         <ContactsIcon active={!selectedChat} requests={requests} />
+      //       </NavItem>
+      //       <NavItem
+      //         className='p-2'
+      //         style={{ ...activeChatsStyle, cursor: 'pointer' }}
+      //         onClick={() => {
+      //           this.setState({
+      //             selectedChat: true,
+      //             showSettings: false,
+      //             showProfile: false,
+      //             showContact: false
+      //           })
+      //         }}>
+      //         <ChatsIcon active={selectedChat} />
+      //       </NavItem>
+      //     </Nav>
+      //     {
+      //       selectedChat ?
+      //         <ChatList
+      //           list={chats}
+      //           onStartChat={this.onStartChat} /> :
+      //         <ContactList
+      //           list={Object.values(contacts)}
+      //           onContactRequest={this.onContactRequest}
+      //           onAcceptContact={this.onAcceptContact}
+      //           onDeclineContact={this.onDeclineContact}
+      //           onStartChat={this.onStartChat}
+      //           onOpenInfo={this.onOpenContactInfo} />
+      //     }
+      //   </Col>
+      //   <Col
+      //     xl={{ size: 5, offset: 2 }}
+      //     lg={{ size: 7, offset: 1 }}
+      //     md={{ size: 8, offset: 0 }}>
+      //     {
+      //       showSettings ?
+      //         <Settings
+      //           pss={pss}
+      //           bzz={bzz}
+      //           localStorage={storage.getRaw()}
+      //           onSave={this.onSettingsSave}
+      //           onReset={this.onSettingsResest} /> :
+      //         showProfile && account ?
+      //           <Profile
+      //             username={username}
+      //             publicKey={account.publicKey || ''}
+      //             onSave={this.onProfileSave} /> :
+      //           showContact && selectedContact ?
+      //             <Contact
+      //               username={selectedContact.username}
+      //               publicKey={selectedContact.key}
+      //               onSave={() => console.log} /> :
+      //             chat ?
+      //               <Chat
+      //                 id={chat.key}
+      //                 messages={chat.messages}
+      //                 participants={this.getChatParticipants(chat)}
+      //                 publicKey={account.publicKey || ''}
+      //                 onSend={this.onMessageSend}
+      //                 onFileUpload={this.onFileUpload}
+      //                 onFileDownload={this.onFileDownload} /> :
+      //               null
+      //     }
+      //   </Col>
+      // </Row>
+      <div>test</div>
     );
   }
 }
