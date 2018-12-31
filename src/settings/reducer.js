@@ -1,5 +1,6 @@
 import {
-  SETTINGS_RESTORE
+  SETTINGS_RESTORE,
+  SETTINGS_MUTATE
 } from './actions';
 
 export const initialState = {
@@ -11,6 +12,11 @@ export const initialState = {
 export default function reduce(state = initialState, action) {
   switch (action.type) {
     case SETTINGS_RESTORE: {
+      return Object.assign({}, state, {
+        ...action.settings
+      });
+    }
+    case SETTINGS_MUTATE: {
       return Object.assign({}, state, {
         ...action.settings
       });

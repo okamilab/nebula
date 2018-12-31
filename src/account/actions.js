@@ -9,7 +9,7 @@ export function fetchAccount() {
     dispatch(requestAccount());
     const account = await api.fetchAccount(client);
     dispatch(receiveAccount(account));
-    // dispatch(restoreSettings(account));
+    dispatch(restoreSettings());
   };
 }
 

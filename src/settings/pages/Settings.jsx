@@ -7,6 +7,8 @@ import {
 } from 'reactstrap';
 import pretty from 'prettysize';
 
+import { updateSettings, resetSettings } from './../../settings/actions';
+
 class Settings extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -14,6 +16,12 @@ class Settings extends Component {
     bzz: PropTypes.string,
     raw: PropTypes.string
   };
+
+  constructor(props) {
+    super(props)
+
+    this.state = {};
+  }
 
   render() {
     const { pss, bzz, raw } = this.props;
@@ -69,19 +77,29 @@ class Settings extends Component {
         <div className='pt-3'>
           <Button
             color='second'
-            onClick={this.onReset}>
+            onClick={this.reset}>
             Reset
-        </Button>
+          </Button>
           <Button
             color='success'
-            onClick={this.onSave}
+            onClick={this.save}
             className='ml-3'>
             Save
-        </Button>
+          </Button>
         </div>
       </Container>
     )
   }
+
+  reset = async () => {
+    await this.props.dispatch(resetSettings());
+  };
+
+  save = async () => {
+    const { pss, bzz } =
+      Object.assign({}, this.props, this.state);
+    await this.props.dispatch(updateSettings({ pss, bzz }));
+  };
 }
 
 export default compose(
