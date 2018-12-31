@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { hexValueType } from '@erebos/swarm-browser';
 import {
   Row, Col, Nav, NavItem
@@ -485,7 +485,37 @@ class App extends Component {
       //     }
       //   </Col>
       // </Row>
-      <div>test</div>
+      <Fragment>
+        {
+          showSettings ?
+            <Settings
+              pss={pss}
+              bzz={bzz}
+              localStorage={storage.getRaw()}
+              onSave={this.onSettingsSave}
+              onReset={this.onSettingsResest} /> :
+            showProfile && account ?
+              <Profile
+                username={username}
+                publicKey={account.publicKey || ''}
+                onSave={this.onProfileSave} /> :
+              showContact && selectedContact ?
+                <Contact
+                  username={selectedContact.username}
+                  publicKey={selectedContact.key}
+                  onSave={() => console.log} /> :
+                chat ?
+                  <Chat
+                    id={chat.key}
+                    messages={chat.messages}
+                    participants={this.getChatParticipants(chat)}
+                    publicKey={account.publicKey || ''}
+                    onSend={this.onMessageSend}
+                    onFileUpload={this.onFileUpload}
+                    onFileDownload={this.onFileDownload} /> :
+                  null
+        }
+      </Fragment>
     );
   }
 }

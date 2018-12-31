@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
   Container, Row, Col, FormGroup, Label, Input, Button
@@ -8,18 +9,14 @@ import pretty from 'prettysize';
 
 class Settings extends Component {
   static propTypes = {
-    onSave: PropTypes.func.isRequired,
-    onReset: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
     pss: PropTypes.string,
     bzz: PropTypes.string,
+    raw: PropTypes.string
   };
 
   render() {
-    const {
-      pss,
-      bzz,
-      localStorage
-    } = this.props;
+    const { pss, bzz, raw } = this.props;
 
     return (
       <Container fluid>
@@ -66,7 +63,7 @@ class Settings extends Component {
             <Label for='localStorage'>Local storage</Label>
           </Col>
           <Col sm={9}>
-            {pretty((localStorage || '').length)}
+            {pretty((raw || '').length)}
           </Col>
         </FormGroup>
         <div className='pt-3'>
@@ -87,4 +84,19 @@ class Settings extends Component {
   }
 }
 
-export default connect()(Settings);
+export default compose(
+  connect((state) => {
+    const { appState } = state || {
+      appState: {
+        pss: '',
+        bzz: '',
+        raw: ''
+      }
+    };
+    return {
+      pss: appState.pss,
+      bzz: appState.bzz,
+      raw: appState.raw
+    };
+  })
+)(Settings);
