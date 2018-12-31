@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withJob } from 'react-jobs';
-import Helmet from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import {
-  Container, Row, Col, Alert, Card, CardTitle
+  Button
 } from 'reactstrap';
-import { Redirect } from 'react-router';
 
 import Identicon from './../../base/components/Identicon';
+import GearIcon from './../../base/components/GearIcon';
 import { fetchAccount } from './../actions';
 
 class Account extends Component {
@@ -41,7 +41,10 @@ class Account extends Component {
             className='flex-grow-1 pl-2 text-truncate font-weight-bold'
             style={{ lineHeight: '48px' }}>
             {username || publicKey}
-          </div>
+          </div>          
+          <Button className='btn-primary-outline p-2' tag={Link} to='/settings'>
+            <GearIcon />
+          </Button>
         </div>
       </div>
     );
