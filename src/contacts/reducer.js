@@ -1,13 +1,18 @@
 import {
-  CONTACTS_RESTORE
+  CONTACTS_RESTORE,
+  CONTACT_REQUEST
 } from './actions';
 
-export const initialState = {
-};
+export const initialState = {};
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
     case CONTACTS_RESTORE: {
+      return Object.assign({}, state, {
+        ...action.contacts
+      });
+    }
+    case CONTACT_REQUEST: {
       return Object.assign({}, state, {
         ...action.contacts
       });

@@ -31,7 +31,7 @@ class Account extends Component {
         style={{ cursor: 'pointer' }}>
         <div>
           <Button
-            className='btn-primary-outline text-primary d-flex flex-row'
+            className='btn-primary-outline text-primary d-flex flex-row p-0'
             tag={Link} to='/profile'>
             <div>
               {

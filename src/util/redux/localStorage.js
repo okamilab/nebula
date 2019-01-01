@@ -7,9 +7,9 @@ export default class LocalStorageMiddleware {
   }
 
   middleware() {
-    return (store) => (next) => (action) => {
+    return (store) => (next) => async (action) => {
       console.log('store, next, action', store, next, action);
-      next(action);
+      await next(action);
     }
   }
 

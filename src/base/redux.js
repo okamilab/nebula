@@ -28,7 +28,8 @@ export function configureStore(initialState) {
 
   const middleware = [
     localStorageMiddleware.middleware(),
-    thunk.withExtraArgument(client)];
+    thunk.withExtraArgument(client)
+  ];
   const enhancers = [applyMiddleware(...middleware)];
   const store = createStore(reducer, initialState, compose(...enhancers));
 

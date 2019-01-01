@@ -7,6 +7,8 @@ import {
   Button, FormGroup, Label, Input, Alert
 } from 'reactstrap';
 
+import { inviteContact } from './../actions';
+
 class ContactInvite extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -39,30 +41,25 @@ class ContactInvite extends Component {
 
   onKeyPress(e) {
     if (e.key === 'Enter' && this.state.publicKey) {
-      this.onRequest();
+      this.invite();
     }
-  }
-
-  async onRequest() {
-    try {
-      await this.props.onRequest(this.state.publicKey);
-    } catch (error) {
-      if (error) {
-        this.setState({ error: error.message });
-        return;
-      }
-    }
-    this.toggle();
   }
 
   render() {
+    const { error } = this.state;
+
     return (
       <Fragment>
-        <Button color='primary' onClick={this.toggle} size='sm' className='float-right'>+ Invite contact</Button>
+        <Button color='primary'
+          onClick={this.toggle}
+          size='sm'
+          className='float-right'>
+          + Invite contact
+        </Button>
         <Modal isOpen={this.state.modal} centered>
           <ModalHeader>Invite contact</ModalHeader>
           <ModalBody>
-            {this.state.error ? <Alert color='danger'>{this.state.error}</Alert> : null}
+            {error ? <Alert color='danger'>{error.message || error}</Alert> : null}
             <FormGroup>
               <Label for='contactPublicKey'>Contact public key</Label>
               <Input
@@ -80,13 +77,25 @@ class ContactInvite extends Component {
             <Button
               type='button'
               color='primary'
-              onClick={this.onRequest}
+              onClick={this.invite}
               disabled={!this.state.publicKey}>Send Request</Button>
           </ModalFooter>
         </Modal>
       </Fragment>
     );
   }
+
+  invite = async () => {
+    try {
+      this.setState({ error: null });
+      await this.props.dispatch(inviteContact(this.state.publicKey));
+    } catch (error) {
+      this.setState({ error: error.message });
+      return;
+    }
+
+    this.toggle();
+  };
 }
 
 export default compose(connect())(ContactInvite);
