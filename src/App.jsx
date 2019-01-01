@@ -6,6 +6,7 @@ import Layout from './base/containers/Layout';
 import Main from './Main';
 import Settings from './settings/pages/Settings';
 import Profile from './account/pages/Profile';
+import Contact from './contacts/pages/Contact';
 
 import './App.css';
 
@@ -20,6 +21,7 @@ export default function App() {
           <Route exact path='/' component={Main} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/profile' component={Profile} />
+          <Route exact path='/contact/:key' component={Contact} />
         </Switch>
       </Layout>
     </Fragment>

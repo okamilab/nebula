@@ -2,8 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Button } from 'reactstrap';
+import sum from 'hash-sum';
 
 import ContactInvite from './ContactInvite';
+import ContactListGroup from './ContactListGroup';
+import ContactRequest from './ContactRequest';
+import Identicon from './../../base/components/Identicon';
+import { groupBy } from './../../base/fn';
 
 class ContactList extends Component {
   static propTypes = {
@@ -12,12 +19,53 @@ class ContactList extends Component {
   };
 
   render() {
+    const { contacts } = this.props;
+    const map = groupBy(Object.values(contacts), 'type');
+
     return (
       <div className='pt-3'>
         <h5>
           All
           <ContactInvite />
         </h5>
+        <ContactListGroup list={map['sent_request']} title='Sent' />
+        <ContactListGroup
+          list={map['received_request']}
+          title='Received'
+          renderItem={(c, i) => <ContactRequest key={i} value={c.key} />} />
+        <ContactListGroup
+          list={map['added']}
+          renderItem={(c, i) =>
+            <div
+              key={i}
+              style={{ cursor: 'pointer' }}>
+              <Button
+                className='btn-primary-outline text-primary text-left d-flex flex-row p-2 pl-0'
+                tag={Link} to={'/contact/' + sum(c.key)}>
+                <div>
+                  <Identicon publicKey={c.key} size={32} />
+                </div>
+                <div
+                  className='flex-grow-1 pl-2 text-truncate'
+                  style={{ lineHeight: '32px' }}>
+                  {c.username || c.key}
+                </div>
+              </Button>
+              {/* <div className="d-flex flex-row pt-2">
+                <div onClick={() => { this.startChat(c); }}>
+                  <Identicon publicKey={c.key} size={32} />
+                </div>
+                <div
+                  className='flex-grow-1 pl-2 text-truncate'
+                  style={{ lineHeight: '32px' }}
+                  onClick={() => { this.startChat(c); }}>
+                  {c.username || c.key}
+                </div>
+                <div onClick={() => { onOpenInfo(c.key) }}>. . .</div>
+              </div> */}
+            </div>
+          }>
+        </ContactListGroup>
       </div>
     );
   }

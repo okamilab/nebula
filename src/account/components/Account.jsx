@@ -4,9 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withJob } from 'react-jobs';
 import { Link } from 'react-router-dom';
-import {
-  Button
-} from 'reactstrap';
+import { Button } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
 import GearIcon from './../../base/components/GearIcon';

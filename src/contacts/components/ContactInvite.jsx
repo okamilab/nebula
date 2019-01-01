@@ -16,6 +16,7 @@ class ContactInvite extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       modal: false,
       publicKey: '',
@@ -29,6 +30,7 @@ class ContactInvite extends Component {
 
   toggle() {
     this.setState({
+      error: null,
       modal: !this.state.modal
     });
   }

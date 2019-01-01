@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Identicon from '../common/Identicon';
+import Identicon from './../common/Identicon';
 import Gear from './GearIcon';
 
 class Account extends Component {
