@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
   Container, Row, Col, FormGroup, Label, Input, Button
 } from 'reactstrap';
@@ -25,7 +25,7 @@ class Contact extends Component {
     return (
       <Container>
         <Row className='pt-3'>
-          <h3>Profile</h3>
+          <h3>Contact</h3>
         </Row>
         <Row className='pt-3'>
           <Col sm={3}>
@@ -69,14 +69,15 @@ class Contact extends Component {
             onClick={this.save}>
             Save
           </Button> */}
+          <Button
+            color='success'
+            tag={Link} to={'/chat/' + key}>
+            Chat
+          </Button>
         </div>
       </Container>
     );
   }
-
-  startChat = async (contact) => {
-    console.log(contact)
-  };
 }
 
 export default compose(

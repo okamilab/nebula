@@ -7,6 +7,7 @@ import Main from './Main';
 import Settings from './settings/pages/Settings';
 import Profile from './account/pages/Profile';
 import Contact from './contacts/pages/Contact';
+import Chat from './chats/pages/Chat';
 
 import './App.css';
 
@@ -22,6 +23,7 @@ export default function App() {
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/profile' component={Profile} />
           <Route exact path='/contact/:key' component={Contact} />
+          <Route exact path='/chat/:key' component={Chat} />
         </Switch>
       </Layout>
     </Fragment>

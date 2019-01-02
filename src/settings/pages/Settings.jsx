@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import pretty from 'prettysize';
 
+import { DEFAULT_SETTINGS } from './../../base/redux'
 import { updateSettings, resetSettings } from './../../settings/actions';
 
 class Settings extends Component {
@@ -24,7 +25,11 @@ class Settings extends Component {
   }
 
   render() {
-    const { pss, bzz, raw } = this.props;
+    const {
+      pss = DEFAULT_SETTINGS.pss,
+      bzz = DEFAULT_SETTINGS.bzz,
+      raw
+    } = this.props;
 
     return (
       <Container fluid>
@@ -91,14 +96,14 @@ class Settings extends Component {
     )
   }
 
-  reset = async () => {
-    await this.props.dispatch(resetSettings());
+  reset = () => {
+    this.props.dispatch(resetSettings());
   };
 
-  save = async () => {
+  save = () => {
     const { pss, bzz } =
       Object.assign({}, this.props, this.state);
-    await this.props.dispatch(updateSettings({ pss, bzz }));
+    this.props.dispatch(updateSettings({ pss, bzz }));
   };
 }
 

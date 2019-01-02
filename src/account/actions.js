@@ -1,6 +1,7 @@
 import * as api from './../api/account';
 import { restoreSettings } from './../settings/actions';
 import { restoreContacts } from './../contacts/actions';
+import { restoreChats } from './../chats/actions';
 
 export const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';
 export const ACCOUNT_RECEIVE = 'ACCOUNT_RECEIVE';
@@ -13,6 +14,7 @@ export function fetchAccount() {
     dispatch(receiveAccount(account));
     dispatch(restoreSettings());
     dispatch(restoreContacts(account.publicKey));
+    dispatch(restoreChats(account.publicKey));
   };
 }
 

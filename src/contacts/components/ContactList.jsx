@@ -51,18 +51,6 @@ class ContactList extends Component {
                   {c.username || c.key}
                 </div>
               </Button>
-              {/* <div className="d-flex flex-row pt-2">
-                <div onClick={() => { this.startChat(c); }}>
-                  <Identicon publicKey={c.key} size={32} />
-                </div>
-                <div
-                  className='flex-grow-1 pl-2 text-truncate'
-                  style={{ lineHeight: '32px' }}
-                  onClick={() => { this.startChat(c); }}>
-                  {c.username || c.key}
-                </div>
-                <div onClick={() => { onOpenInfo(c.key) }}>. . .</div>
-              </div> */}
             </div>
           }>
         </ContactListGroup>

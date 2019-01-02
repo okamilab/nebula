@@ -11,11 +11,7 @@ export const initialState = {
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
-    case SETTINGS_RESTORE: {
-      return Object.assign({}, state, {
-        ...action.settings
-      });
-    }
+    case SETTINGS_RESTORE:
     case SETTINGS_MUTATE: {
       return Object.assign({}, state, {
         ...action.settings
