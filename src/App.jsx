@@ -13,9 +13,7 @@ import './App.css';
 export default function App() {
   return (
     <Fragment>
-      <Helmet titleTemplate="Swarm Messenger - %s">
-        {/* <link rel="icon" href={favicon} type="image/png" /> */}
-      </Helmet>
+      <Helmet titleTemplate='Swarm Messenger - %s' />
       <Layout>
         <Switch>
           {/* <Route exact path='/' component={Home} /> */}

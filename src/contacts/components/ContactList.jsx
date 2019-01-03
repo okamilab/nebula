@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
 import sum from 'hash-sum';
 
 import ContactInvite from './ContactInvite';
@@ -39,9 +38,9 @@ class ContactList extends Component {
             <div
               key={i}
               style={{ cursor: 'pointer' }}>
-              <Button
+              <Link
                 className='btn-primary-outline text-primary text-left d-flex flex-row p-2 pl-0'
-                tag={Link} to={'/contact/' + sum(c.key)}>
+                to={'/contact/' + sum(c.key)}>
                 <div>
                   <Identicon publicKey={c.key} size={32} />
                 </div>
@@ -50,7 +49,7 @@ class ContactList extends Component {
                   style={{ lineHeight: '32px' }}>
                   {c.username || c.key}
                 </div>
-              </Button>
+              </Link>
             </div>
           }>
         </ContactListGroup>

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
 
@@ -21,10 +20,10 @@ class ChatList extends Component {
         <h5>Chats</h5>
         {
           chats.map((c, i) =>
-            <Button
+            <Link
               key={i}
               className='btn-primary-outline text-primary text-left d-flex flex-row p-2 pl-0'
-              tag={Link} to={'/chat/' + c.key}>
+              to={'/chat/' + c.key}>
               <div>
                 <Identicon publicKey={c.key} size={32} />
               </div>
@@ -33,7 +32,7 @@ class ChatList extends Component {
                 style={{ lineHeight: '32px' }}>
                 {c.key}
               </div>
-            </Button>
+            </Link>
           )
         }
       </div>

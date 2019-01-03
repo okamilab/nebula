@@ -4,7 +4,6 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withJob } from 'react-jobs';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
 import GearIcon from './../../base/components/GearIcon';
@@ -24,32 +23,25 @@ class Account extends Component {
 
     const { username, publicKey } = account;
     return (
-      <div
-        className='pt-3'
-        style={{ cursor: 'pointer' }}>
-        <div>
-          <Button
-            className='btn-primary-outline text-primary d-flex flex-row p-0'
-            tag={Link} to='/profile'>
-            <div>
-              {
-                publicKey ?
-                  <Identicon publicKey={publicKey} size={48} /> :
-                  null
-              }
-            </div>
-            <div
-              className='flex-grow-1 pl-2 text-truncate font-weight-bold'
-              style={{ lineHeight: '48px' }}>
-              {username || publicKey}
-            </div>
-          </Button>
-        </div>
-        <div>
-          <Button className='btn-primary-outline p-2' tag={Link} to='/settings'>
-            <GearIcon />
-          </Button>
-        </div>
+      <div class='w-100 pt-3'>
+        <Link to='/settings' style={{ float: 'right', paddingTop: 8 }}>
+          <GearIcon />
+        </Link>
+        <Link to='/profile'>
+          {
+            publicKey ?
+              <Identicon publicKey={publicKey} size={48} style={{ float: 'left' }} /> :
+              null
+          }
+          <div class='text-truncate font-weight-bold' style={{
+            height: 48,
+            lineHeight: '44px',
+            paddingLeft: 10,
+            paddingRight: 10
+          }}>
+            {username || publicKey}
+          </div>
+        </Link>
       </div>
     );
   }
