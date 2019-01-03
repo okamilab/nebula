@@ -63,3 +63,17 @@
 .inputfile + label:hover {
   opacity: 1;
 }
+
+.btn-primary-outline {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.btn-primary-outline:hover,
+.btn-primary-outline:focus,
+.btn-primary-outline:active {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
