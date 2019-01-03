@@ -77,9 +77,7 @@ function subscribe(chat) {
 }
 
 function subscribeAll(dispatch, chats) {
-  chats.map(async (chat) => {
-    dispatch(subscribe(chat));
-  });
+  chats.map(chat => dispatch(subscribe(chat)));
 }
 
 export function restoreChats(publicKey) {

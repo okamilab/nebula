@@ -8,19 +8,17 @@ export const ACCOUNT_RECEIVE = 'ACCOUNT_RECEIVE';
 export const ACCOUNT_MUTATE = 'ACCOUNT_MUTATE';
 
 export function fetchAccount() {
-  return async (dispatch, _, client) => {
-    dispatch(requestAccount());
+  return async (dispatch, getState, client) => {
+    dispatch({ type: ACCOUNT_REQUEST });
+
     const account = await api.fetchAccount(client);
-    dispatch(receiveAccount(account));
+    const { appState } = getState();
+    const session = appState[account.publicKey] || {};
+    dispatch(receiveAccount({ ...account, username: session.username }));
+
     dispatch(restoreSettings());
     dispatch(restoreContacts(account.publicKey));
     dispatch(restoreChats(account.publicKey));
-  };
-}
-
-function requestAccount() {
-  return {
-    type: ACCOUNT_REQUEST,
   };
 }
 

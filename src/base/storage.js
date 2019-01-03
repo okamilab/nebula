@@ -5,7 +5,8 @@ const STORAGE_KEY = 'swarm_messenger';
 
 // Structure:
 // {
-//   endpoint: 'ws://127.0.0.1:8546',
+//   pss: 'ws://127.0.0.1:8546',
+//   bzz: 'http://127.0.0.1:8500',
 //   [publicKey]: {
 //     username: '',
 //     contacts: {
