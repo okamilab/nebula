@@ -2,7 +2,9 @@ import sum from 'hash-sum';
 
 import {
   CHATS_RESTORE,
-  CHAT_SEND_MESSAGE
+  CHAT_CREATE,
+  CHAT_SEND_MESSAGE,
+  CHAT_RECEIVE_MESSAGE
 } from './actions';
 
 export const initialState = [];
@@ -14,7 +16,11 @@ export default function reduce(state = initialState, action) {
         ...action.chats
       ]);
     }
-    case CHAT_SEND_MESSAGE: {
+    case CHAT_CREATE: {
+      return [...state, action.chat];
+    }
+    case CHAT_SEND_MESSAGE:
+    case CHAT_RECEIVE_MESSAGE: {
       return state.map((chat) => {
         if (chat.key !== action.key) {
           return chat
