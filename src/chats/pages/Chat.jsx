@@ -108,63 +108,69 @@ class Chat extends Component {
     const { publicKey } = account;
 
     return (
-      <div className='h-100 d-flex flex-column pt-3'>
-        <Element
-          id='scroll-container'
-          className='flex-grow-1'
-          style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-          <Row>
-            {
-              messages
-                .map((m, i) => {
-                  const sender = participants[m.sender];
-                  const date = new Date(m.timestamp);
-                  const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
-                  return (
-                    <Fragment key={i}>
-                      {showDayDivider ? <ChatDayDivider date={date} /> : null}
-                      <Col sm={12}>
-                        <ChatMessage
-                          message={m}
-                          sender={sender}
-                          isOwn={sender.key === publicKey}
-                          showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider} />
-                      </Col>
-                    </Fragment>
-                  )
-                })
-            }
-          </Row>
-          <Element name="bottom"></Element>
-        </Element>
-        <Row className='flex-shrink-0 pt-3 pb-3'>
-          <Col>
-            <InputGroup>
-              <Input
-                value={this.state.msg}
-                onChange={this.onChange}
-                onKeyPress={this.onKeyPress}
-                autoFocus />
-              <InputGroupAddon addonType='append'>
-                <input
-                  type='file'
-                  name='file'
-                  id='file'
-                  className='inputfile'
-                  onChange={this.upload}
-                />
-                <label htmlFor='file'>
-                  <FileIcon />
-                </label>
-                <Button
-                  color='secondary'
-                  onClick={this.send}
-                  disabled={!this.state.msg}>Send</Button>
-              </InputGroupAddon>
-            </InputGroup>
-          </Col>
-        </Row>
-      </div>
+      <Row className='h-100'>
+        <Col className='h-100'
+          xl={{ size: 8, offset: 2 }}
+          lg={{ size: 10, offset: 1 }}>
+          <div className='h-100 d-flex flex-column pt-3'>
+            <Element
+              id='scroll-container'
+              className='flex-grow-1'
+              style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+              <Row>
+                {
+                  messages
+                    .map((m, i) => {
+                      const sender = participants[m.sender];
+                      const date = new Date(m.timestamp);
+                      const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
+                      return (
+                        <Fragment key={i}>
+                          {showDayDivider ? <ChatDayDivider date={date} /> : null}
+                          <Col sm={12}>
+                            <ChatMessage
+                              message={m}
+                              sender={sender}
+                              isOwn={sender.key === publicKey}
+                              showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider} />
+                          </Col>
+                        </Fragment>
+                      )
+                    })
+                }
+              </Row>
+              <Element name="bottom"></Element>
+            </Element>
+            <Row className='flex-shrink-0 pt-3 pb-3'>
+              <Col>
+                <InputGroup>
+                  <Input
+                    value={this.state.msg}
+                    onChange={this.onChange}
+                    onKeyPress={this.onKeyPress}
+                    autoFocus />
+                  <InputGroupAddon addonType='append'>
+                    <input
+                      type='file'
+                      name='file'
+                      id='file'
+                      className='inputfile'
+                      onChange={this.upload}
+                    />
+                    <label htmlFor='file'>
+                      <FileIcon />
+                    </label>
+                    <Button
+                      color='secondary'
+                      onClick={this.send}
+                      disabled={!this.state.msg}>Send</Button>
+                  </InputGroupAddon>
+                </InputGroup>
+              </Col>
+            </Row>
+          </div>
+        </Col>
+      </Row>
     );
   }
 

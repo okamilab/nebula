@@ -13,10 +13,7 @@ export default function Layout({ children }) {
         <Col xl={3} lg={3} md={4} style={{ borderRight: '1px solid #eee' }}>
           <LeftSide />
         </Col>
-        <Col
-          xl={{ size: 5, offset: 2 }}
-          lg={{ size: 7, offset: 1 }}
-          md={{ size: 8, offset: 0 }}>
+        <Col xl={9} lg={9} md={8}>
           {children}
         </Col>
       </Row>

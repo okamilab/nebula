@@ -33,65 +33,68 @@ class Settings extends Component {
 
     return (
       <Container fluid>
-        <Row className='pt-3'>
-          <h3>Settings</h3>
+        <Row className='pt-3'
+          style={{ borderBottom: '1px solid #eee' }}>
+          <h4>Settings</h4>
         </Row>
-        <FormGroup className='row pt-3'>
-          <Col sm={3}>
-            <Label for='pss'>PSS endpoint (WebSocket)</Label>
+        <Row>
+          <Col
+            lg={{ size: 8, offset: 2 }}
+            md={{ size: 10, offset: 1 }}>
+            <FormGroup className='row pt-3'>
+              <Col sm={3}>
+                <Label for='pss'>PSS endpoint (WebSocket)</Label>
+              </Col>
+              <Col sm={9}>
+                <Input
+                  type='text'
+                  id='pss'
+                  autoFocus
+                  onChange={(e) => this.setState({ pss: e.target.value })}
+                  defaultValue={pss} />
+              </Col>
+              <Col sm={12}
+                className='pt-1 text-secondary'
+                style={{ fontSize: 13 }}>
+                After updating the field you need to restart the app (refresh page)
+              </Col>
+            </FormGroup>
+            <FormGroup className='row pt-3'>
+              <Col sm={3}>
+                <Label for='bzz'>BZZ endpoint</Label>
+              </Col>
+              <Col sm={9}>
+                <Input
+                  type='text'
+                  id='bzz'
+                  onChange={(e) => this.setState({ bzz: e.target.value })}
+                  defaultValue={bzz} />
+              </Col>
+              <Col sm={12}
+                className='pt-1 text-secondary'
+                style={{ fontSize: 13 }}>
+                After updating the field you need to restart the app (refresh page)
+              </Col>
+            </FormGroup>
+            <FormGroup className='row pt-3'>
+              <Col sm={3}>
+                <Label for='localStorage'>Local storage</Label>
+              </Col>
+              <Col sm={9}>
+                {pretty((raw || '').length)}
+              </Col>
+            </FormGroup>
+            <div className='pt-3'>
+              <Button
+                color='second'
+                onClick={this.reset}>Reset</Button>
+              <Button
+                color='success'
+                onClick={this.save}
+                className='ml-3'>Save</Button>
+            </div>
           </Col>
-          <Col sm={9}>
-            <Input
-              type='text'
-              id='pss'
-              autoFocus
-              onChange={(e) => this.setState({ pss: e.target.value })}
-              defaultValue={pss} />
-          </Col>
-          <Col sm={12}
-            className='pt-1 text-secondary'
-            style={{ fontSize: 13 }}>
-            After updating the field you need to restart the app (refresh page)
-        </Col>
-        </FormGroup>
-        <FormGroup className='row pt-3'>
-          <Col sm={3}>
-            <Label for='bzz'>BZZ endpoint</Label>
-          </Col>
-          <Col sm={9}>
-            <Input
-              type='text'
-              id='bzz'
-              onChange={(e) => this.setState({ bzz: e.target.value })}
-              defaultValue={bzz} />
-          </Col>
-          <Col sm={12}
-            className='pt-1 text-secondary'
-            style={{ fontSize: 13 }}>
-            After updating the field you need to restart the app (refresh page)
-        </Col>
-        </FormGroup>
-        <FormGroup className='row pt-3'>
-          <Col sm={3}>
-            <Label for='localStorage'>Local storage</Label>
-          </Col>
-          <Col sm={9}>
-            {pretty((raw || '').length)}
-          </Col>
-        </FormGroup>
-        <div className='pt-3'>
-          <Button
-            color='second'
-            onClick={this.reset}>
-            Reset
-          </Button>
-          <Button
-            color='success'
-            onClick={this.save}
-            className='ml-3'>
-            Save
-          </Button>
-        </div>
+        </Row>
       </Container>
     )
   }

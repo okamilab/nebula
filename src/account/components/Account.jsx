@@ -6,7 +6,6 @@ import { withJob } from 'react-jobs';
 import { Link } from 'react-router-dom';
 
 import Identicon from './../../base/components/Identicon';
-import GearIcon from './../../base/components/GearIcon';
 import { fetchAccount } from './../actions';
 
 class Account extends Component {
@@ -23,21 +22,17 @@ class Account extends Component {
 
     const { username, publicKey } = account;
     return (
-      <div class='w-100 pt-3'>
-        <Link to='/settings' style={{ float: 'right', paddingTop: 8 }}>
-          <GearIcon />
-        </Link>
+      <div className='w-100 pt-3'>
         <Link to='/profile'>
           {
             publicKey ?
               <Identicon publicKey={publicKey} size={48} style={{ float: 'left' }} /> :
               null
           }
-          <div class='text-truncate font-weight-bold' style={{
+          <div className='text-truncate font-weight-bold' style={{
             height: 48,
             lineHeight: '44px',
-            paddingLeft: 10,
-            paddingRight: 10
+            paddingLeft: 10
           }}>
             {username || publicKey}
           </div>
