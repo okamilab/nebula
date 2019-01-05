@@ -15,7 +15,7 @@ class Settings extends Component {
     dispatch: PropTypes.func.isRequired,
     pss: PropTypes.string,
     bzz: PropTypes.string,
-    raw: PropTypes.string
+    size: PropTypes.number
   };
 
   constructor(props) {
@@ -28,7 +28,7 @@ class Settings extends Component {
     const {
       pss = DEFAULT_SETTINGS.pss,
       bzz = DEFAULT_SETTINGS.bzz,
-      raw
+      size
     } = this.props;
 
     return (
@@ -81,7 +81,7 @@ class Settings extends Component {
                 <Label for='localStorage'>Local storage</Label>
               </Col>
               <Col sm={9}>
-                {pretty((raw || '').length)}
+                {pretty(size)}
               </Col>
             </FormGroup>
             <div className='pt-3'>
@@ -116,7 +116,7 @@ export default compose(
       settings: {
         pss: '',
         bzz: '',
-        raw: ''
+        size: 0
       }
     };
     return settings;

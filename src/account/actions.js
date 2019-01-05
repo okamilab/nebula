@@ -1,5 +1,4 @@
 import * as api from './../api/account';
-import { restoreSettings } from './../settings/actions';
 import { restoreContacts } from './../contacts/actions';
 import { restoreChats } from './../chats/actions';
 
@@ -16,7 +15,6 @@ export function fetchAccount() {
     const session = appState[account.publicKey] || {};
     dispatch(receiveAccount({ ...account, username: session.username }));
 
-    dispatch(restoreSettings());
     dispatch(restoreContacts(account.publicKey));
     dispatch(restoreChats(account.publicKey));
   };

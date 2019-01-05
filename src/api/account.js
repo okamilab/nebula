@@ -1,9 +1,13 @@
 export async function fetchAccount(client) {
-  const [publicKey, overlayAddress] =
-    await Promise.all([
-      client.pss.getPublicKey(),
-      client.pss.baseAddr(),
-    ]);
+  try {
+    const [publicKey, overlayAddress] =
+      await Promise.all([
+        client.pss.getPublicKey(),
+        client.pss.baseAddr(),
+      ]);
 
-  return { publicKey, overlayAddress };
+    return { publicKey, overlayAddress };
+  } catch (error) {
+    console.log(error)
+  }
 }

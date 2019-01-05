@@ -14,7 +14,7 @@ export default class LocalStorageMiddleware {
     this.excludeActionTypes = [
       'ACCOUNT_REQUEST',
       'ACCOUNT_RECEIVE',
-      'SETTINGS_RESTORE',
+      // 'SETTINGS_RESTORE',
       'CONTACTS_RESTORE',
       'CONTACT_SUBSCRIBE',
       'CHATS_RESTORE',
@@ -91,7 +91,12 @@ export default class LocalStorageMiddleware {
 
     return {
       ...preloadedState,
-      appState: { raw, ...state }
+      appState: { raw, ...state },
+      settings: {
+        pss: state.pss,
+        bzz: state.bzz,
+        size: (raw || '').length
+      }
     };
   }
 }
