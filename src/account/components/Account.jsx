@@ -17,9 +17,6 @@ class Account extends Component {
 
   render() {
     const { account, errors } = this.props;
-    if (!account) {
-      return <div>Loading</div>
-    }
 
     if (errors.length) {
       return <Redirect to={'/settings'} />;
