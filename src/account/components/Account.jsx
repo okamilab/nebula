@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -27,22 +27,24 @@ class Account extends Component {
 
     const { username, publicKey } = account;
     return (
-      <div className='w-100 pt-3'>
-        <Link to='/profile'>
-          {
-            publicKey ?
-              <Identicon publicKey={publicKey} size={48} style={{ float: 'left' }} /> :
-              null
-          }
-          <div className='text-truncate font-weight-bold' style={{
-            height: 48,
-            lineHeight: '44px',
-            paddingLeft: 10
-          }}>
-            {username || publicKey}
-          </div>
-        </Link>
-      </div>
+      <Fragment>
+        {
+          publicKey ?
+            <div className='w-100 pt-3'>
+              <Link to='/profile'>
+                <Identicon publicKey={publicKey} size={48} style={{ float: 'left' }} />
+                <div className='text-truncate font-weight-bold' style={{
+                  height: 48,
+                  lineHeight: '44px',
+                  paddingLeft: 10
+                }}>
+                  {username || publicKey}
+                </div>
+              </Link>
+            </div> :
+            null
+        }
+      </Fragment>
     );
   }
 }
