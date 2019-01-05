@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withJob } from 'react-jobs';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import Identicon from './../../base/components/Identicon';
 import { fetchAccount } from './../actions';
@@ -12,12 +12,17 @@ class Account extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     account: PropTypes.object,
+    errors: PropTypes.array
   };
 
   render() {
-    const { account } = this.props;
+    const { account, errors } = this.props;
     if (!account) {
       return <div>Loading</div>
+    }
+
+    if (errors.length) {
+      return <Redirect to={'/settings'} />;
     }
 
     const { username, publicKey } = account;
@@ -44,15 +49,16 @@ class Account extends Component {
 
 export default compose(
   connect((state) => {
-    const { account } = state || {
+    const { account, errors } = state || {
       account: {
         publicKey: '',
         username: ''
-      }
+      },
+      errors: []
     };
-    return { account };
+    return { account, errors };
   }),
   withJob({
-    work: ({ dispatch }) => dispatch(fetchAccount()),
+    work: ({ dispatch }) => dispatch(fetchAccount())
   })
 )(Account);

@@ -14,7 +14,6 @@ export default class LocalStorageMiddleware {
     this.excludeActionTypes = [
       'ACCOUNT_REQUEST',
       'ACCOUNT_RECEIVE',
-      // 'SETTINGS_RESTORE',
       'CONTACTS_RESTORE',
       'CONTACT_SUBSCRIBE',
       'CHATS_RESTORE',

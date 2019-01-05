@@ -1,6 +1,7 @@
 import * as api from './../api/account';
 import { restoreContacts } from './../contacts/actions';
 import { restoreChats } from './../chats/actions';
+import { addError } from './../base/error/actions';
 
 export const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';
 export const ACCOUNT_RECEIVE = 'ACCOUNT_RECEIVE';
@@ -10,13 +11,17 @@ export function fetchAccount() {
   return async (dispatch, getState, client) => {
     dispatch({ type: ACCOUNT_REQUEST });
 
-    const account = await api.fetchAccount(client);
-    const { appState } = getState();
-    const session = appState[account.publicKey] || {};
-    dispatch(receiveAccount({ ...account, username: session.username }));
+    try {
+      const account = await api.fetchAccount(client);
+      const { appState } = getState();
+      const session = appState[account.publicKey] || {};
+      dispatch(receiveAccount({ ...account, username: session.username }));
 
-    dispatch(restoreContacts(account.publicKey));
-    dispatch(restoreChats(account.publicKey));
+      dispatch(restoreContacts(account.publicKey));
+      dispatch(restoreChats(account.publicKey));
+    } catch (error) {
+      dispatch(addError(error.message));
+    }
   };
 }
 

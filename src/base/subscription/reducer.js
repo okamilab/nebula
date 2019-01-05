@@ -1,5 +1,5 @@
-import { CONTACT_SUBSCRIBE } from './../contacts/actions';
-import { CHAT_SUBSCRIBE } from './../chats/actions';
+import { CONTACT_SUBSCRIBE } from './../../contacts/actions';
+import { CHAT_SUBSCRIBE } from './../../chats/actions';
 
 export const initialState = [];
 
