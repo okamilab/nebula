@@ -113,10 +113,8 @@ class Chat extends Component {
           xl={{ size: 8, offset: 2 }}
           lg={{ size: 10, offset: 1 }}>
           <div className='h-100 d-flex flex-column pt-3'>
-            <Element
-              id='scroll-container'
-              className='flex-grow-1'
-              style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+            <Element id='scroll-container'
+              className='flex-grow-1 chat-container'>
               <Row>
                 {
                   messages

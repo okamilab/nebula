@@ -7,34 +7,6 @@ import { Button } from 'reactstrap';
 import Identicon from './../../base/components/Identicon';
 import { download } from './../actions';
 
-const styles = {
-  container: {
-    own: {
-      textAlign: 'right',
-      paddingRight: 10,
-      paddingTop: 2
-    },
-    rest: {
-      textAlign: 'left',
-      paddingTop: 2
-    }
-  },
-  message: {
-    own: {
-      backgroundColor: '#dbf4fd',
-      display: 'inline-block',
-      padding: '2px 10px',
-      borderRadius: 6
-    },
-    rest: {
-      backgroundColor: '#f2f6f9',
-      display: 'inline-block',
-      padding: '2px 10px',
-      borderRadius: 6
-    }
-  }
-}
-
 class ChatMessage extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -47,18 +19,11 @@ class ChatMessage extends Component {
   renderMessageContent() {
     const { message, isOwn } = this.props;
     const { text } = message;
-    const { own, rest } = styles.message;
-    const messageStyles = isOwn ? own : rest;
 
     switch (text.startsWith('bzz:/')) {
       case true:
         return (
-          <div style={{
-            backgroundColor: '#f1f1f4',
-            display: 'inline-block',
-            padding: 10,
-            borderRadius: 6
-          }}>
+          <div className='chat-msg-file'>
             <div className='pt-2'>File: {text.substr(5, 15)}...</div>
             <hr className='mt-2 mb-2' />
             <div className='text-center pb-2'>
@@ -70,10 +35,9 @@ class ChatMessage extends Component {
             </div>
           </div>
         );
-
       default:
         return (
-          <div style={messageStyles}>
+          <div className={'chat-msg' + (isOwn ? ' own' : '')}>
             {message.text}
           </div>
         );
@@ -89,7 +53,7 @@ class ChatMessage extends Component {
       case true:
         if (showHeader) {
           header = (
-            <div style={{ fontSize: 12, color: '#bbb' }} >
+            <div className='chat-msg-header'>
               {time.toLocaleTimeString()}
             </div>
           );
@@ -100,7 +64,6 @@ class ChatMessage extends Component {
             {this.renderMessageContent()}
           </Fragment>
         );
-
       default:
         let identicon = (<div style={{ width: 32 }}></div>);
         const { key, username } = sender;
@@ -111,7 +74,7 @@ class ChatMessage extends Component {
             </div>
           );
           header = (
-            <div style={{ fontSize: 12, color: '#bbb' }} >
+            <div className='chat-msg-header'>
               {username || key.substr(0, 8) + '...'}, {time.toLocaleTimeString()}
             </div>
           );
@@ -130,11 +93,9 @@ class ChatMessage extends Component {
 
   render() {
     const { isOwn } = this.props;
-    const { own, rest } = styles.container;
-    const containerStyles = isOwn ? own : rest;
 
     return (
-      <div style={containerStyles}>
+      <div className={'chat-msg-layout' + (isOwn ? ' own' : '')}>
         {this.renderMessage()}
       </div>
     );

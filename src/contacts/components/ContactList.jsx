@@ -39,7 +39,7 @@ class ContactList extends Component {
               key={i}
               style={{ cursor: 'pointer' }}>
               <Link
-                className='btn-primary-outline text-primary text-left d-flex flex-row p-2 pl-0'
+                className='d-flex flex-row text-left pt-3'
                 to={'/contact/' + sum(c.key)}>
                 <div>
                   <Identicon publicKey={c.key} size={32} />

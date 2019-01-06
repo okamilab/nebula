@@ -4,20 +4,8 @@ import { Col } from 'reactstrap';
 
 const ChatDayDivider = ({ date }) => {
   return (
-    <Col style={{
-      textAlign: 'center',
-      borderBottom: '1px solid #ddd',
-      lineHeight: '0.3em',
-      margin: '10px 0 20px'
-    }}>
-      <span style={{
-        background: '#fff',
-        padding: '0 6px',
-        color: '#bbb',
-        fontSize: 12
-      }}>
-        {date.toLocaleDateString()}
-      </span>
+    <Col className='chat-hr'>
+      <span>{date.toLocaleDateString()}</span>
     </Col>
   );
 }
