@@ -33,8 +33,7 @@ class Settings extends Component {
 
     return (
       <Container fluid>
-        <Row className='pt-3'
-          style={{ borderBottom: '1px solid #eee' }}>
+        <Row className='section-header pt-3'>
           <h4>Settings</h4>
         </Row>
         <Row>
@@ -53,9 +52,7 @@ class Settings extends Component {
                   onChange={(e) => this.setState({ pss: e.target.value })}
                   defaultValue={pss} />
               </Col>
-              <Col sm={12}
-                className='pt-1 text-secondary'
-                style={{ fontSize: 13 }}>
+              <Col sm={12} className='pt-1 text-sub'>
                 After updating the field you need to restart the app (refresh page)
               </Col>
             </FormGroup>
@@ -70,9 +67,7 @@ class Settings extends Component {
                   onChange={(e) => this.setState({ bzz: e.target.value })}
                   defaultValue={bzz} />
               </Col>
-              <Col sm={12}
-                className='pt-1 text-secondary'
-                style={{ fontSize: 13 }}>
+              <Col sm={12} className='pt-1 text-sub'>
                 After updating the field you need to restart the app (refresh page)
               </Col>
             </FormGroup>

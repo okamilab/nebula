@@ -18,22 +18,18 @@ class LeftSide extends Component {
 
   render() {
     const { selectedChat } = this.state;
-    const activeContactsStyle = !selectedChat ? { background: '#282c34' } : {};
-    const activeChatsStyle = selectedChat ? { background: '#282c34' } : {};
 
     return (
       <Fragment>
         <Account />
-        <Nav style={{ borderBottom: '3px solid #282c34' }} className='pt-4' fill>
+        <Nav className='left-nav pt-4' fill>
           <NavItem
-            className='p-2'
-            style={{ ...activeContactsStyle, cursor: 'pointer' }}
+            className={'left-nav-item p-2' + (!selectedChat ? ' active' : '')}
             onClick={() => { this.setState({ selectedChat: false }) }}>
             <ContactsIcon active={!selectedChat} />
           </NavItem>
           <NavItem
-            className='p-2'
-            style={{ ...activeChatsStyle, cursor: 'pointer' }}
+            className={'left-nav-item p-2' + (selectedChat ? ' active' : '')}
             onClick={() => { this.setState({ selectedChat: true }) }}>
             <ChatsIcon active={selectedChat} />
           </NavItem>

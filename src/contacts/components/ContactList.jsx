@@ -35,9 +35,7 @@ class ContactList extends Component {
         <ContactListGroup
           list={map['added']}
           renderItem={(c, i) =>
-            <div
-              key={i}
-              style={{ cursor: 'pointer' }}>
+            <div key={i}>
               <Link
                 className='d-flex flex-row text-left pt-3'
                 to={'/contact/' + sum(c.key)}>

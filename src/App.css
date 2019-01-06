@@ -119,3 +119,48 @@
   padding: 10px;
   border-radius: 6px
 }
+
+.text-break {
+  word-wrap: break-word;
+}
+
+.text-sub {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.section-header {
+  border-bottom: 1px solid #eee;
+}
+
+.account {
+  height: 48px;
+  line-height: 44px;
+  padding-left: 10px;
+}
+
+.left-nav {
+  border-bottom: 3px solid #282c34;
+}
+
+.left-nav-item {
+  cursor: pointer;
+  background: transparent;
+}
+
+.left-nav-item.active {
+  background: #282c34;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.home-logo {
+  width: 300px;
+}
+
+.identicon {
+  overflow: hidden;
+  border-radius: 50%;
+}

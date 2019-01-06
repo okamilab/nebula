@@ -38,7 +38,7 @@ class ContactRequest extends Component {
         {value}
         <Modal isOpen={this.state.modal} centered>
           <ModalHeader>Received contact</ModalHeader>
-          <ModalBody style={{ wordWrap: 'break-word' }}>
+          <ModalBody className='text-break'>
             Do you want to accept request from {value}?
           </ModalBody>
           <ModalFooter>

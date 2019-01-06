@@ -30,11 +30,7 @@ class Account extends Component {
             <div className='w-100 pt-3'>
               <Link to='/profile'>
                 <Identicon publicKey={publicKey} size={48} style={{ float: 'left' }} />
-                <div className='text-truncate font-weight-bold' style={{
-                  height: 48,
-                  lineHeight: '44px',
-                  paddingLeft: 10
-                }}>
+                <div className='text-truncate font-weight-bold account'>
                   {username || publicKey}
                 </div>
               </Link>

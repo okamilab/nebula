@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import logo from './../images/logo.svg';
 
-export default class Home extends Component {
-  render() {
-    return (
-      <div className='h-100 d-flex align-items-center'>
-        <div style={{ margin: '0 auto' }}>
-          <img src={logo} alt='Swarm Messenger' style={{ width: 300 }} />
-        </div>
+export default function Home() {
+  return (
+    <div className='d-flex align-items-center h-100'>
+      <div className='center'>
+        <img src={logo} alt='Swarm Messenger' className='home-logo' />
       </div>
-    );
-  }
+    </div>
+  );
 }

@@ -24,8 +24,7 @@ class Contact extends Component {
     const { username, key } = contact;
     return (
       <Container fluid>
-        <Row className='pt-3'
-          style={{ borderBottom: '1px solid #eee' }}>
+        <Row className='section-header pt-3'>
           <h4>Contact</h4>
         </Row>
         <Row>
@@ -61,7 +60,7 @@ class Contact extends Component {
                 <Label for='publicKey'>Public key</Label>
               </Col>
               <Col sm={9}>
-                <div style={{ wordWrap: 'break-word' }}>
+                <div className='text-break'>
                   {key}
                 </div>
               </Col>
