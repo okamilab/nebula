@@ -5,6 +5,62 @@ The project works with local instanse of swarm, port `8546`
 
 Endpoint `ws://127.0.0.1:8546`
 
+# Roadmap
+* Generic
+	* Investigate swarm execution options, is it possible to run without unlock an account. In order to provide one swarm instance for multiple accounts
+	* Investigate possibility to create multi users chats
+	
+* File sharing
+	* Data encryption
+	
+* State management
+	* Save/restore state to/from swarm
+	* Data encryption
+	* Auto/manual state backup
+
+* UX improvements
+	* Contact management
+		* Add posibility to change contact usename
+		* Manage of declined contacts
+	* Chat management
+		* Add posibility to set chat name
+		* Add posibility to check chat info (participants, stat)
+		* Add posibility to leave chat
+		* Optimize chat representation (render last X messages, the rest - on demand)
+		* Highlighting unread messages
+		* Archive chat
+		* Images preview
+		* Smiles
+	* Notification
+		* Contact mutations (received request, added or declined request events)
+		* Chat mutations (received message, contact left events)
+		* DApp events (connection lost, etc.)
+		
+* ENS
+	* Investigate possibility of ENS integration, using ENS for contacts and onw PSS address
+	* Experiment with ENS by extending the protocol for using PSS addresses
+	
+* Feeds
+	* Investigate feeds
+	* Experiment with feeds, store personal data in swarm
+	
+* Payment
+	* Investigate payment ininiated from chat
+
+* Mobile
+	* Investigate possibility to run the dapp on mobile
+
+* Non-functional
+	* Unit/integration testing
+	* Linting
+	* Investigate how to deploy the dapp properly
+	* Continuous deployment
+
+* Hosting
+	* Buy ENS name
+	* Buy domain name
+	* Proxy from domain name to ENS
+
 ## Getting Started
 ### Setting up
 Make sure you have installed the necessary dependencies using `yarn`:
