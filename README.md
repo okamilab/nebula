@@ -6,6 +6,9 @@ The project works with local instanse of swarm, port `8546`
 Endpoint `ws://127.0.0.1:8546`
 
 # Roadmap
+* Improvements
+	* [ ] Restore connection after lose enhancement [#21](https://github.com/aquiladev/swarm-messenger/issues/21)
+	* [ ] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/aquiladev/swarm-messenger/issues/20)
 * Generic
 	* [ ] Investigate swarm execution options, is it possible to run without unlock an account. In order to provide one swarm instance for multiple accounts
 	* [ ] Investigate possibility to create multi users chats
