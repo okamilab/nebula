@@ -53,7 +53,7 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Experiment with feeds, store personal data in swarm
 	
 * Payment
-	* [ ] Investigate payment ininiated from chat
+	* [ ] Investigate payments initiated from chat
 
 * Mobile
 	* [ ] Investigate possibility to run the dapp on mobile
