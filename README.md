@@ -49,6 +49,7 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Investigate possibility to create multi users chats
 	* [ ] Investigate payments initiated from chat
 	* [ ] Investigate possibility to run the dapp on mobile
+	* [ ] Investigate possibility to run the dapp as a browser extension
 	
 * Feeds
 	* [ ] Investigate feeds
