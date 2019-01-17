@@ -10,10 +10,6 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Restore connection after lose enhancement [#21](https://github.com/aquiladev/swarm-messenger/issues/21)
 	* [ ] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/aquiladev/swarm-messenger/issues/20)
 	
-* Generic
-	* [ ] Investigate swarm execution options, is it possible to run without unlock an account. In order to provide one swarm instance for multiple accounts
-	* [ ] Investigate possibility to create multi users chats
-	
 * Routing
 	* [ ] Avoid broadcasting, reveal address partially
 
@@ -48,15 +44,15 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Investigate possibility of ENS integration, using ENS for contacts and onw PSS address
 	* [ ] Experiment with ENS by extending the protocol for using PSS addresses
 	
+* Research
+	* [ ] Investigate swarm execution options, is it possible to run without unlock an account. In order to provide one swarm instance for multiple accounts
+	* [ ] Investigate possibility to create multi users chats
+	* [ ] Investigate payments initiated from chat
+	* [ ] Investigate possibility to run the dapp on mobile
+	
 * Feeds
 	* [ ] Investigate feeds
 	* [ ] Experiment with feeds, store personal data in swarm
-	
-* Payment
-	* [ ] Investigate payments initiated from chat
-
-* Mobile
-	* [ ] Investigate possibility to run the dapp on mobile
 
 * Non-functional
 	* [ ] Unit/integration testing
@@ -66,8 +62,8 @@ Endpoint `ws://127.0.0.1:8546`
 
 * Hosting
 	* [ ] Buy ENS name
-	* [ ] Buy domain name
-	* [ ] Proxy from domain name to ENS
+	* [ ] Buy domain name (?)
+	* [ ] Proxy from domain name to ENS (?)
 
 ## Getting Started
 ### Setting up
