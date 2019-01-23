@@ -31,7 +31,7 @@ class ContactList extends Component {
         <ContactListGroup
           list={map['received_request']}
           title='Received'
-          renderItem={(c, i) => <ContactRequest key={i} value={c.key} />} />
+          renderItem={(c, i) => <ContactRequest key={i} publicKey={c.key} address={c.address} />} />
         <ContactListGroup
           list={map['added']}
           renderItem={(c, i) =>

@@ -12,7 +12,8 @@ import { acceptContact, declineContact } from './../actions';
 class ContactRequest extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    value: PropTypes.string.isRequired,
+    publicKey: PropTypes.string.isRequired,
+    address: PropTypes.string
   };
 
   constructor(props) {
@@ -31,15 +32,15 @@ class ContactRequest extends Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { publicKey } = this.props;
 
     return (
       <div className='text-truncate' onClick={this.toggle}>
-        {value}
-        <Modal isOpen={this.state.modal} centered>
+        <div>{publicKey}</div>
+        <Modal isOpen={this.state.modal} centered autoFocus={false}>
           <ModalHeader>Received contact</ModalHeader>
           <ModalBody className='text-break'>
-            Do you want to accept request from {value}?
+            Do you want to accept request from {publicKey}?
           </ModalBody>
           <ModalFooter>
             <Button color='light' onClick={this.decline}>Decline</Button>
@@ -51,14 +52,14 @@ class ContactRequest extends Component {
   }
 
   accept = () => {
-    const { value, dispatch } = this.props;
-    dispatch(acceptContact(value));
+    const { publicKey, address, dispatch } = this.props;
+    dispatch(acceptContact(publicKey, address));
     this.toggle();
   };
 
   decline = () => {
-    const { value, dispatch } = this.props;
-    dispatch(declineContact(value));
+    const { publicKey, address, dispatch } = this.props;
+    dispatch(declineContact(publicKey, address));
     this.toggle();
   };
 }

@@ -4,11 +4,7 @@ import { SwarmClient } from '@erebos/swarm-browser';
 
 import reducer from './reducer';
 import LocalStorageMiddleware from './../util/redux/localStorage';
-
-export const DEFAULT_SETTINGS = {
-  pss: 'ws://127.0.0.1:8546',
-  bzz: 'http://127.0.0.1:8500'
-}
+import { DEFAULT_SETTINGS } from './default';
 
 export function configureStore(initialState) {
   // Use compose function provided by Redux DevTools if the extension is installed.

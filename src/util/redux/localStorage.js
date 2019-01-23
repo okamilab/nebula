@@ -1,6 +1,8 @@
 import jsonpack from 'jsonpack';
 import LZString from 'lz-string';
 
+import { DEFAULT_SETTINGS } from './../../base/default';
+
 export default class LocalStorageMiddleware {
   constructor(key) {
     this.key = key;
@@ -8,6 +10,7 @@ export default class LocalStorageMiddleware {
       'account.username',
       'settings.pss',
       'settings.bzz',
+      'settings.revealAddress',
       'contacts',
       'chats'
     ];
@@ -40,11 +43,12 @@ export default class LocalStorageMiddleware {
     };
 
     const storeState = (state, publicKey) => {
-      const { pss, bzz } = state.settings;
+      const { pss, bzz, revealAddress } = state.settings;
       const username = get(state, 'account.username');
       const model = {
         pss,
         bzz,
+        revealAddress,
         [publicKey]: {
           username,
           contacts: state.contacts,
@@ -80,7 +84,7 @@ export default class LocalStorageMiddleware {
   }
 
   deriveInitialState(preloadedState) {
-    let state;
+    let state = {};
 
     const raw = localStorage.getItem(this.key);
     const uncompressed = LZString.decompress(raw);
@@ -92,9 +96,10 @@ export default class LocalStorageMiddleware {
       ...preloadedState,
       appState: { raw, ...state },
       settings: {
-        pss: state.pss,
-        bzz: state.bzz,
-        size: (raw || '').length
+        pss: state.pss || DEFAULT_SETTINGS.pss,
+        bzz: state.bzz || DEFAULT_SETTINGS.bzz,
+        revealAddress: state.revealAddress || DEFAULT_SETTINGS.revealAddress,
+        size: (raw || '').length,
       }
     };
   }

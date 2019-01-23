@@ -25,10 +25,10 @@ function getChat(key, chats) {
   return chat;
 }
 
-async function createSubscription(client, contactKey, topic) {
+async function createSubscription(client, chat) {
   const [sub] = await Promise.all([
-    client.pss.createTopicSubscription(topic),
-    client.pss.setPeerPublicKey(contactKey, topic),
+    client.pss.createTopicSubscription(chat.topic),
+    client.pss.setPeerPublicKey(chat.key, chat.topic, chat.address),
   ])
   return sub.pipe(
     map(decodePssEvent),
@@ -70,7 +70,7 @@ function handler(dispatch, getState) {
 
 function subscribe(chat) {
   return async (dispatch, getState, client) => {
-    const subscription = await createSubscription(client, chat.key, chat.topic);
+    const subscription = await createSubscription(client, chat);
     const sub = subscription.subscribe(handler(dispatch, getState));
     dispatch({ type: CHAT_SUBSCRIBE, sub });
   }
@@ -96,6 +96,7 @@ export function createChat(contact) {
     const chat = {
       key: contact.key,
       topic: contact.topic,
+      address: contact.address,
       participants: {
         [sum(contact.key)]: contact.key,
         [sum(account.publicKey)]: account.publicKey,

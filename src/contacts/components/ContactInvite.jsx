@@ -20,11 +20,11 @@ class ContactInvite extends Component {
     this.state = {
       modal: false,
       publicKey: '',
+      address: '',
       error: ''
     };
 
     this.toggle = this.toggle.bind(this);
-    this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
   }
 
@@ -32,12 +32,6 @@ class ContactInvite extends Component {
     this.setState({
       error: null,
       modal: !this.state.modal
-    });
-  }
-
-  onChange(e) {
-    this.setState({
-      publicKey: e.target.value
     });
   }
 
@@ -58,17 +52,28 @@ class ContactInvite extends Component {
           className='float-right'>
           + Invite contact
         </Button>
-        <Modal isOpen={this.state.modal} centered>
+        <Modal isOpen={this.state.modal} centered autoFocus={false}>
           <ModalHeader>Invite contact</ModalHeader>
           <ModalBody>
             {error ? <Alert color='danger'>{error.message || error}</Alert> : null}
             <FormGroup>
-              <Label for='contactPublicKey'>Contact public key</Label>
+              <Label for='contactPublicKey'>Contact public key *</Label>
               <Input
                 type='text'
                 id='contactPublicKey'
                 placeholder='Public key'
-                onChange={this.onChange}
+                onChange={(e) => this.setState({ publicKey: e.target.value })}
+                onKeyPress={this.onKeyPress}
+                autoFocus
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label for='contactAddress'>Contact address</Label>
+              <Input
+                type='text'
+                id='contactAddress'
+                placeholder='Address'
+                onChange={(e) => this.setState({ address: e.target.value })}
                 onKeyPress={this.onKeyPress}
                 autoFocus
               />
@@ -89,8 +94,9 @@ class ContactInvite extends Component {
 
   invite = async () => {
     try {
+      const { publicKey, address } = this.state
       this.setState({ error: null });
-      await this.props.dispatch(inviteContact(this.state.publicKey));
+      await this.props.dispatch(inviteContact(publicKey, address));
     } catch (error) {
       this.setState({ error: error.message });
       return;

@@ -12,3 +12,7 @@ export const readFile = (file) => {
     fr.readAsArrayBuffer(file);
   });
 };
+
+export const getAddress = (address = '', reveal = 0) => {
+  return address.substring(0, 2 + reveal * 2) || '0x';
+}

@@ -4,6 +4,7 @@ import sum from 'hash-sum';
 
 import keyUtils from './../base/key';
 import { createChat } from './../chats/actions';
+import { getAddress } from './../base/fn';
 
 export const CONTACTS_RESTORE = 'CONTACTS_RESTORE';
 export const CONTACT_SUBSCRIBE = 'CONTACT_SUBSCRIBE';
@@ -114,9 +115,9 @@ function createRandomString() {
     .slice(2);
 }
 
-export function inviteContact(publicKey) {
+export function inviteContact(publicKey, address) {
   return async (dispatch, getState, client) => {
-    const { account, contacts } = getState();
+    const { account, contacts, settings } = getState();
     const publicKeyHex = hexValueType(publicKey);
     const hash = sum(publicKeyHex);
 
@@ -127,14 +128,14 @@ export function inviteContact(publicKey) {
       client.pss.stringToTopic(createRandomString()),
     ]);
 
-    await client.pss.setPeerPublicKey(publicKeyHex, contactTopic);
+    await client.pss.setPeerPublicKey(publicKeyHex, contactTopic, address || '0x');
     const pssMessage = {
       type: 'contact_request',
       payload: {
         username: account.username,
         message: null,
         topic: sharedTopic,
-        overlay_address: account.overlayAddress,
+        overlay_address: getAddress(account.overlayAddress, settings.revealAddress),
       },
       utc_timestamp: Date.now()
     };
@@ -150,30 +151,33 @@ export function inviteContact(publicKey) {
   };
 }
 
-async function sendResponse(client, overlayAddress, key, accept, data = {}) {
-  let payload = { contact: accept }
+async function sendResponse(client, getState, publicKey, address, accept) {
+  const topic = await client.pss.stringToTopic(publicKey);
+  let payload = { contact: accept };
+
   if (accept) {
+    const { account, settings } = getState();
     payload = {
       ...payload,
-      username: data.username,
-      overlay_address: overlayAddress,
+      username: account.username,
+      overlay_address: getAddress(account.overlayAddress, settings.revealAddress),
     };
+
+    await client.pss.setPeerPublicKey(publicKey, topic, address || '0x');
   }
 
-  const topic = await client.pss.stringToTopic(key);
-  await client.pss.setPeerPublicKey(key, topic);
   const message = {
     type: 'contact_response',
     payload,
     utc_timestamp: Date.now()
   };
-  await client.pss.sendAsym(key, topic, message);
+  await client.pss.sendAsym(publicKey, topic, message);
 }
 
-export function acceptContact(publicKey) {
+export function acceptContact(publicKey, address) {
   return async (dispatch, getState, client) => {
-    const { account, contacts } = getState();
-    await sendResponse(client, account.overlayAddress, publicKey, true, { username: account.username });
+    const { contacts } = getState();
+    await sendResponse(client, getState, publicKey, address, true);
 
     const hash = sum(publicKey);
     const contact = {
@@ -186,10 +190,10 @@ export function acceptContact(publicKey) {
   }
 }
 
-export function declineContact(publicKey) {
+export function declineContact(publicKey, address) {
   return async (dispatch, getState, client) => {
-    const { account, contacts } = getState();
-    await sendResponse(client, account.overlayAddress, publicKey, false, { username: account.username });
+    const { contacts } = getState();
+    await sendResponse(client, getState, publicKey, address, false);
 
     const hash = sum(publicKey);
     const contact = {

@@ -164,3 +164,9 @@
   overflow: hidden;
   border-radius: 50%;
 }
+
+.section {
+  background: #f8f9fa;
+  border: none;
+  padding: 10px 20px;
+}

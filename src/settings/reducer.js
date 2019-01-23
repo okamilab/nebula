@@ -5,6 +5,7 @@ import {
 export const initialState = {
   bzz: '',
   pss: '',
+  revealAddress: 0,
   size: 0
 };
 
