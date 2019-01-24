@@ -53,7 +53,7 @@ class Settings extends Component {
                 </Col>
                 <Col sm={12} className='pt-1 text-sub'>
                   After updating the field you need to restart the app (refresh page)
-              </Col>
+                </Col>
               </FormGroup>
               <FormGroup className='row pt-3'>
                 <Col sm={4}>
@@ -68,7 +68,7 @@ class Settings extends Component {
                 </Col>
                 <Col sm={12} className='pt-1 text-sub'>
                   After updating the field you need to restart the app (refresh page)
-              </Col>
+                </Col>
               </FormGroup>
               <FormGroup className='row pt-3'>
                 <Col sm={4}>

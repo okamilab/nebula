@@ -11,7 +11,7 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/aquiladev/swarm-messenger/issues/20)
 	
 * Routing
-	* [ ] Avoid broadcasting, reveal address partially
+	* [x] Avoid broadcasting, reveal address partially
 
 * File sharing
 	* [ ] Data encryption

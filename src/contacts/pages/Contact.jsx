@@ -21,7 +21,7 @@ class Contact extends Component {
       return <div>Contact not found</div>
     }
 
-    const { username, key } = contact;
+    const { username, key, address } = contact;
     return (
       <Container fluid>
         <Row className='section-header pt-3'>
@@ -57,12 +57,18 @@ class Contact extends Component {
             </FormGroup>
             <FormGroup className='row pt-3'>
               <Col sm={3}>
-                <Label for='publicKey'>Public key</Label>
+                <Label>Public key</Label>
               </Col>
-              <Col sm={9}>
-                <div className='text-break'>
-                  {key}
-                </div>
+              <Col sm={9} className='text-break'>
+                {key}
+              </Col>
+            </FormGroup>
+            <FormGroup className='row pt-3'>
+              <Col sm={3}>
+                <Label>Address</Label>
+              </Col>
+              <Col sm={9} className='text-break'>
+                {address}
               </Col>
             </FormGroup>
             <div className='pt-3'>

@@ -27,7 +27,7 @@ class Profile extends Component {
       return <div>Loading</div>
     }
 
-    const { username, publicKey } = account;
+    const { username, publicKey, overlayAddress } = account;
     return (
       <Container fluid>
         <Row className='section-header pt-3'>
@@ -62,12 +62,21 @@ class Profile extends Component {
             </FormGroup>
             <FormGroup className='row pt-3'>
               <Col sm={3}>
-                <Label for='publicKey'>Public key</Label>
+                <Label>Public key</Label>
               </Col>
-              <Col sm={9}>
-                <div className='text-break'>
-                  {publicKey}
-                </div>
+              <Col sm={9} className='text-break'>
+                {publicKey}
+              </Col>
+            </FormGroup>
+            <FormGroup className='row pt-3'>
+              <Col sm={3}>
+                <Label>Address</Label>
+              </Col>
+              <Col sm={9} className='text-break'>
+                {overlayAddress}
+              </Col>
+              <Col sm={12} className='pt-1 text-sub'>
+                Do not share whole address for security reason
               </Col>
             </FormGroup>
             <div className='pt-3'>
