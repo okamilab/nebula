@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Container, Row, Col, FormGroup, Label, Input, Button, Card
+  Container, Row, Col, Label, Input, Button, Card
 } from 'reactstrap';
 import pretty from 'prettysize';
 
-import { DEFAULT_SETTINGS } from '../../base/default'
+import { DEFAULT_SETTINGS } from '../../base/default';
 import { updateSettings, resetSettings } from './../../settings/actions';
 
 class Settings extends Component {
@@ -39,7 +39,7 @@ class Settings extends Component {
             md={{ size: 10, offset: 1 }}>
             <h6 className='pt-3 pb-1'>General</h6>
             <Card className='section'>
-              <FormGroup className='row pt-3'>
+              <Row className='pt-3 pb-3'>
                 <Col sm={4}>
                   <Label for='pss'>PSS endpoint (WebSocket)</Label>
                 </Col>
@@ -54,8 +54,8 @@ class Settings extends Component {
                 <Col sm={12} className='pt-1 text-sub'>
                   After updating the field you need to restart the app (refresh page)
                 </Col>
-              </FormGroup>
-              <FormGroup className='row pt-3'>
+              </Row>
+              <Row className='pt-3 pb-3'>
                 <Col sm={4}>
                   <Label for='bzz'>BZZ endpoint</Label>
                 </Col>
@@ -69,19 +69,19 @@ class Settings extends Component {
                 <Col sm={12} className='pt-1 text-sub'>
                   After updating the field you need to restart the app (refresh page)
                 </Col>
-              </FormGroup>
-              <FormGroup className='row pt-3'>
+              </Row>
+              <Row className='pt-3 pb-3'>
                 <Col sm={4}>
                   <Label>Local storage</Label>
                 </Col>
                 <Col sm={8}>
                   {pretty(size)}
                 </Col>
-              </FormGroup>
+              </Row>
             </Card>
             <h6 className='pt-3 pb-1'>Security</h6>
             <Card className='section'>
-              <FormGroup className='row pt-3'>
+              <Row className='pt-3 pb-3'>
                 <Col sm={4}>
                   <Label for='revealAddress'>Reveal address partially</Label>
                 </Col>
@@ -99,7 +99,34 @@ class Settings extends Component {
                     <option value={32}>Full</option>
                   </Input>
                 </Col>
-              </FormGroup>
+              </Row>
+            </Card>
+            <h6 className='pt-3 pb-1'>About</h6>
+            <Card className='section'>
+              <Row>
+                <Col sm={4}>
+                  <Label>Version</Label>
+                </Col>
+                <Col sm={8}>
+                  0.1.0
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={4}>
+                  <Label>Last update</Label>
+                </Col>
+                <Col sm={8}>
+                  01/24/2019
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={4}>
+                  <Label>Source</Label>
+                </Col>
+                <Col sm={8}>
+                  <a href='https://github.com/aquiladev/swarm-messenger' target='_block'>GitHub</a>
+                </Col>
+              </Row>
             </Card>
             <div className='pt-3'>
               <Button

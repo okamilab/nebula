@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import {
-  Container, Row, Col, FormGroup, Label, Input, Button
+  Container, Row, Col, Label, Input, Button
 } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
@@ -47,7 +47,7 @@ class Profile extends Component {
                 }
               </Col>
             </Row>
-            <FormGroup className='row pt-3'>
+            <Row className='pt-3'>
               <Col sm={3}>
                 <Label for='username'>User name</Label>
               </Col>
@@ -59,16 +59,16 @@ class Profile extends Component {
                   onChange={(e) => this.setState({ username: e.target.value })}
                   defaultValue={username} />
               </Col>
-            </FormGroup>
-            <FormGroup className='row pt-3'>
+            </Row>
+            <Row className='pt-3'>
               <Col sm={3}>
                 <Label>Public key</Label>
               </Col>
               <Col sm={9} className='text-break'>
                 {publicKey}
               </Col>
-            </FormGroup>
-            <FormGroup className='row pt-3'>
+            </Row>
+            <Row className='pt-3'>
               <Col sm={3}>
                 <Label>Address</Label>
               </Col>
@@ -78,7 +78,7 @@ class Profile extends Component {
               <Col sm={12} className='pt-1 text-sub'>
                 Do not share whole address for security reason
               </Col>
-            </FormGroup>
+            </Row>
             <div className='pt-3'>
               <Button
                 color='success'
