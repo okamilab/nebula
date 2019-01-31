@@ -104,7 +104,8 @@ class Chat extends Component {
     }
 
     const participants = this.getParticipants();
-    const messages = Object.values(chat.messages);
+    const messages = Object.values(chat.messages)
+      .sort((a, b) => a.timestamp - b.timestamp);
     const { publicKey } = account;
 
     return (
