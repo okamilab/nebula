@@ -57,7 +57,7 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Experiment with feeds, store personal data in swarm
 
 * Non-functional
-	* [ ] Unit/integration testing
+	* [x] Unit/integration testing
 	* [ ] Linting
 	* [ ] Investigate how to deploy the dapp properly
 	* [ ] Continuous deployment
