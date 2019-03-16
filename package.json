@@ -46,7 +46,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .jsx,.js --max-warnings 0 src",
-    "release": "release-it --no-npm.publish"
+    "release": "release-it --no-npm.publish --dry-run"
   },
   "browserslist": [
     ">0.2%",

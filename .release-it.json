@@ -3,7 +3,8 @@
     "beforeStart": "yarn run lint"
   },
   "git": {
-    "requireUpstream": true
+    "requireUpstream": true,
+    "tagName": "v${version}"
   },
   "github": {
     "release": true
