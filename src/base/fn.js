@@ -7,7 +7,7 @@ export const groupBy = (xs, key) => {
 
 export const readFile = (file) => {
   return new Promise((resolve, _) => {
-    var fr = new FileReader();
+    const fr = new FileReader();
     fr.onload = resolve;
     fr.readAsArrayBuffer(file);
   });
