@@ -7,9 +7,9 @@ Endpoint `ws://127.0.0.1:8546`
 
 # Roadmap
 * Improvements
-	* [ ] Restore connection after lose [#21](https://github.com/aquiladev/swarm-messenger/issues/21)
-	* [ ] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/aquiladev/swarm-messenger/issues/20)
-	* [x] Fix messages order in chat [#22](https://github.com/aquiladev/swarm-messenger/issues/22)
+	* [ ] Restore connection after lose [#21](https://github.com/okamilab/nebula/issues/21)
+	* [ ] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/okamilab/nebula/issues/20)
+	* [x] Fix messages order in chat [#22](https://github.com/okamilab/nebula/issues/22)
 	
 * Routing
 	* [x] Avoid broadcasting, reveal address partially

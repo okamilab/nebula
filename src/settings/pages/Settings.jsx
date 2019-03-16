@@ -124,7 +124,7 @@ class Settings extends Component {
                   <Label>Source</Label>
                 </Col>
                 <Col sm={8}>
-                  <a href='https://github.com/aquiladev/swarm-messenger' target='_block'>GitHub</a>
+                  <a href='https://github.com/okamilab/nebula' target='_block'>GitHub</a>
                 </Col>
               </Row>
             </Card>
