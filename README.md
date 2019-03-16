@@ -63,7 +63,7 @@ Endpoint `ws://127.0.0.1:8546`
 	* [ ] Continuous deployment
 
 * Hosting
-	* [ ] Buy ENS name
+	* [x] Buy ENS name
 	* [ ] Buy domain name (?)
 	* [ ] Proxy from domain name to ENS (?)
 
