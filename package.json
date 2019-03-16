@@ -37,14 +37,16 @@
     "eslint-plugin-jsx-a11y": "6.2.1",
     "eslint-plugin-react": "7.12.4",
     "eslint-plugin-react-hooks": "1.5.1",
-    "hasky": "3.0.2"
+    "hasky": "3.0.2",
+    "release-it": "10.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .jsx,.js --max-warnings 0 src"
+    "lint": "eslint --ext .jsx,.js --max-warnings 0 src",
+    "release": "release-it --dry-run"
   },
   "browserslist": [
     ">0.2%",
