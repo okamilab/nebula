@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "beforeStart": "yarn run lint"
+  },
+  "git": {
+    "requireUpstream": true
+  },
+  "github": {
+    "release": true
+  }
+}
