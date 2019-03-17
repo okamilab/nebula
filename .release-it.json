@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "beforeStart": "yarn run lint"
+    "beforeStart": "npm run lint"
   },
   "git": {
     "requireUpstream": true,
