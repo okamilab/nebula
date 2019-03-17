@@ -69,10 +69,10 @@ Endpoint `ws://127.0.0.1:8546`
 
 ## Getting Started
 ### Setting up
-Make sure you have installed the necessary dependencies using `yarn`:
+Make sure you have installed the necessary dependencies using `npm`:
 
 ```sh
-$ yarn
+$ npm i
 ```
 
 ### Running
