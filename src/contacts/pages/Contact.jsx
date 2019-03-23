@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
+import Key from './../../base/components/Key';
 
 class Contact extends Component {
   static propTypes = {
@@ -60,7 +61,7 @@ class Contact extends Component {
                 <Label>Public key</Label>
               </Col>
               <Col sm={9} className='text-break'>
-                {key}
+                <Key name="publicKey" value={key} />
               </Col>
             </Row>
             <Row className='pt-3'>
@@ -68,7 +69,7 @@ class Contact extends Component {
                 <Label>Address</Label>
               </Col>
               <Col sm={9} className='text-break'>
-                {address}
+                <Key name="address" value={address} />
               </Col>
             </Row>
             <div className='pt-3'>

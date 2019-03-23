@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 
 import Identicon from './../../base/components/Identicon';
+import Key from './../../base/components/Key';
 import { updateUsername } from './../actions';
 
 class Profile extends Component {
@@ -65,7 +66,7 @@ class Profile extends Component {
                 <Label>Public key</Label>
               </Col>
               <Col sm={9} className='text-break'>
-                {publicKey}
+                <Key name="publicKey" value={publicKey} />
               </Col>
             </Row>
             <Row className='pt-3'>
@@ -73,7 +74,7 @@ class Profile extends Component {
                 <Label>Address</Label>
               </Col>
               <Col sm={9} className='text-break'>
-                {overlayAddress}
+                <Key name="overlayAddress" value={overlayAddress} />
               </Col>
               <Col sm={12} className='pt-1 text-sub'>
                 Do not share whole address for security reason

@@ -7,8 +7,8 @@ import {
   NavbarBrand,
 } from 'reactstrap';
 
-import logo from './../images/logo.svg';
-import gear from './../images/gear.svg';
+import logo from './../../images/logo.svg';
+import gear from './../../images/gear.svg';
 
 class Header extends Component {
   render() {
