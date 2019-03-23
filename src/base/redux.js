@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { SwarmClient } from '@erebos/swarm-browser';
 
 import reducer from './reducer';
-import LocalStorageMiddleware from './../util/redux/localStorage';
+import LocalStorageMiddleware from './middlewares/localStorage';
 import { DEFAULT_SETTINGS } from './default';
 
 export function configureStore(initialState) {

@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import pretty from 'prettysize';
 
+import packageJson from '../../../package.json';
 import { DEFAULT_SETTINGS } from '../../base/default';
 import { updateSettings, resetSettings } from './../../settings/actions';
 
@@ -108,23 +109,9 @@ class Settings extends Component {
                   <Label>Version</Label>
                 </Col>
                 <Col sm={8}>
-                  0.1.0
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={4}>
-                  <Label>Last update</Label>
-                </Col>
-                <Col sm={8}>
-                  01/24/2019
-                </Col>
-              </Row>
-              <Row>
-                <Col sm={4}>
-                  <Label>Source</Label>
-                </Col>
-                <Col sm={8}>
-                  <a href='https://github.com/okamilab/nebula' target='_block'>GitHub</a>
+                  <a href={'https://github.com/okamilab/nebula/releases/tag/v' + packageJson.version} target='_block'>
+                    {packageJson.version}
+                  </a>
                 </Col>
               </Row>
             </Card>
