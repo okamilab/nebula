@@ -13,7 +13,7 @@ export function configureStore(initialState) {
     && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
     || reduxCompose;
 
-  const localStorageMiddleware = new LocalStorageMiddleware('swarm_messenger');
+  const localStorageMiddleware = new LocalStorageMiddleware('nebula');
   initialState = localStorageMiddleware.deriveInitialState(initialState);
 
   const config = {

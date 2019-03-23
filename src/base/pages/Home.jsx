@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className='d-flex align-items-center h-100'>
       <div className='center'>
-        <img src={logo} alt='Swarm Messenger' className='home-logo' />
+        <img src={logo} alt='Nebula' className='home-logo' />
       </div>
     </div>
   );

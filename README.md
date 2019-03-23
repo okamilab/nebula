@@ -1,9 +1,7 @@
-# Swarm Messenger
-Messenger based on PSS protocol.
+# Nebula
+Messenger dapp based on PSS protocol over swarm.
 
-The project works with local instanse of swarm, port `8546`
-
-Endpoint `ws://127.0.0.1:8546`
+The project works with local instanse of swarm, default endpoint `ws://127.0.0.1:8546`
 
 # Roadmap
 * Improvements

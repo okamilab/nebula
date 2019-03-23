@@ -14,7 +14,7 @@ import './App.css';
 export default function App() {
   return (
     <Fragment>
-      <Helmet titleTemplate='Swarm Messenger - %s' />
+      <Helmet titleTemplate='Nebula - %s' />
       <Layout>
         <Switch>
           <Route exact path='/' component={Home} />

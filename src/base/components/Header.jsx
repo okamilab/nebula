@@ -16,8 +16,8 @@ class Header extends Component {
       <Row className='flex-shrink-0 header'>
         <Navbar expand='md' className='w-100 justify-content-between'>
           <NavbarBrand tag={Link} to='/'>
-            <img src={logo} alt='Swarm Messenger' style={{ width: 36 }} />
-            <span className='pl-3 text-white'>Swarm Messenger</span>
+            <img src={logo} alt='Nebula' style={{ width: 36 }} />
+            <span className='pl-3 text-white'>Nebula</span>
           </NavbarBrand>
           <Link to='/settings'>
             <img src={gear} alt='Settings' style={{ width: 32 }} />
