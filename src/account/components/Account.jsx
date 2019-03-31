@@ -2,11 +2,9 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withJob } from 'react-jobs';
 import { Link, Redirect } from 'react-router-dom';
 
 import Identicon from './../../base/components/Identicon';
-import { fetchAccount } from './../actions';
 
 class Account extends Component {
   static propTypes = {
@@ -52,8 +50,5 @@ export default compose(
       errors: []
     };
     return { account, errors };
-  }),
-  withJob({
-    work: ({ dispatch }) => dispatch(fetchAccount())
   })
 )(Account);

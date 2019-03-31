@@ -69,7 +69,8 @@ function handler(dispatch, getState) {
 }
 
 function subscribe(chat) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
+    const { client } = resolve();
     const subscription = await createSubscription(client, chat);
     const sub = subscription.subscribe(handler(dispatch, getState));
     dispatch({ type: CHAT_SUBSCRIBE, sub });
@@ -82,8 +83,8 @@ function subscribeAll(dispatch, chats) {
 
 export function restoreChats(publicKey) {
   return async (dispatch, getState) => {
-    const { appState } = getState();
-    const session = appState[publicKey] || {};
+    const { app } = getState();
+    const session = app[publicKey] || {};
     const chats = session.chats || [];
     dispatch({ type: CHATS_RESTORE, chats });
     subscribeAll(dispatch, chats);
@@ -128,19 +129,20 @@ async function send(dispatch, client, chat, publicKey, text) {
 }
 
 export function sendMessage(key, text) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { account, chats } = getState();
     const chat = getChat(key, chats);
-
+    const { client } = resolve();
     send(dispatch, client, chat, account.publicKey, text);
   };
 }
 
 export function sendFile(key, file) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { account, chats } = getState();
     const chat = getChat(key, chats);
 
+    const { client } = resolve();
     const { bzz } = client;
     const readEvent = await readFile(file);
     const buffer = readEvent.currentTarget.result
@@ -152,7 +154,8 @@ export function sendFile(key, file) {
 }
 
 export function download(hash) {
-  return async (_, __, client) => {
+  return async (_, __, resolve) => {
+    const { client } = resolve();
     const { bzz } = client;
     const file = await bzz.download(hash);
     await FileSaver.saveAs(await file.blob());

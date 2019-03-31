@@ -94,7 +94,7 @@ export default class LocalStorageMiddleware {
 
     return {
       ...preloadedState,
-      appState: { raw, ...state },
+      app: { raw, ...state },
       settings: {
         pss: state.pss || DEFAULT_SETTINGS.pss,
         bzz: state.bzz || DEFAULT_SETTINGS.bzz,

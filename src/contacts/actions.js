@@ -90,9 +90,9 @@ function handler(dispatch, getState) {
 }
 
 export function subscribe() {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { account } = getState();
-
+    const { client } = resolve();
     const subscription = await createSubscription(client, account.publicKey);
     const sub = subscription.subscribe(handler(dispatch, getState));
     dispatch({ type: CONTACT_SUBSCRIBE, sub });
@@ -101,8 +101,8 @@ export function subscribe() {
 
 export function restoreContacts(publicKey) {
   return async (dispatch, getState) => {
-    const { appState } = getState();
-    const session = appState[publicKey] || {};
+    const { app } = getState();
+    const session = app[publicKey] || {};
     const contacts = session.contacts || {};
     dispatch({ type: CONTACTS_RESTORE, contacts });
     dispatch(subscribe());
@@ -116,13 +116,14 @@ function createRandomString() {
 }
 
 export function inviteContact(publicKey, address) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { account, contacts, settings } = getState();
     const publicKeyHex = hexValueType(publicKey);
     const hash = sum(publicKeyHex);
 
     keyUtils.isValidPubKey(publicKeyHex, account.publicKey, contacts[hash]);
 
+    const { client } = resolve();
     const [contactTopic, sharedTopic] = await Promise.all([
       client.pss.stringToTopic(publicKeyHex),
       client.pss.stringToTopic(createRandomString()),
@@ -175,8 +176,9 @@ async function sendResponse(client, getState, publicKey, address, accept) {
 }
 
 export function acceptContact(publicKey, address) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { contacts } = getState();
+    const { client } = resolve();
     await sendResponse(client, getState, publicKey, address, true);
 
     const hash = sum(publicKey);
@@ -191,8 +193,9 @@ export function acceptContact(publicKey, address) {
 }
 
 export function declineContact(publicKey, address) {
-  return async (dispatch, getState, client) => {
+  return async (dispatch, getState, resolve) => {
     const { contacts } = getState();
+    const { client } = resolve();
     await sendResponse(client, getState, publicKey, address, false);
 
     const hash = sum(publicKey);

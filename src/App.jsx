@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Route } from 'react-router';
 import Helmet from 'react-helmet-async';
 
@@ -9,11 +9,12 @@ import Profile from './account/pages/Profile';
 import Contact from './contacts/pages/Contact';
 import Chat from './chats/pages/Chat';
 
+import Startup from './base/containers/Startup';
 import './App.css';
 
 export default function App() {
   return (
-    <Fragment>
+    <Startup>
       <Helmet titleTemplate='Nebula - %s' />
       <Layout>
         <Switch>
@@ -24,6 +25,6 @@ export default function App() {
           <Route exact path='/chat/:key' component={Chat} />
         </Switch>
       </Layout>
-    </Fragment>
+    </Startup>
   );
 }
