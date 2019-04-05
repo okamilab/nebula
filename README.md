@@ -5,7 +5,7 @@ The project works with local instanse of swarm, default endpoint `ws://127.0.0.1
 
 # Roadmap
 * Improvements
-	* [ ] Restore connection after lose [#21](https://github.com/okamilab/nebula/issues/21)
+	* [x] Restore connection after lose [#21](https://github.com/okamilab/nebula/issues/21)
 	* [x] Copy-full-key-hex--to-clipboard for publicKeys [#20](https://github.com/okamilab/nebula/issues/20)
 	* [x] Fix messages order in chat [#22](https://github.com/okamilab/nebula/issues/22)
 	
