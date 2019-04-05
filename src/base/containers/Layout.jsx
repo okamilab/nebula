@@ -5,6 +5,7 @@ import { Container, Row, Col } from 'reactstrap';
 import Header from './../components/Header';
 import Error from './../error/components/Error';
 import LeftSide from './../components/LeftSide';
+import WsConnection from './../components/WsConnection';
 
 export default function Layout({ children }) {
   return (
@@ -21,6 +22,7 @@ export default function Layout({ children }) {
         </Row>
       </Container>
       <Error />
+      <WsConnection />
     </Fragment>
   );
 }
