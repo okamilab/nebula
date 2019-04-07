@@ -65,6 +65,9 @@ The project works with local instanse of swarm, default endpoint `ws://127.0.0.1
 	* [ ] Buy domain name (?)
 	* [ ] Proxy from domain name to ENS (?)
 
+## Introduction
+[![Nebula intro](https://img.youtube.com/vi/RKPL8Njbu84/0.jpg)](https://www.youtube.com/watch?v=RKPL8Njbu84)
+
 ## Getting Started
 ### Setting up
 Make sure you have installed the necessary dependencies using `npm`:
