@@ -3,8 +3,8 @@ import { combineReducers } from 'redux';
 import app from './../app/reducer';
 import account from './../account/reducer';
 import settings from './../settings/reducer';
-import contacts from './../contacts/reducer';
-import chats from './../chats/reducer';
+import contacts from './../messenger/contacts/reducer';
+import chats from './../messenger/chats/reducer';
 import subscriptions from './../base/subscription/reducer';
 import errors from './../base/error/reducer';
 

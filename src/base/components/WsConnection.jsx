@@ -1,7 +1,26 @@
 import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Alert } from 'reactstrap';
+import { withStyles } from '@material-ui/core/styles';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import green from '@material-ui/core/colors/green';
+
+const styles = theme => ({  
+  fixed: {
+    position: "fixed",
+    top: 0,
+    left: '50%',
+    right: 'auto',
+    zIndex: 1400,
+    transform: 'translateX(-50%)'
+  },
+  success: {
+    backgroundColor: green[600],
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  }
+});
 
 class WsConnection extends Component {
   constructor(props) {
@@ -20,14 +39,20 @@ class WsConnection extends Component {
   }
 
   render() {
-    const { app } = this.props;
+    const { classes, app } = this.props;
 
     return (
-      <div className="fixed-top pt-2 pr-2">
-        <div className="text-center" style={{ width: 200, margin: "0 auto" }}>
-          <Alert color="success" isOpen={this.state.isOpen}>Connected</Alert>
-          {app.connected ? null : <Alert color="danger">No connection</Alert>}
-        </div>
+      <div className={classes.fixed}>
+        {
+          this.state.isOpen ?
+            <SnackbarContent className={classes.success} message="Connected" /> :
+            null
+        }
+        {
+          app.connected ?
+            null :
+            <SnackbarContent className={classes.error} message="No connection" />
+        }
       </div>
     );
   }
@@ -39,5 +64,6 @@ export default compose(
       connected: false
     };
     return { app };
-  })
+  }),
+  withStyles(styles)
 )(WsConnection);

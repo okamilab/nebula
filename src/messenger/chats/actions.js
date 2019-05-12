@@ -2,7 +2,7 @@ import { map, filter } from 'rxjs/operators';
 import sum from 'hash-sum';
 import FileSaver from 'file-saver';
 
-import { readFile } from './../base/fn';
+import { readFile } from './../../base/fn';
 
 export const CHATS_RESTORE = 'CHATS_RESTORE';
 export const CHAT_CREATE = 'CHAT_CREATE';

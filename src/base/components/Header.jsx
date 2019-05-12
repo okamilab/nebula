@@ -1,31 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  Row,
-  Navbar,
-  NavbarBrand,
-} from 'reactstrap';
+import withStyles from '@material-ui/core/styles/withStyles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
+import AccountMenu from '../../account/components/AccountMenu';
 import logo from './../../images/logo.svg';
-import gear from './../../images/gear.svg';
 
-class Header extends Component {
-  render() {
-    return (
-      <Row className='flex-shrink-0 header'>
-        <Navbar expand='md' className='w-100 justify-content-between'>
-          <NavbarBrand tag={Link} to='/'>
-            <img src={logo} alt='Nebula' style={{ width: 36 }} />
-            <span className='pl-3 text-white'>Nebula</span>
-          </NavbarBrand>
-          <Link to='/settings'>
-            <img src={gear} alt='Settings' style={{ width: 32 }} />
-          </Link>
-        </Navbar>
-      </Row>
-    );
+const styles = theme => ({
+  grow: {
+    flexGrow: 1,
+  },
+  title: {
+    color: 'inherit'
+  },
+  logo: {
+    width: 36,
+    marginRight: theme.spacing.unit * 2,
   }
+});
+
+function Header({ classes }) {
+  return (
+    <AppBar position="absolute" color="default">
+      <Toolbar>
+        <Typography variant="h5" color="inherit" noWrap className={classes.grow}>
+          <Link to='/'
+            className={classes.title}
+            style={{ textDecoration: 'none' }}>
+            <img src={logo} alt='Nebula' className={classes.logo} />
+            Nebula
+          </Link>
+        </Typography>
+        <AccountMenu />
+      </Toolbar>
+    </AppBar>
+  );
 }
 
-export default connect()(Header);
+Header.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default compose(
+  connect(),
+  withStyles(styles)
+)(Header);

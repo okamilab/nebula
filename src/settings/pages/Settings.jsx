@@ -2,24 +2,41 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Container, Row, Col, Label, Input, Button, Card
-} from 'reactstrap';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import Divider from '@material-ui/core/Divider';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import pretty from 'prettysize';
 
 import packageJson from '../../../package.json';
 import { DEFAULT_SETTINGS } from '../../base/default';
 import { updateSettings, resetSettings } from './../../settings/actions';
 
-class Settings extends Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    pss: PropTypes.string,
-    bzz: PropTypes.string,
-    revealAddress: PropTypes.number,
-    size: PropTypes.number
-  };
+const styles = theme => ({
+  sectionTitle: {
+    marginTop: theme.spacing.unit * 2,
+  },
+  section: {
+    borderRadius: 5,
+    padding: theme.spacing.unit * 2
+  },
+  divider: {
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
+  },
+  actionBar: {
+    paddingTop: theme.spacing.unit * 2
+  },
+  button: {
+    marginRight: theme.spacing.unit * 2,
+  },
+});
 
+class Settings extends Component {
   constructor(props) {
     super(props)
 
@@ -27,106 +44,137 @@ class Settings extends Component {
   }
 
   render() {
-    const { pss, bzz, revealAddress, size } = this.props;
+    const { classes, pss, bzz, revealAddress, size } = this.props;
+    if (!pss) {
+      return <div>No data</div>
+    }
 
     return (
-      <Container fluid>
-        <Row className='section-header pt-3'>
-          <h4>Settings</h4>
-        </Row>
-        <Row>
-          <Col
-            lg={{ size: 8, offset: 2 }}
-            md={{ size: 10, offset: 1 }}>
-            <h6 className='pt-3 pb-1'>General</h6>
-            <Card className='section'>
-              <Row className='pt-3 pb-3'>
-                <Col sm={4}>
-                  <Label for='pss'>PSS endpoint (WebSocket)</Label>
-                </Col>
-                <Col sm={8}>
-                  <Input
-                    type='text'
-                    id='pss'
-                    autoFocus
-                    onChange={(e) => this.setState({ pss: e.target.value })}
-                    defaultValue={pss} />
-                </Col>
-                <Col sm={12} className='pt-1 text-sub'>
+      <Grid
+        container
+        spacing={0}
+        justify="center"
+        style={{ paddingTop: 10 }}
+      >
+        <Grid item xs={6}>
+          <Typography variant="h5" color="inherit" noWrap>
+            Settings
+          </Typography>
+          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+            General
+          </Typography>
+          <Paper square className={classes.section}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="subtitle1" color="inherit" noWrap>
+                  PSS endpoint (WebSocket)
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="pss"
+                  onChange={(e) => this.setState({ pss: e.target.value })}
+                  defaultValue={pss}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="caption">
                   After updating the field you need to restart the app (refresh page)
-                </Col>
-              </Row>
-              <Row className='pt-3 pb-3'>
-                <Col sm={4}>
-                  <Label for='bzz'>BZZ endpoint</Label>
-                </Col>
-                <Col sm={8}>
-                  <Input
-                    type='text'
-                    id='bzz'
-                    onChange={(e) => this.setState({ bzz: e.target.value })}
-                    defaultValue={bzz} />
-                </Col>
-                <Col sm={12} className='pt-1 text-sub'>
+                </Typography>
+              </Grid>
+              <Grid item xs={12} className={classes.divider}>
+                <Divider />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="subtitle1" color="inherit" noWrap>
+                  BZZ endpoint
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="bzz"
+                  onChange={(e) => this.setState({ bzz: e.target.value })}
+                  defaultValue={bzz}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="caption">
                   After updating the field you need to restart the app (refresh page)
-                </Col>
-              </Row>
-              <Row className='pt-3 pb-3'>
-                <Col sm={4}>
-                  <Label>Local storage</Label>
-                </Col>
-                <Col sm={8}>
-                  {pretty(size)}
-                </Col>
-              </Row>
-            </Card>
-            <h6 className='pt-3 pb-1'>Security</h6>
-            <Card className='section'>
-              <Row className='pt-3 pb-3'>
-                <Col sm={4}>
-                  <Label for='revealAddress'>Reveal address partially</Label>
-                </Col>
-                <Col sm={8}>
-                  <Input
-                    type='select'
-                    name='revealAddress'
-                    id='revealAddress'
-                    onChange={(e) => this.setState({ revealAddress: +e.target.value })}
-                    defaultValue={revealAddress}>
-                    <option value={0}>Broadcast</option>
-                    <option value={4}>4</option>
-                    <option value={8}>8</option>
-                    <option value={16}>16</option>
-                    <option value={32}>Full</option>
-                  </Input>
-                </Col>
-              </Row>
-            </Card>
-            <h6 className='pt-3 pb-1'>About</h6>
-            <Card className='section'>
-              <Row>
-                <Col sm={4}>
-                  <Label>Version</Label>
-                </Col>
-                <Col sm={8}>
-                  <a href={'https://github.com/okamilab/nebula/releases/tag/v' + packageJson.version} target='_block'>
-                    {packageJson.version}
-                  </a>
-                </Col>
-              </Row>
-            </Card>
-            <div className='pt-3'>
-              <Button
-                color='second'
-                onClick={this.reset}>Reset</Button>
-              <Button
-                color='success'
-                onClick={this.save}
-                className='ml-3'>Save</Button>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+                </Typography>
+              </Grid>
+              <Grid item xs={12} className={classes.divider}>
+                <Divider />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="subtitle1" color="inherit" noWrap>
+                  Local storage
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                {pretty(size)}
+              </Grid>
+            </Grid>
+          </Paper>
+          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+            Security
+          </Typography>
+          <Paper square className={classes.section}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="subtitle1" color="inherit" noWrap>
+                  Reveal address partially
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="revealAddress"
+                  select
+                  onChange={(e) => this.setState({ revealAddress: +e.target.value })}
+                  value={this.state.revealAddress === undefined ? revealAddress : this.state.revealAddress}
+                >
+                  <MenuItem value={0}>Broadcast</MenuItem>
+                  <MenuItem value={4}>4</MenuItem>
+                  <MenuItem value={8}>8</MenuItem>
+                  <MenuItem value={16}>16</MenuItem>
+                  <MenuItem value={32}>Full</MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
+          </Paper>
+          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+            About
+          </Typography>
+          <Paper square className={classes.section}>
+            <Grid container spacing={0}>
+              <Grid item xs={6}>
+                <Typography variant="subtitle1" color="inherit" noWrap>
+                  Version
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <a href={'https://github.com/okamilab/nebula/releases/tag/v' + packageJson.version} target='_block'>
+                  {packageJson.version}
+                </a>
+              </Grid>
+            </Grid>
+          </Paper>
+          <div className={classes.actionBar}>
+            <Button
+              variant="contained"
+              onClick={this.reset}
+              className={classes.button}>
+              Reset
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.save}
+              className={classes.button}>
+              Save
+            </Button>
+          </div>
+        </Grid>
+      </Grid>
     )
   }
 
@@ -141,6 +189,14 @@ class Settings extends Component {
   };
 }
 
+Settings.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  pss: PropTypes.string,
+  bzz: PropTypes.string,
+  revealAddress: PropTypes.number,
+  size: PropTypes.number
+};
+
 export default compose(
   connect((state) => {
     const { settings } = state || {
@@ -152,5 +208,6 @@ export default compose(
       }
     };
     return settings;
-  })
+  }),
+  withStyles(styles)
 )(Settings);

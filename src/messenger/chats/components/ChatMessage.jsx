@@ -2,20 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import Button from '@material-ui/core/Button';
 
-import Identicon from './../../base/components/Identicon';
+import Identicon from './../../../base/components/Identicon';
 import { download } from './../actions';
 
 class ChatMessage extends Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    message: PropTypes.object.isRequired,
-    sender: PropTypes.object.isRequired,
-    isOwn: PropTypes.bool.isRequired,
-    showHeader: PropTypes.bool.isRequired,
-  };
-
   renderMessageContent() {
     const { message, isOwn } = this.props;
     const { text } = message;
@@ -109,5 +101,13 @@ class ChatMessage extends Component {
     this.props.dispatch(download(hash));
   }
 }
+
+ChatMessage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  message: PropTypes.object.isRequired,
+  sender: PropTypes.object.isRequired,
+  isOwn: PropTypes.bool.isRequired,
+  showHeader: PropTypes.bool.isRequired,
+};
 
 export default compose(connect())(ChatMessage);
