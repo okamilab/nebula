@@ -9,24 +9,63 @@ import Identicon from './../../../base/components/Identicon';
 import { download } from './../actions';
 
 const styles = theme => ({
-
+  file: {
+    backgroundColor: '#f1f1f4',
+    display: 'inline-block',
+    padding: 10,
+    borderRadius: 6
+  },
+  fileName: {
+    paddingTop: theme.spacing.unit
+  },
+  divider: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+  },
+  actionBar: {
+    textAlign: 'center',
+    paddingBottom: theme.spacing.unit
+  },
+  messageLayout: {
+    textAlign: 'left',
+    paddingTop: 2
+  },
+  ownLayout: {
+    textAlign: 'right',
+    paddingRight: 10
+  },
+  messageHeader: {
+    fontSize: 12,
+    color: '#bbb'
+  },
+  messageBody: {
+    backgroundColor: '#f2f6f9',
+    display: 'inline-block',
+    padding: '2px 10px',
+    marginRight: 10,
+    borderRadius: 6,
+    textAlign: 'left'
+  },
+  own: {
+    backgroundColor: '#dbf4fd',
+    marginRight: 0,
+    marginLeft: 40
+  }
 });
 
 class ChatMessage extends Component {
   renderMessageContent() {
-    const { message, isOwn } = this.props;
+    const { classes, message, isOwn } = this.props;
     const { text } = message;
 
     switch (text.startsWith('bzz:/')) {
       case true:
         return (
-          <div className='chat-msg-file'>
-            <div className='pt-2'>File: {text.substr(5, 15)}...</div>
-            <hr className='mt-2 mb-2' />
-            <div className='text-center pb-2'>
-              <Button color='link'
-                className='p-0'
-                onClick={() => this.download(text.substr(5))}>
+          <div className={classes.file}>
+            <div className={classes.fileName}>File: {text.substr(5, 15)}...</div>
+            <hr className={classes.divider} />
+            <div className={classes.actionBar}>
+              <Button onClick={() => this.download(text.substr(5))}>
                 Download
               </Button>
             </div>
@@ -34,7 +73,7 @@ class ChatMessage extends Component {
         );
       default:
         return (
-          <div className={'chat-msg' + (isOwn ? ' own' : '')}>
+          <div className={`${classes.messageBody} ${isOwn ? classes.own : null}`}>
             {message.text}
           </div>
         );
@@ -42,7 +81,7 @@ class ChatMessage extends Component {
   }
 
   renderMessage() {
-    const { message, sender, isOwn, showHeader } = this.props;
+    const { classes, message, sender, isOwn, showHeader } = this.props;
     const time = new Date(message.timestamp);
     let header;
 
@@ -50,7 +89,7 @@ class ChatMessage extends Component {
       case true:
         if (showHeader) {
           header = (
-            <div className='chat-msg-header'>
+            <div className={classes.messageHeader}>
               {time.toLocaleTimeString()}
             </div>
           );
@@ -71,7 +110,7 @@ class ChatMessage extends Component {
             </div>
           );
           header = (
-            <div className='chat-msg-header'>
+            <div className={classes.messageHeader}>
               {username || `${key.substr(0, 8)}...`}, {time.toLocaleTimeString()}
             </div>
           );
@@ -89,10 +128,10 @@ class ChatMessage extends Component {
   }
 
   render() {
-    const { isOwn } = this.props;
+    const { classes, isOwn } = this.props;
 
     return (
-      <div className={'chat-msg-layout' + (isOwn ? ' own' : '')}>
+      <div className={`${classes.messageLayout} ${isOwn ? classes.ownLayout : null}`}>
         {this.renderMessage()}
       </div>
     );
