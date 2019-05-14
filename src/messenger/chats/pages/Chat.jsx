@@ -4,8 +4,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
-import {  Row, Col} from 'reactstrap';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
@@ -18,11 +18,20 @@ import ChatDayDivider from './../components/ChatDayDivider';
 import ChatMessage from './../components/ChatMessage';
 import { sendMessage, sendFile } from './../actions';
 
-const styles = {
+const styles = theme => ({
+  scrollContainer: {
+    height: '100%',
+    overflow: 'scroll'
+  },
+  list: {
+    paddingBottom: 80
+  },
   root: {
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 4,
+    marginRight: theme.spacing.unit * 2,
     padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
+    display: 'flex'
   },
   input: {
     marginLeft: 8,
@@ -48,7 +57,13 @@ const styles = {
     height: 28,
     margin: 4,
   },
-};
+  fixed: {
+    position: 'fixed',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
+});
 
 class Chat extends Component {
   constructor(props) {
@@ -137,40 +152,50 @@ class Chat extends Component {
     const { publicKey } = account;
 
     return (
-      <Layout>
-        <Row className='h-100'>
-          <Col className='h-100'
-            xl={{ size: 8, offset: 2 }}
-            lg={{ size: 10, offset: 1 }}>
-            <div className='h-100 d-flex flex-column pt-3'>
-              <Element id='scroll-container'
-                className='flex-grow-1 chat-container'>
-                <Row>
-                  {
-                    messages
-                      .map((m, i) => {
-                        const sender = participants[m.sender];
-                        const date = new Date(m.timestamp);
-                        const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
-                        return (
-                          <Fragment key={i}>
-                            {showDayDivider ? <ChatDayDivider date={date} /> : null}
-                            <Col sm={12}>
-                              <ChatMessage
-                                message={m}
-                                sender={sender}
-                                isOwn={sender.key === publicKey}
-                                showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider} />
-                            </Col>
-                          </Fragment>
-                        )
-                      })
-                  }
-                </Row>
+      <>
+        <Layout>
+          <Element id='scroll-container' className={classes.scrollContainer}>
+            <Grid
+              container
+              spacing={0}
+              justify="center"
+            >
+              <Grid item xs={10} lg={10} xl={8} className={classes.list}>
+                {
+                  messages
+                    .map((m, i) => {
+                      const sender = participants[m.sender];
+                      const date = new Date(m.timestamp);
+                      const showDayDivider = i === 0 || !this.isSameDay(date, new Date(messages[i - 1].timestamp));
+                      return (
+                        <Fragment key={i}>
+                          {showDayDivider ? <ChatDayDivider date={date} /> : null}
+                          <div>
+                            <ChatMessage
+                              message={m}
+                              sender={sender}
+                              isOwn={sender.key === publicKey}
+                              showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider} />
+                          </div>
+                        </Fragment>
+                      )
+                    })
+                }
                 <Element name="bottom"></Element>
-              </Element>
-              <Row className='flex-shrink-0 pt-3 pb-3'>
-                <Col>
+              </Grid>
+            </Grid>
+          </Element>
+        </Layout>
+        <div className={classes.fixed}>
+          <Grid container spacing={0}>
+            <Grid item sm={3} xs={4}></Grid>
+            <Grid item sm={9} xs={8}>
+              <Grid
+                container
+                spacing={0}
+                justify="center"
+              >
+                <Grid item xs={10} lg={10} xl={8}>
                   <Paper className={classes.root} elevation={1}>
                     <InputBase
                       className={classes.input}
@@ -199,12 +224,12 @@ class Chat extends Component {
                       <Send />
                     </IconButton>
                   </Paper>
-                </Col>
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Layout>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </div>
+      </>
     );
   }
 

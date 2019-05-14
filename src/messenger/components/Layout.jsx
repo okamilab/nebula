@@ -14,7 +14,8 @@ const styles = {
   },
   cell: {
     margin: 0,
-    padding: 0
+    padding: 0,
+    height: '100%'
   }
 };
 
@@ -24,7 +25,7 @@ function Layout({ classes, children }) {
       <Grid item sm={3} xs={4} className={classes.cell}>
         <LeftSide />
       </Grid>
-      <Grid item sm={9} xs={8}>
+      <Grid item sm={9} xs={8} className={classes.cell}>
         {children}
       </Grid>
     </Grid>

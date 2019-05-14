@@ -2,10 +2,15 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 import Identicon from './../../../base/components/Identicon';
 import { download } from './../actions';
+
+const styles = theme => ({
+
+});
 
 class ChatMessage extends Component {
   renderMessageContent() {
@@ -103,6 +108,7 @@ class ChatMessage extends Component {
 }
 
 ChatMessage.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   message: PropTypes.object.isRequired,
   sender: PropTypes.object.isRequired,
@@ -110,4 +116,7 @@ ChatMessage.propTypes = {
   showHeader: PropTypes.bool.isRequired,
 };
 
-export default compose(connect())(ChatMessage);
+export default compose(
+  connect(),
+  withStyles(styles)
+)(ChatMessage);

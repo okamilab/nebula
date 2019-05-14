@@ -1,17 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Col } from 'reactstrap';
+import { withStyles } from '@material-ui/core/styles';
 
-const ChatDayDivider = ({ date }) => {
+const styles = theme => ({
+  divider: {
+    textAlign: 'center',
+    borderBottom: '1px solid #ddd',
+    lineHeight: '0.3em',
+    margin: '10px 0 20px'
+  },
+  title: {
+    background: theme.palette.background.default,
+    padding: '0 6px',
+    color: '#bbb',
+    fontSize: '12px'
+  }
+});
+
+const ChatDayDivider = ({ classes, date }) => {
   return (
-    <Col className='chat-hr'>
-      <span>{date.toLocaleDateString()}</span>
-    </Col>
+    <div className={classes.divider}>
+      <span className={classes.title}>
+        {date.toLocaleDateString()}
+        </span>
+    </div>
   );
 }
 
 ChatDayDivider.propTypes = {
+  classes: PropTypes.object.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
 }
 
-export default ChatDayDivider
+export default withStyles(styles)(ChatDayDivider);

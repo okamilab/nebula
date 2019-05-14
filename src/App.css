@@ -42,20 +42,6 @@
   overflow-y: auto;
 }
 
-.chat-hr {
-  text-align: center;
-  border-bottom: 1px solid #ddd;
-  line-height: 0.3em;
-  margin: 10px 0 20px;
-}
-
-.chat-hr > span {
-  background: #fff;
-  padding: 0 6px;
-  color: #bbb;
-  font-size: 12px;
-}
-
 .chat-msg-layout {
   text-align: left;
   padding-top: 2px;
