@@ -2,9 +2,9 @@ import { hexValueType } from '@erebos/swarm-browser';
 import { map, filter } from 'rxjs/operators';
 import sum from 'hash-sum';
 
-import keyUtils from './../base/key';
+import keyUtils from './../../base/key';
 import { createChat } from './../chats/actions';
-import { getAddress } from './../base/fn';
+import { getAddress } from './../../base/fn';
 
 export const CONTACTS_RESTORE = 'CONTACTS_RESTORE';
 export const CONTACT_SUBSCRIBE = 'CONTACT_SUBSCRIBE';

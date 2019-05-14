@@ -1,6 +1,6 @@
 import * as api from './../api/account';
-import { restoreContacts } from './../contacts/actions';
-import { restoreChats } from './../chats/actions';
+import { restoreContacts } from './../messenger/contacts/actions';
+import { restoreChats } from './../messenger/chats/actions';
 import { addError } from './../base/error/actions';
 
 export const ACCOUNT_REQUEST = 'ACCOUNT_REQUEST';

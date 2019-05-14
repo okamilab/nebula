@@ -6,8 +6,9 @@ import Layout from './base/containers/Layout';
 import Home from './base/pages/Home';
 import Settings from './settings/pages/Settings';
 import Profile from './account/pages/Profile';
-import Contact from './contacts/pages/Contact';
-import Chat from './chats/pages/Chat';
+import Messenger from './messenger';
+import Contact from './messenger/contacts/pages/Contact';
+import Chat from './messenger/chats/pages/Chat';
 
 import Startup from './base/containers/Startup';
 import './App.css';
@@ -21,8 +22,9 @@ export default function App() {
           <Route exact path='/' component={Home} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/profile' component={Profile} />
-          <Route exact path='/contact/:key' component={Contact} />
-          <Route exact path='/chat/:key' component={Chat} />
+          <Route exact path='/messenger' component={Messenger} />
+          <Route exact path='/messenger/contact/:key' component={Contact} />
+          <Route exact path='/messenger/chat/:key' component={Chat} />
         </Switch>
       </Layout>
     </Startup>

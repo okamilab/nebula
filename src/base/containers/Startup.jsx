@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -17,9 +17,9 @@ class Startup extends React.Component {
 
   render() {
     return (
-      <Fragment >
+      <>
         {this.props.children}
-      </Fragment>
+      </>
     );
   }
 }

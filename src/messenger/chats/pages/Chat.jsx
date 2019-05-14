@@ -4,25 +4,68 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
-import {
-  Row, Col, Input, Button,
-  InputGroup, InputGroupAddon
-} from 'reactstrap';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import { Description, Send } from '@material-ui/icons';
 import sum from 'hash-sum';
 
+import Layout from './../../components/Layout';
 import ChatDayDivider from './../components/ChatDayDivider';
 import ChatMessage from './../components/ChatMessage';
-import FileIcon from './../components/FileIcon';
 import { sendMessage, sendFile } from './../actions';
 
-class Chat extends Component {
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    id: PropTypes.string,
-    chat: PropTypes.object,
-    account: PropTypes.object,
-  };
+const styles = theme => ({
+  scrollContainer: {
+    height: '100%',
+    overflow: 'scroll'
+  },
+  list: {
+    paddingBottom: 80
+  },
+  root: {
+    marginTop: theme.spacing.unit * 4,
+    marginBottom: theme.spacing.unit * 4,
+    marginRight: theme.spacing.unit * 2,
+    padding: '2px 4px',
+    display: 'flex'
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  file: {
+    width: 0.1,
+    height: 0.1,
+    opacity: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    zIndex: '-1',
+    cursor: 'pointer',
+  },
+  fileLabel: {
+    margin: 0,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  divider: {
+    width: 1,
+    height: 28,
+    margin: 4,
+  },
+  fixed: {
+    position: 'fixed',
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
+});
 
+class Chat extends Component {
   constructor(props) {
     super(props);
 
@@ -98,7 +141,7 @@ class Chat extends Component {
   }
 
   render() {
-    const { chat, account } = this.props;
+    const { classes, chat, account } = this.props;
     if (!chat) {
       return <div>Chat not found</div>
     }
@@ -109,14 +152,15 @@ class Chat extends Component {
     const { publicKey } = account;
 
     return (
-      <Row className='h-100'>
-        <Col className='h-100'
-          xl={{ size: 8, offset: 2 }}
-          lg={{ size: 10, offset: 1 }}>
-          <div className='h-100 d-flex flex-column pt-3'>
-            <Element id='scroll-container'
-              className='flex-grow-1 chat-container'>
-              <Row>
+      <>
+        <Layout>
+          <Element id='scroll-container' className={classes.scrollContainer}>
+            <Grid
+              container
+              spacing={0}
+              justify="center"
+            >
+              <Grid item xs={10} lg={10} xl={8} className={classes.list}>
                 {
                   messages
                     .map((m, i) => {
@@ -126,50 +170,66 @@ class Chat extends Component {
                       return (
                         <Fragment key={i}>
                           {showDayDivider ? <ChatDayDivider date={date} /> : null}
-                          <Col sm={12}>
+                          <div>
                             <ChatMessage
                               message={m}
                               sender={sender}
                               isOwn={sender.key === publicKey}
                               showHeader={this.showMsgHeader(i, m, i > 0 ? messages[i - 1] : null) || showDayDivider} />
-                          </Col>
+                          </div>
                         </Fragment>
                       )
                     })
                 }
-              </Row>
-              <Element name="bottom"></Element>
-            </Element>
-            <Row className='flex-shrink-0 pt-3 pb-3'>
-              <Col>
-                <InputGroup>
-                  <Input
-                    value={this.state.msg}
-                    onChange={this.onChange}
-                    onKeyPress={this.onKeyPress}
-                    autoFocus />
-                  <InputGroupAddon addonType='append'>
+                <Element name="bottom"></Element>
+              </Grid>
+            </Grid>
+          </Element>
+        </Layout>
+        <div className={classes.fixed}>
+          <Grid container spacing={0}>
+            <Grid item sm={3} xs={4}></Grid>
+            <Grid item sm={9} xs={8}>
+              <Grid
+                container
+                spacing={0}
+                justify="center"
+              >
+                <Grid item xs={10} lg={10} xl={8}>
+                  <Paper className={classes.root} elevation={1}>
+                    <InputBase
+                      className={classes.input}
+                      placeholder="Type a message here"
+                      value={this.state.msg}
+                      onChange={this.onChange}
+                      onKeyPress={this.onKeyPress}
+                      autoFocus />
                     <input
                       type='file'
                       name='file'
                       id='file'
-                      className='inputfile'
+                      className={classes.file}
                       onChange={this.upload}
                     />
-                    <label htmlFor='file'>
-                      <FileIcon />
+                    <label htmlFor='file' className={classes.fileLabel}>
+                      <IconButton className={classes.iconButton} component="span">
+                        <Description />
+                      </IconButton>
                     </label>
-                    <Button
-                      color='secondary'
+                    <Divider className={classes.divider} />
+                    <IconButton
+                      className={classes.iconButton}
                       onClick={this.send}
-                      disabled={!this.state.msg}>Send</Button>
-                  </InputGroupAddon>
-                </InputGroup>
-              </Col>
-            </Row>
-          </div>
-        </Col>
-      </Row>
+                      disabled={!this.state.msg}>
+                      <Send />
+                    </IconButton>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        </div>
+      </>
     );
   }
 
@@ -189,6 +249,14 @@ class Chat extends Component {
   }
 }
 
+Chat.propTypes = {
+  classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  id: PropTypes.string,
+  chat: PropTypes.object,
+  account: PropTypes.object,
+};
+
 export default compose(
   connect((state, props) => {
     const { chats, account, contacts } = state || {
@@ -203,5 +271,6 @@ export default compose(
       account,
       contacts
     };
-  })
+  }),
+  withStyles(styles)
 )(withRouter(Chat));

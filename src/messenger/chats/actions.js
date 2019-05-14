@@ -2,7 +2,7 @@ import { map, filter } from 'rxjs/operators';
 import sum from 'hash-sum';
 import FileSaver from 'file-saver';
 
-import { readFile } from './../base/fn';
+import { readFile } from './../../base/fn';
 
 export const CHATS_RESTORE = 'CHATS_RESTORE';
 export const CHAT_CREATE = 'CHAT_CREATE';
@@ -148,7 +148,7 @@ export function sendFile(key, file) {
     const buffer = readEvent.currentTarget.result
     const hash = await bzz.uploadFile(buffer, { contentType: file.type });
 
-    const text = 'bzz:/' + hash;
+    const text = `bzz:/${hash}`;
     send(dispatch, client, chat, account.publicKey, text);
   };
 }
