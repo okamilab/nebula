@@ -67,7 +67,7 @@ class ChatMessage extends Component {
           );
           header = (
             <div className='chat-msg-header'>
-              {username || key.substr(0, 8) + '...'}, {time.toLocaleTimeString()}
+              {username || `${key.substr(0, 8)}...`}, {time.toLocaleTimeString()}
             </div>
           );
         }

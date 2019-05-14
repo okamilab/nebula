@@ -152,7 +152,7 @@ class Settings extends Component {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <a href={'https://github.com/okamilab/nebula/releases/tag/v' + packageJson.version} target='_block'>
+                <a href={`https://github.com/okamilab/nebula/releases/tag/v${packageJson.version}`} target='_block'>
                   {packageJson.version}
                 </a>
               </Grid>
@@ -190,6 +190,7 @@ class Settings extends Component {
 }
 
 Settings.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   pss: PropTypes.string,
   bzz: PropTypes.string,

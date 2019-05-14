@@ -39,7 +39,7 @@ class ChatList extends Component {
           {
             chats.map((c, i) =>
               <Link key={i}
-                to={'/messenger/chat/' + c.key}
+                to={`/messenger/chat/${c.key}`}
                 className={classes.chat}
                 style={{ textDecoration: 'none' }}>
                 <div>
@@ -58,6 +58,7 @@ class ChatList extends Component {
 }
 
 ChatList.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   chats: PropTypes.array,
 };

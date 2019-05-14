@@ -4,17 +4,51 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
-import {
-  Row, Col, Input, Button,
-  InputGroup, InputGroupAddon
-} from 'reactstrap';
+import {  Row, Col} from 'reactstrap';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import { Description, Send } from '@material-ui/icons';
 import sum from 'hash-sum';
 
 import Layout from './../../components/Layout';
 import ChatDayDivider from './../components/ChatDayDivider';
 import ChatMessage from './../components/ChatMessage';
-import FileIcon from './../components/FileIcon';
 import { sendMessage, sendFile } from './../actions';
+
+const styles = {
+  root: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  input: {
+    marginLeft: 8,
+    flex: 1,
+  },
+  file: {
+    width: 0.1,
+    height: 0.1,
+    opacity: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    zIndex: '-1',
+    cursor: 'pointer',
+  },
+  fileLabel: {
+    margin: 0,
+  },
+  iconButton: {
+    padding: 10,
+  },
+  divider: {
+    width: 1,
+    height: 28,
+    margin: 4,
+  },
+};
 
 class Chat extends Component {
   constructor(props) {
@@ -92,7 +126,7 @@ class Chat extends Component {
   }
 
   render() {
-    const { chat, account } = this.props;
+    const { classes, chat, account } = this.props;
     if (!chat) {
       return <div>Chat not found</div>
     }
@@ -137,29 +171,34 @@ class Chat extends Component {
               </Element>
               <Row className='flex-shrink-0 pt-3 pb-3'>
                 <Col>
-                  <InputGroup>
-                    <Input
+                  <Paper className={classes.root} elevation={1}>
+                    <InputBase
+                      className={classes.input}
+                      placeholder="Type a message here"
                       value={this.state.msg}
                       onChange={this.onChange}
                       onKeyPress={this.onKeyPress}
                       autoFocus />
-                    <InputGroupAddon addonType='append'>
-                      <input
-                        type='file'
-                        name='file'
-                        id='file'
-                        className='inputfile'
-                        onChange={this.upload}
-                      />
-                      <label htmlFor='file'>
-                        <FileIcon />
-                      </label>
-                      <Button
-                        color='secondary'
-                        onClick={this.send}
-                        disabled={!this.state.msg}>Send</Button>
-                    </InputGroupAddon>
-                  </InputGroup>
+                    <input
+                      type='file'
+                      name='file'
+                      id='file'
+                      className={classes.file}
+                      onChange={this.upload}
+                    />
+                    <label htmlFor='file' className={classes.fileLabel}>
+                      <IconButton className={classes.iconButton} component="span">
+                        <Description />
+                      </IconButton>
+                    </label>
+                    <Divider className={classes.divider} />
+                    <IconButton
+                      className={classes.iconButton}
+                      onClick={this.send}
+                      disabled={!this.state.msg}>
+                      <Send />
+                    </IconButton>
+                  </Paper>
                 </Col>
               </Row>
             </div>
@@ -186,6 +225,7 @@ class Chat extends Component {
 }
 
 Chat.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   id: PropTypes.string,
   chat: PropTypes.object,
@@ -206,5 +246,6 @@ export default compose(
       account,
       contacts
     };
-  })
+  }),
+  withStyles(styles)
 )(withRouter(Chat));

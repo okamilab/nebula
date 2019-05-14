@@ -57,6 +57,7 @@ class Error extends Component {
 }
 
 Error.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   errors: PropTypes.array,
 };

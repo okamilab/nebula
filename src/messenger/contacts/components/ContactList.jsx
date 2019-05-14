@@ -50,7 +50,7 @@ class ContactList extends Component {
           list={map['added']}
           renderItem={(c, i) =>
             <Link key={i}
-              to={'/messenger/contact/' + sum(c.key)}
+              to={`/messenger/contact/${sum(c.key)}`}
               className={classes.contact}
               style={{ textDecoration: 'none' }}>
               <div>
@@ -68,8 +68,8 @@ class ContactList extends Component {
 }
 
 ContactList.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   contacts: PropTypes.object,
 };
 

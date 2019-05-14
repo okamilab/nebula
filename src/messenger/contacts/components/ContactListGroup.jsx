@@ -32,6 +32,7 @@ ContactListGroup.defaultProps = {
 };
 
 ContactListGroup.propTypes = {
+  classes: PropTypes.object.isRequired,
   renderItem: PropTypes.func.isRequired,
   list: PropTypes.array,
   title: PropTypes.string

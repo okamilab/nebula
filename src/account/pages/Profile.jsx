@@ -114,6 +114,7 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   account: PropTypes.object,
 };

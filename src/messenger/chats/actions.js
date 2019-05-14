@@ -148,7 +148,7 @@ export function sendFile(key, file) {
     const buffer = readEvent.currentTarget.result
     const hash = await bzz.uploadFile(buffer, { contentType: file.type });
 
-    const text = 'bzz:/' + hash;
+    const text = `bzz:/${hash}`;
     send(dispatch, client, chat, account.publicKey, text);
   };
 }

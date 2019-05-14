@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import green from '@material-ui/core/colors/green';
 
-const styles = theme => ({  
+const styles = theme => ({
   fixed: {
     position: "fixed",
     top: 0,
@@ -57,6 +58,11 @@ class WsConnection extends Component {
     );
   }
 }
+
+WsConnection.propTypes = {
+  classes: PropTypes.object.isRequired,
+  app: PropTypes.object.isRequired
+};
 
 export default compose(
   connect((state) => {

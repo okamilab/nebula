@@ -106,7 +106,7 @@ class ContactInvite extends Component {
               disabled={!this.state.publicKey}
               variant="contained"
               color="primary">
-              Subscribe
+              Send request
             </Button>
           </DialogActions>
         </Dialog>
@@ -127,6 +127,10 @@ class ContactInvite extends Component {
     this.toggle();
   };
 }
+
+ContactInvite.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 export default compose(
   connect(),

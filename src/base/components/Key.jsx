@@ -45,13 +45,13 @@ class Key extends Component {
     }
 
     const display = value.length > 22 ?
-      value.substr(0, 16) + '...' + value.substr(value.length - 4) :
+      `${value.substr(0, 16)}...${value.substr(value.length - 4)}` :
       value;
     return (
       <FormControl margin="normal">
-        <InputLabel htmlFor={name + '_key'}>{label}</InputLabel>
+        <InputLabel htmlFor={`${name}_key`}>{label}</InputLabel>
         <Input
-          id={name + '_key'}
+          id={`${name}_key`}
           type="text"
           value={display}
           disabled
@@ -59,7 +59,7 @@ class Key extends Component {
           endAdornment={
             <InputAdornment position="end">
               <CopyToClipboard
-                id={name + '_key'}
+                id={`${name}_key`}
                 text={value}
                 onCopy={() => this.setState({ copied: true })}>
                 <Tooltip
@@ -82,6 +82,7 @@ class Key extends Component {
 }
 
 Key.propTypes = {
+  classes: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   label: PropTypes.string

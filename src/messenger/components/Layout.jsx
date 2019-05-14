@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 
 import LeftSide from './LeftSide';
 
-const styles = theme => ({
+const styles = {
   container: {
     width: '100%',
     height: '100%',
@@ -16,7 +16,7 @@ const styles = theme => ({
     margin: 0,
     padding: 0
   }
-});
+};
 
 function Layout({ classes, children }) {
   return (

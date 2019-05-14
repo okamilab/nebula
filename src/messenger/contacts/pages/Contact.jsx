@@ -91,7 +91,7 @@ class Contact extends Component {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={'/messenger/chat/' + key}
+                to={`/messenger/chat/${key}`}
                 className={classes.button}>
                 Chat
               </Button>
@@ -104,6 +104,7 @@ class Contact extends Component {
 }
 
 Contact.propTypes = {
+  classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   contact: PropTypes.object,
 };
