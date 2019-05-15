@@ -26,19 +26,25 @@ const styles = theme => ({
     textAlign: 'center',
     paddingBottom: theme.spacing.unit
   },
-  messageLayout: {
+  block: {
     textAlign: 'left',
     paddingTop: 2
   },
-  ownLayout: {
+  owned: {
     textAlign: 'right',
     paddingRight: 10
   },
-  messageHeader: {
+  layout: {
+    display: 'flex'
+  },
+  content: {
+    paddingLeft: theme.spacing.unit
+  },
+  header: {
     fontSize: 12,
     color: '#bbb'
   },
-  messageBody: {
+  body: {
     backgroundColor: '#f2f6f9',
     display: 'inline-block',
     padding: '2px 10px',
@@ -46,7 +52,7 @@ const styles = theme => ({
     borderRadius: 6,
     textAlign: 'left'
   },
-  own: {
+  ownedBody: {
     backgroundColor: '#dbf4fd',
     marginRight: 0,
     marginLeft: 40
@@ -73,7 +79,7 @@ class ChatMessage extends Component {
         );
       default:
         return (
-          <div className={`${classes.messageBody} ${isOwn ? classes.own : null}`}>
+          <div className={`${classes.body} ${isOwn ? classes.ownedBody : null}`}>
             {message.text}
           </div>
         );
@@ -89,7 +95,7 @@ class ChatMessage extends Component {
       case true:
         if (showHeader) {
           header = (
-            <div className={classes.messageHeader}>
+            <div className={classes.header}>
               {time.toLocaleTimeString()}
             </div>
           );
@@ -110,15 +116,15 @@ class ChatMessage extends Component {
             </div>
           );
           header = (
-            <div className={classes.messageHeader}>
+            <div className={classes.header}>
               {username || `${key.substr(0, 8)}...`}, {time.toLocaleTimeString()}
             </div>
           );
         }
         return (
-          <div className='d-flex flex-row'>
+          <div className={classes.layout}>
             {identicon}
-            <div className='pl-2'>
+            <div className={classes.content}>
               {header}
               {this.renderMessageContent()}
             </div>
@@ -131,7 +137,7 @@ class ChatMessage extends Component {
     const { classes, isOwn } = this.props;
 
     return (
-      <div className={`${classes.messageLayout} ${isOwn ? classes.ownLayout : null}`}>
+      <div className={`${classes.block} ${isOwn ? classes.owned : null}`}>
         {this.renderMessage()}
       </div>
     );

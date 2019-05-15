@@ -16,11 +16,14 @@ const styles = theme => ({
     flexGrow: 1,
   },
   title: {
-    color: 'inherit'
+    color: 'inherit',
+    lineHeight: '2.4rem'
   },
   logo: {
     width: 36,
     marginRight: theme.spacing.unit * 2,
+    display: 'block',
+    float: 'left'
   }
 });
 
