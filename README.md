@@ -71,6 +71,7 @@ The project works with local instanse of swarm, default endpoint `ws://127.0.0.1
 
 ## References
 1. [Nebula Ðapp](https://medium.com/okami-lab/nebula-%C3%B0app-870dc7602deb)
+2. [Nebula Ðapp Development Update #1](https://medium.com/okami-lab/nebula-%C3%B0app-development-update-1-ad4182978013)
 
 ## Getting Started
 ### Setting up
