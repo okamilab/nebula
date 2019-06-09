@@ -42,19 +42,27 @@ export default class LocalStorageMiddleware {
       return value;
     };
 
-    const storeState = (state, publicKey) => {
+    const storeState = (state) => {
       const { pss, bzz, revealAddress } = state.settings;
-      const username = get(state, 'account.username');
+
       const model = {
-        pss,
-        bzz,
-        revealAddress,
-        [publicKey]: {
+        ...this.unpack(state.app.raw),
+        ...{
+          pss,
+          bzz,
+          revealAddress
+        }
+      };
+
+      const publicKey = get(state, 'account.publicKey');
+      if (publicKey) {
+        const username = get(state, 'account.username');
+        model[publicKey] = {
           username,
           contacts: state.contacts,
           chats: state.chats,
-        }
-      };
+        };
+      }
 
       const value = jsonpack.pack(model);
       const compressed = LZString.compress(value);
@@ -75,22 +83,15 @@ export default class LocalStorageMiddleware {
         return prev !== next;
       })
 
-
-      const publicKey = get(nextState, 'account.publicKey');
-      if (diff && publicKey) {
-        storeState(nextState, publicKey);
+      if (diff) {
+        storeState(nextState);
       }
     }
   }
 
   deriveInitialState(preloadedState) {
-    let state = {};
-
     const raw = localStorage.getItem(this.key);
-    const uncompressed = LZString.decompress(raw);
-    if (uncompressed) {
-      state = jsonpack.unpack(uncompressed)
-    }
+    const state = this.unpack(raw);
 
     return {
       ...preloadedState,
@@ -102,5 +103,10 @@ export default class LocalStorageMiddleware {
         size: (raw || '').length,
       }
     };
+  }
+
+  unpack(raw) {
+    const uncompressed = LZString.decompress(raw);
+    return uncompressed ? jsonpack.unpack(uncompressed) : {};
   }
 }

@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Header from './../components/Header';
 import Error from './../error/components/Error';
-import WsConnection from './../components/WsConnection';
+import ConnectionController from './ConnectionController';
 
 const styles = theme => ({
   layout: {
@@ -16,13 +16,14 @@ const styles = theme => ({
 
 function Layout({ classes, children }) {
   return (
-    <>
+    <ConnectionController>
       <CssBaseline />
       <Header />
-      <main className={classes.layout}>{children}</main>
+      <main className={classes.layout}>
+        {children}
+      </main>
       <Error />
-      <WsConnection />
-    </>
+    </ConnectionController>
   );
 }
 

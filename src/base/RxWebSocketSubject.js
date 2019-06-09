@@ -2,7 +2,6 @@ import { Subject, Observable, interval } from 'rxjs';
 import { WebSocketSubject } from 'rxjs/webSocket';
 import { distinctUntilChanged, share, takeWhile } from 'rxjs/operators';
 
-/// we inherit from the ordinary Subject
 export default class RxWebSocketSubject extends Subject {
   constructor(
     url,
@@ -16,14 +15,12 @@ export default class RxWebSocketSubject extends Subject {
     this.resultSelector = resultSelector;
     this.serializer = serializer;
 
-    /// by default, when a message is received from the server, we are trying to decode it as JSON
-    /// we can override it in the constructor
+    /// by default, when a message is received from the server, trying to decode it as JSON
     this.defaultResultSelector = (e) => {
       return JSON.parse(e.data);
     };
 
-    /// when sending a message, we encode it to JSON
-    /// we can override it in the constructor
+    /// when sending a message, encode it to JSON
     this.defaultSerializer = (data) => {
       return JSON.stringify(data);
     };
@@ -59,10 +56,9 @@ export default class RxWebSocketSubject extends Subject {
       }
     };
 
-    /// we connect
     this.connect();
 
-    /// we follow the connection status and run the reconnect while losing the connection
+    /// follow the connection status and run the reconnect while losing the connection
     this.connectionStatus.subscribe((isConnected) => {
       if (!this.reconnectionObservable && typeof (isConnected) == "boolean" && !isConnected) {
         this.reconnect();
