@@ -54,6 +54,15 @@ function Home({ classes }) {
             Messenger
           </Typography>
         </Button>
+        <Button
+          component={Link}
+          to='/browser'
+          className={classes.app}>
+          <Typography>
+            <Message className={classes.appIcon} />
+            Browser
+          </Typography>
+        </Button>
       </div>
     </>
   );
