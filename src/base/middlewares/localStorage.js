@@ -99,7 +99,7 @@ export default class LocalStorageMiddleware {
       settings: {
         pss: state.pss || DEFAULT_SETTINGS.pss,
         bzz: state.bzz || DEFAULT_SETTINGS.bzz,
-        revealAddress: state.revealAddress || DEFAULT_SETTINGS.revealAddress,
+        revealAddress: state.revealAddress === undefined ? DEFAULT_SETTINGS.revealAddress : state.revealAddress,
         size: (raw || '').length,
       }
     };

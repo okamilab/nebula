@@ -15,6 +15,9 @@ import Identicon from './../../../base/components/Identicon';
 import Key from './../../../base/components/Key';
 
 const styles = theme => ({
+  sectionTitle: {
+    marginTop: theme.spacing.unit * 2,
+  },
   section: {
     borderRadius: 5,
     marginTop: theme.spacing.unit * 2,
@@ -49,14 +52,11 @@ class Contact extends Component {
           style={{ paddingTop: 10 }}
         >
           <Grid item xs={6}>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography variant='h5' color='inherit' noWrap className={classes.sectionTitle}>
               Contact
             </Typography>
             <Paper square className={classes.section}>
-              <Grid
-                container
-                spacing={0}
-              >
+              <Grid container spacing={0}>
                 <Grid item xs={3}>
                   {key ? <Identicon publicKey={key} size={78} /> : null}
                 </Grid>
@@ -68,16 +68,14 @@ class Contact extends Component {
                     defaultValue={username}
                   />
                 </Grid>
-                <Grid item xs={3}>
-                </Grid>
+                <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
                   <Key
                     name="publicKey"
                     value={key}
                     label="Public key" />
                 </Grid>
-                <Grid item xs={3}>
-                </Grid>
+                <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
                   <Key
                     name="address"

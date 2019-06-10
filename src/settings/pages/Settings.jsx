@@ -10,6 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import amber from '@material-ui/core/colors/amber';
 import pretty from 'prettysize';
 
 import packageJson from '../../../package.json';
@@ -34,6 +36,11 @@ const styles = theme => ({
   button: {
     marginRight: theme.spacing.unit * 2,
   },
+  info: {
+    backgroundColor: amber[300],
+    color: '#000',
+    maxWidth: '100%'
+  }
 });
 
 class Settings extends Component {
@@ -44,8 +51,8 @@ class Settings extends Component {
   }
 
   render() {
-    const { classes, pss, bzz, revealAddress, size } = this.props;
-    if (!pss) {
+    const { classes, settings, app } = this.props;
+    if (!settings.pss) {
       return <div>No data</div>
     }
 
@@ -53,32 +60,38 @@ class Settings extends Component {
       <Grid
         container
         spacing={0}
-        justify="center"
+        justify='center'
         style={{ paddingTop: 10 }}
       >
         <Grid item xs={6}>
-          <Typography variant="h5" color="inherit" noWrap>
+          {!app.isConnected && <SnackbarContent
+            className={classes.info}
+            message={
+              <div>There is no connection. Make sure you did everything right in order
+                to <a href='https://github.com/okamilab/nebula#running-nebula' target='_block'>run nebula</a></div>
+            } />}
+          <Typography variant='h5' color='inherit' noWrap className={classes.sectionTitle}>
             Settings
           </Typography>
-          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+          <Typography variant='subtitle1' color='inherit' noWrap className={classes.sectionTitle}>
             General
           </Typography>
           <Paper square className={classes.section}>
             <Grid container spacing={0}>
               <Grid item xs={6}>
-                <Typography variant="subtitle1" color="inherit" noWrap>
+                <Typography variant='subtitle1' color='inherit' noWrap>
                   PSS endpoint (WebSocket)
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="pss"
+                  id='pss'
                   onChange={(e) => this.setState({ pss: e.target.value })}
-                  defaultValue={pss}
+                  defaultValue={settings.pss}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="caption">
+                <Typography variant='caption'>
                   After updating the field you need to restart the app (refresh page)
                 </Typography>
               </Grid>
@@ -86,19 +99,19 @@ class Settings extends Component {
                 <Divider />
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="subtitle1" color="inherit" noWrap>
+                <Typography variant='subtitle1' color='inherit' noWrap>
                   BZZ endpoint
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="bzz"
+                  id='bzz'
                   onChange={(e) => this.setState({ bzz: e.target.value })}
-                  defaultValue={bzz}
+                  defaultValue={settings.bzz}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="caption">
+                <Typography variant='caption'>
                   After updating the field you need to restart the app (refresh page)
                 </Typography>
               </Grid>
@@ -106,31 +119,31 @@ class Settings extends Component {
                 <Divider />
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="subtitle1" color="inherit" noWrap>
+                <Typography variant='subtitle1' color='inherit' noWrap>
                   Local storage
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                {pretty(size)}
+                {pretty(settings.size)}
               </Grid>
             </Grid>
           </Paper>
-          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+          <Typography variant='subtitle1' color='inherit' noWrap className={classes.sectionTitle}>
             Security
           </Typography>
           <Paper square className={classes.section}>
             <Grid container spacing={0}>
               <Grid item xs={6}>
-                <Typography variant="subtitle1" color="inherit" noWrap>
+                <Typography variant='subtitle1' color='inherit' noWrap>
                   Reveal address partially
                 </Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="revealAddress"
+                  id='revealAddress'
                   select
                   onChange={(e) => this.setState({ revealAddress: +e.target.value })}
-                  value={this.state.revealAddress === undefined ? revealAddress : this.state.revealAddress}
+                  value={this.state.revealAddress === undefined ? settings.revealAddress : this.state.revealAddress}
                 >
                   <MenuItem value={0}>Broadcast</MenuItem>
                   <MenuItem value={4}>4</MenuItem>
@@ -141,13 +154,13 @@ class Settings extends Component {
               </Grid>
             </Grid>
           </Paper>
-          <Typography variant="subtitle1" color="inherit" noWrap className={classes.sectionTitle}>
+          <Typography variant='subtitle1' color='inherit' noWrap className={classes.sectionTitle}>
             About
           </Typography>
           <Paper square className={classes.section}>
             <Grid container spacing={0}>
               <Grid item xs={6}>
-                <Typography variant="subtitle1" color="inherit" noWrap>
+                <Typography variant='subtitle1' color='inherit' noWrap>
                   Version
                 </Typography>
               </Grid>
@@ -160,14 +173,14 @@ class Settings extends Component {
           </Paper>
           <div className={classes.actionBar}>
             <Button
-              variant="contained"
+              variant='contained'
               onClick={this.reset}
               className={classes.button}>
               Reset
             </Button>
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               onClick={this.save}
               className={classes.button}>
               Save
@@ -184,7 +197,7 @@ class Settings extends Component {
 
   save = () => {
     const { pss, bzz, revealAddress } =
-      Object.assign({}, this.props, this.state);
+      Object.assign({}, this.props.settings, this.state);
     this.props.dispatch(updateSettings({ pss, bzz, revealAddress }));
   };
 }
@@ -192,23 +205,24 @@ class Settings extends Component {
 Settings.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  pss: PropTypes.string,
-  bzz: PropTypes.string,
-  revealAddress: PropTypes.number,
-  size: PropTypes.number
+  settings: PropTypes.object.isRequired,
+  app: PropTypes.object.isRequired
 };
 
 export default compose(
   connect((state) => {
-    const { settings } = state || {
+    const { settings, app } = state || {
       settings: {
         pss: DEFAULT_SETTINGS.pss,
         bzz: DEFAULT_SETTINGS.bzz,
         revealAddress: DEFAULT_SETTINGS.revealAddress,
         size: 0
+      },
+      app: {
+        isConnected: false,
       }
     };
-    return settings;
+    return { settings, app };
   }),
   withStyles(styles)
 )(Settings);

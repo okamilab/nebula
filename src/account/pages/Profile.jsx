@@ -14,6 +14,9 @@ import Key from './../../base/components/Key';
 import { updateUsername } from './../actions';
 
 const styles = theme => ({
+  sectionTitle: {
+    marginTop: theme.spacing.unit * 2,
+  },
   section: {
     borderRadius: 5,
     marginTop: theme.spacing.unit * 2,
@@ -50,14 +53,11 @@ class Profile extends Component {
         style={{ paddingTop: 10 }}
       >
         <Grid item xs={6}>
-          <Typography variant="h6" color="inherit" noWrap>
+          <Typography variant='h5' color='inherit' noWrap className={classes.sectionTitle}>
             Profile
           </Typography>
           <Paper square className={classes.section}>
-            <Grid
-              container
-              spacing={0}
-            >
+            <Grid container spacing={0}>
               <Grid item xs={3}>
                 {
                   publicKey ?
@@ -83,16 +83,14 @@ class Profile extends Component {
                   Save
                 </Button>
               </Grid>
-              <Grid item xs={3}>
-              </Grid>
+              <Grid item xs={3}></Grid>
               <Grid item xs={9}>
                 <Key
                   name="publicKey"
                   value={publicKey}
                   label="Public key" />
               </Grid>
-              <Grid item xs={3}>
-              </Grid>
+              <Grid item xs={3}></Grid>
               <Grid item xs={9}>
                 <Key
                   name="overlayAddress"
