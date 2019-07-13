@@ -20,21 +20,21 @@ import { updateSettings, resetSettings } from './../../settings/actions';
 
 const styles = theme => ({
   sectionTitle: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   section: {
     borderRadius: 5,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   divider: {
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2)
   },
   actionBar: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   button: {
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2),
   },
   info: {
     backgroundColor: amber[300],
@@ -63,7 +63,7 @@ class Settings extends Component {
         justify='center'
         style={{ paddingTop: 10 }}
       >
-        <Grid item xs={6}>
+        <Grid item md={6} sm={8} xs={11}>
           {!app.isConnected && <SnackbarContent
             className={classes.info}
             message={

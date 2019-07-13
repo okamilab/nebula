@@ -11,15 +11,15 @@ import Identicon from './../../../base/components/Identicon';
 
 const styles = theme => ({
   container: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   chat: {
     display: 'flex',
     color: 'inherit'
   },
   chatTitle: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(1),
     lineHeight: '32px'
   }
 });

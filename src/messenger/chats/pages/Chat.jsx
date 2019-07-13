@@ -27,9 +27,9 @@ const styles = theme => ({
     paddingBottom: 80
   },
   root: {
-    marginTop: theme.spacing.unit * 4,
-    marginBottom: theme.spacing.unit * 4,
-    marginRight: theme.spacing.unit * 2,
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    marginRight: theme.spacing(2),
     padding: '2px 4px',
     display: 'flex'
   },
@@ -55,7 +55,10 @@ const styles = theme => ({
   divider: {
     width: 1,
     height: 28,
-    margin: 4,
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 4,
+    marginRight: 4,
   },
   fixed: {
     position: 'fixed',
@@ -141,7 +144,7 @@ class Chat extends Component {
   }
 
   render() {
-    const { classes, chat, account } = this.props;
+    const { classes, isNarrow, chat, account } = this.props;
     if (!chat) {
       return <div>Chat not found</div>
     }
@@ -153,7 +156,7 @@ class Chat extends Component {
 
     return (
       <>
-        <Layout>
+        <Layout isNarrow={isNarrow}>
           <Element id='scroll-container' className={classes.scrollContainer}>
             <Grid
               container
@@ -188,8 +191,10 @@ class Chat extends Component {
         </Layout>
         <div className={classes.fixed}>
           <Grid container spacing={0}>
-            <Grid item sm={3} xs={4}></Grid>
-            <Grid item sm={9} xs={8}>
+            {
+              !isNarrow && <Grid item sm={3}></Grid>
+            }
+            <Grid item xs={isNarrow ? 12 : 9}>
               <Grid
                 container
                 spacing={0}
@@ -252,6 +257,7 @@ class Chat extends Component {
 Chat.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  isNarrow: PropTypes.bool,
   id: PropTypes.string,
   chat: PropTypes.object,
   account: PropTypes.object,

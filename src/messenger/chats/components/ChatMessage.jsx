@@ -16,15 +16,15 @@ const styles = theme => ({
     borderRadius: 6
   },
   fileName: {
-    paddingTop: theme.spacing.unit
+    paddingTop: theme.spacing(1)
   },
   divider: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   actionBar: {
     textAlign: 'center',
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing(1)
   },
   block: {
     textAlign: 'left',
@@ -38,7 +38,7 @@ const styles = theme => ({
     display: 'flex'
   },
   content: {
-    paddingLeft: theme.spacing.unit
+    paddingLeft: theme.spacing(1)
   },
   header: {
     fontSize: 12,

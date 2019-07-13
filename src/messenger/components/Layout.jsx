@@ -19,13 +19,15 @@ const styles = {
   }
 };
 
-function Layout({ classes, children }) {
+function Layout({ classes, children, isNarrow }) {
   return (
     <Grid container spacing={0} className={classes.container}>
-      <Grid item sm={3} xs={4} className={classes.cell}>
-        <LeftSide />
-      </Grid>
-      <Grid item sm={9} xs={8} className={classes.cell}>
+      {
+        !isNarrow && <Grid item xs={3} className={classes.cell}>
+          <LeftSide />
+        </Grid>
+      }
+      <Grid item xs={isNarrow ? 12 : 9} className={classes.cell}>
         {children}
       </Grid>
     </Grid>
@@ -34,7 +36,8 @@ function Layout({ classes, children }) {
 
 Layout.propTypes = {
   classes: PropTypes.object.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
+  isNarrow: PropTypes.bool
 };
 
 export default withStyles(styles)(Layout);

@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withStyles from '@material-ui/core/styles/withStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import AccountMenu from '../../account/components/AccountMenu';
+import AccountMenu from './../../account/components/AccountMenu';
+import ControlPanelButton from './../../messenger/components/ControlPanelButton';
 import logo from './../../images/logo.svg';
 
 const styles = theme => ({
@@ -21,16 +20,17 @@ const styles = theme => ({
   },
   logo: {
     width: 36,
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing(2),
     display: 'block',
     float: 'left'
   }
 });
 
-function Header({ classes }) {
+function Header({ classes, isNarrow }) {
   return (
-    <AppBar position="absolute" color="default">
+    <AppBar color="default">
       <Toolbar>
+        {isNarrow && <ControlPanelButton />}
         <Typography variant="h5" color="inherit" noWrap className={classes.grow}>
           <Link to='/'
             className={classes.title}
@@ -47,9 +47,7 @@ function Header({ classes }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
+  isNarrow: PropTypes.bool
 };
 
-export default compose(
-  connect(),
-  withStyles(styles)
-)(Header);
+export default withStyles(styles)(Header);

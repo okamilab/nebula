@@ -23,7 +23,7 @@ const styles = theme => ({
     color: 'inherit'
   },
   contactTitle: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(1),
     lineHeight: '32px'
   }
 });

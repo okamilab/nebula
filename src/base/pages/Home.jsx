@@ -11,26 +11,26 @@ import logo from './../../images/logo.svg';
 const styles = theme => ({
   logoContainer: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 10,
-    paddingBottom: theme.spacing.unit * 8,
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(8),
   },
   logo: {
     width: 200,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing(2),
   },
   title: {
     color: '#e3e3e3'
   },
   apps: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 6,
-    paddingBottom: theme.spacing.unit * 8,
+    paddingTop: theme.spacing(6),
+    paddingBottom: theme.spacing(8),
   },
   app: {
     width: 100,
     textAlign: 'center',
-    paddingLeft: theme.spacing.unit * 8,
-    paddingRight: theme.spacing.unit * 8,
+    paddingLeft: theme.spacing(8),
+    paddingRight: theme.spacing(8),
   },
   appIcon: {
     fontSize: 100

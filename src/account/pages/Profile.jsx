@@ -15,15 +15,15 @@ import { updateUsername } from './../actions';
 
 const styles = theme => ({
   sectionTitle: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   section: {
     borderRadius: 5,
-    marginTop: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(2)
   },
   button: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2)
   }
 });
 
@@ -52,7 +52,7 @@ class Profile extends Component {
         justify="center"
         style={{ paddingTop: 10 }}
       >
-        <Grid item xs={6}>
+        <Grid item md={6} sm={8} xs={11}>
           <Typography variant='h5' color='inherit' noWrap className={classes.sectionTitle}>
             Profile
           </Typography>

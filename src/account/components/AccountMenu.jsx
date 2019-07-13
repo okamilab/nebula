@@ -14,7 +14,7 @@ import { AccountCircle, Settings } from '@material-ui/icons';
 
 import Identicon from '../../base/components/Identicon';
 
-const styles = theme => ({
+const styles = _ => ({
   menu: {
     maxWidth: 300,
   },
@@ -76,7 +76,7 @@ class AccountMenu extends Component {
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
-            <ListItemText inset primary={
+            <ListItemText primary={
               <Typography color="inherit" noWrap>
                 {username || publicKey}
               </Typography>
@@ -88,7 +88,7 @@ class AccountMenu extends Component {
             <ListItemIcon>
               <Settings />
             </ListItemIcon>
-            <ListItemText inset primary={
+            <ListItemText primary={
               <Typography color="inherit" noWrap>
                 Settings
               </Typography>

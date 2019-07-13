@@ -7,18 +7,18 @@ import Header from './../components/Header';
 import Error from './../error/components/Error';
 import ConnectionController from './ConnectionController';
 
-const styles = theme => ({
+const styles = _ => ({
   layout: {
     height: '100%',
     paddingTop: 64
   }
 });
 
-function Layout({ classes, children }) {
+function Layout({ classes, children, isNarrow }) {
   return (
     <ConnectionController>
       <CssBaseline />
-      <Header />
+      <Header isNarrow={isNarrow} />
       <main className={classes.layout}>
         {children}
       </main>
@@ -29,7 +29,8 @@ function Layout({ classes, children }) {
 
 Layout.propTypes = {
   classes: PropTypes.object.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
+  isNarrow: PropTypes.bool
 };
 
 export default withStyles(styles)(Layout);

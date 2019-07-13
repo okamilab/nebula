@@ -1,10 +1,14 @@
 import { applyMiddleware, createStore, compose as reduxCompose } from 'redux';
 import thunk from 'redux-thunk';
+import { createBrowserHistory } from 'history';
+import { routerMiddleware } from 'connected-react-router';
 
 import reducer from './reducer';
 import LocalStorageMiddleware from './middlewares/localStorage';
 import { DEFAULT_SETTINGS } from './default';
 import ClientResolver from './client';
+
+export const history = createBrowserHistory();
 
 export function configureStore(initialState) {
   // Use compose function provided by Redux DevTools if the extension is installed.
@@ -23,6 +27,7 @@ export function configureStore(initialState) {
   const clientResolver = new ClientResolver(config);
 
   const middleware = [
+    routerMiddleware(history),
     localStorageMiddleware.middleware(),
     thunk.withExtraArgument(() => {
       return {
@@ -32,7 +37,7 @@ export function configureStore(initialState) {
     })
   ];
   const enhancers = [applyMiddleware(...middleware)];
-  const store = createStore(reducer, initialState, compose(...enhancers));
+  const store = createStore(reducer(history), initialState, compose(...enhancers));
 
   // Hot-reloading
   if (module.hot && process.env.NODE_ENV === 'development') {
