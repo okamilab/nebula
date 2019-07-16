@@ -1,4 +1,3 @@
-import * as api from './../api/account';
 import { restoreContacts } from './../messenger/contacts/actions';
 import { restoreChats } from './../messenger/chats/actions';
 import { addError } from './../base/error/actions';
@@ -13,13 +12,18 @@ export function fetchAccount() {
 
     try {
       const { client } = resolve();
-      const account = await api.fetchAccount(client);
-      const { app } = getState();
-      const session = app[account.publicKey] || {};
-      dispatch(receiveAccount({ ...account, username: session.username }));
+      const [publicKey, overlayAddress] =
+        await Promise.all([
+          client.pss.getPublicKey(),
+          client.pss.baseAddr(),
+        ]);
 
-      dispatch(restoreContacts(account.publicKey));
-      dispatch(restoreChats(account.publicKey));
+      const { app } = getState();
+      const session = app[publicKey] || {};
+      dispatch(receiveAccount({ publicKey, overlayAddress, username: session.username }));
+
+      dispatch(restoreContacts(publicKey));
+      dispatch(restoreChats(publicKey));
     } catch (error) {
       dispatch(addError(error.message));
     }

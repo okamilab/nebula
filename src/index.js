@@ -11,7 +11,14 @@ import { configureStore, history } from './base/redux';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const store = configureStore({});
+const urlParams = new URLSearchParams(window.location.search);
+
+const store = configureStore({
+  settings: {
+    mode: (urlParams.get('narrow') || '').toLowerCase() === 'true' ? 'narrow' : 'full',
+    home: urlParams.get('home')
+  }
+});
 
 ReactDOM.render(
   <AppContainer>

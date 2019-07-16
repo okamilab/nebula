@@ -6,7 +6,9 @@ export const initialState = {
   bzz: '',
   pss: '',
   revealAddress: 0,
-  size: 0
+  size: 0,
+  mode: 'full',
+  home: '/'
 };
 
 export default function reduce(state = initialState, action) {

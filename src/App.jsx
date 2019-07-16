@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router';
 import Helmet from 'react-helmet-async';
 import { useTheme } from '@material-ui/core/styles';
@@ -16,16 +19,16 @@ import ControlPanel from './messenger/components/ControlPanel';
 import Startup from './base/containers/Startup';
 import './App.css';
 
-export default function App() {
+function App({ settings }) {
   const theme = useTheme();
-  const isNarrow = !useMediaQuery(theme.breakpoints.up('md'));
+  const isNarrow = !useMediaQuery(theme.breakpoints.up('md')) || settings.mode === 'narrow';
 
   return (
     <Startup>
       <Helmet titleTemplate='Nebula - %s' />
       <Layout isNarrow={isNarrow}>
         <Switch>
-          <Route exact path='/' component={Home} />
+          <Route exact path={settings.home} component={Home} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/profile' component={Profile} />
           <Route exact path='/messenger' render={(props) => (<Messenger {...props} isNarrow={isNarrow} />)} />
@@ -37,3 +40,19 @@ export default function App() {
     </Startup>
   );
 }
+
+App.propTypes = {
+  settings: PropTypes.object.isRequired,
+};
+
+export default compose(
+  connect((state) => {
+    const { settings } = state || {
+      settings: {
+        mode: 'full',
+        home: '/'
+      }
+    };
+    return { settings };
+  })
+)(App);

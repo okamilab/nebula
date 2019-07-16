@@ -93,15 +93,17 @@ export default class LocalStorageMiddleware {
     const raw = localStorage.getItem(this.key);
     const state = this.unpack(raw);
 
+    const { app, settings, ...rest } = preloadedState;
     return {
-      ...preloadedState,
-      app: { raw, ...state },
+      app: { ...app, raw, ...state },
       settings: {
+        ...settings,
         pss: state.pss || DEFAULT_SETTINGS.pss,
         bzz: state.bzz || DEFAULT_SETTINGS.bzz,
         revealAddress: state.revealAddress === undefined ? DEFAULT_SETTINGS.revealAddress : state.revealAddress,
         size: (raw || '').length,
-      }
+      },
+      ...rest
     };
   }
 
