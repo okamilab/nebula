@@ -5,6 +5,11 @@ Messenger dapp based on PSS protocol over swarm.
 
 The project works with local instanse of swarm, default endpoint `ws://127.0.0.1:8546`
 
+# Try it
+You can run the dapp http://okamilab.github.io/nebula. In order to run swarm take a look [# Running nebula](https://github.com/okamilab/nebula#running-nebula) section.
+
+**NOTE:** You need to force insecure connection (`http://`) in order to connect to swarm WebSocket (`ws://`). It is not possible to connect to secure WebSocket at the moment.
+
 # Roadmap
 * Improvements
 	* [x] Restore connection after lose [#21](https://github.com/okamilab/nebula/issues/21)
