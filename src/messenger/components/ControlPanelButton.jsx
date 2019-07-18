@@ -14,7 +14,7 @@ function ControlPanelButton({ router, dispatch }) {
 
   return (
     <>
-      {location.hash === `#${path}` ?
+      {location.pathname === path ?
         <IconButton edge='start' color='inherit' aria-label='Close'
           onClick={() => { dispatch(routerActions.goBack()) }}>
           <Close />
