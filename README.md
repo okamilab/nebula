@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/okamilab/nebula/tree/master.svg?style=svg)](https://circleci.com/gh/okamilab/nebula/tree/master)
+
 # Nebula
 Messenger dapp based on PSS protocol over swarm.
 
