@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import sum from 'hash-sum';
+import { push } from 'connected-react-router';
 
 import ContactInvite from './ContactInvite';
 import ContactListGroup from './ContactListGroup';
@@ -30,7 +31,7 @@ const styles = theme => ({
 
 class ContactList extends Component {
   render() {
-    const { contacts, classes } = this.props;
+    const { contacts, classes, dispatch } = this.props;
     const map = groupBy(Object.values(contacts), 'type');
 
     return (
@@ -49,17 +50,17 @@ class ContactList extends Component {
         <ContactListGroup
           list={map['added']}
           renderItem={(c, i) =>
-            <Link key={i}
-              to={`/messenger/contact/${sum(c.key)}`}
+            <ButtonBase key={i}
               className={classes.contact}
-              style={{ textDecoration: 'none' }}>
+              style={{ textDecoration: 'none' }}
+              onClick={() => { dispatch(push(`/messenger/contact/${sum(c.key)}`)) }}>
               <div>
                 <Identicon publicKey={c.key} size={32} />
               </div>
               <Typography key={i} color="inherit" className={classes.contactTitle} noWrap>
                 {c.username || c.key}
               </Typography>
-            </Link>
+            </ButtonBase>
           }>
         </ContactListGroup>
       </>

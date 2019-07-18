@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { push } from 'connected-react-router';
 
 import Layout from './../../components/Layout';
 import Identicon from './../../../base/components/Identicon';
@@ -33,7 +33,7 @@ const styles = theme => ({
 
 class Contact extends Component {
   render() {
-    const { classes, isNarrow, contact } = this.props;
+    const { classes, isNarrow, contact, dispatch } = this.props;
     if (!contact) {
       return <div>Contact not found</div>
     }
@@ -48,7 +48,7 @@ class Contact extends Component {
         <Grid
           container
           spacing={0}
-          justify="center"
+          justify='center'
           style={{ paddingTop: 10 }}
         >
           <Grid item md={6} sm={8} xs={11}>
@@ -62,8 +62,8 @@ class Contact extends Component {
                 </Grid>
                 <Grid item xs={9}>
                   <TextField
-                    id="username"
-                    label="User name"
+                    id='username'
+                    label='User name'
                     disabled
                     defaultValue={username}
                   />
@@ -71,26 +71,25 @@ class Contact extends Component {
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
                   <Key
-                    name="publicKey"
+                    name='publicKey'
                     value={key}
-                    label="Public key" />
+                    label='Public key' />
                 </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
                   <Key
-                    name="address"
+                    name='address'
                     value={address}
-                    label="Address" />
+                    label='Address' />
                 </Grid>
               </Grid>
             </Paper>
             <div className={classes.actionBar}>
               <Button
-                variant="contained"
-                color="primary"
-                component={Link}
-                to={`/messenger/chat/${key}`}
-                className={classes.button}>
+                variant='contained'
+                color='primary'
+                className={classes.button}
+                onClick={() => { dispatch(push(`/messenger/chat/${key}`)) }}>
                 Chat
               </Button>
             </div>
@@ -103,6 +102,7 @@ class Contact extends Component {
 
 Contact.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   isNarrow: PropTypes.bool,
   contact: PropTypes.object
 };
@@ -113,4 +113,4 @@ export default compose(
     return { contact: contacts[props.match.params.key] };
   }),
   withStyles(styles)
-)(withRouter(Contact));
+)(Contact);

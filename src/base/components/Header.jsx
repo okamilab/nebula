@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import { push } from 'connected-react-router';
 
 import AccountMenu from './../../account/components/AccountMenu';
 import ControlPanelButton from './../../messenger/components/ControlPanelButton';
@@ -26,18 +29,19 @@ const styles = theme => ({
   }
 });
 
-function Header({ classes, isNarrow }) {
+function Header({ classes, dispatch, isNarrow }) {
   return (
-    <AppBar color="default">
+    <AppBar color='default'>
       <Toolbar>
         {isNarrow && <ControlPanelButton />}
-        <Typography variant="h5" color="inherit" noWrap className={classes.grow}>
-          <Link to='/'
+        <Typography variant='h5' color='inherit' noWrap className={classes.grow}>
+          <ButtonBase
             className={classes.title}
-            style={{ textDecoration: 'none' }}>
+            style={{ textDecoration: 'none' }}
+            onClick={() => { dispatch(push('/')) }}>
             <img src={logo} alt='Nebula' className={classes.logo} />
-            Nebula
-          </Link>
+            <Typography variant='h5' color='inherit' noWrap>Nebula</Typography>
+          </ButtonBase>
         </Typography>
         <AccountMenu />
       </Toolbar>
@@ -47,7 +51,11 @@ function Header({ classes, isNarrow }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
   isNarrow: PropTypes.bool
 };
 
-export default withStyles(styles)(Header);
+export default compose(
+  connect(),
+  withStyles(styles)
+)(Header);

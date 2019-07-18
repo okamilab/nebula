@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Message } from '@material-ui/icons';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { push } from 'connected-react-router';
 
 import logo from './../../images/logo.svg';
 
@@ -37,7 +39,7 @@ const styles = theme => ({
   }
 });
 
-function Home({ classes }) {
+function Home({ classes, dispatch }) {
   return (
     <>
       <div className={classes.logoContainer}>
@@ -46,9 +48,8 @@ function Home({ classes }) {
       </div>
       <div className={classes.apps}>
         <Button
-          component={Link}
-          to='/messenger'
-          className={classes.app}>
+          className={classes.app}
+          onClick={() => { dispatch(push('/messenger')) }}>
           <Typography>
             <Message className={classes.appIcon} />
             Messenger
@@ -60,7 +61,11 @@ function Home({ classes }) {
 }
 
 Home.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(Home);
+export default compose(
+  connect(),
+  withStyles(styles)
+)(Home);

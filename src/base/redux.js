@@ -1,6 +1,6 @@
 import { applyMiddleware, createStore, compose as reduxCompose } from 'redux';
 import thunk from 'redux-thunk';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 
 import reducer from './reducer';
@@ -8,7 +8,7 @@ import LocalStorageMiddleware from './middlewares/localStorage';
 import { DEFAULT_SETTINGS } from './default';
 import ClientResolver from './client';
 
-export const history = createBrowserHistory();
+export const history = createHashHistory();
 
 export function configureStore(initialState) {
   // Use compose function provided by Redux DevTools if the extension is installed.

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import withStyles from '@material-ui/core/styles/withStyles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { AccountCircle, Settings } from '@material-ui/icons';
+import { push } from 'connected-react-router';
 
 import Identicon from '../../base/components/Identicon';
 
@@ -34,7 +35,7 @@ class AccountMenu extends Component {
   };
 
   render() {
-    const { classes, account, errors } = this.props;
+    const { classes, dispatch, account, errors } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -49,14 +50,14 @@ class AccountMenu extends Component {
       <>
         <IconButton
           aria-owns={open ? 'menu-account' : undefined}
-          aria-haspopup="true"
+          aria-haspopup='true'
           onClick={this.handleMenu}
-          color="inherit"
+          color='inherit'
         >
           <Identicon publicKey={publicKey} size={32} />
         </IconButton>
         <Menu
-          id="menu-account"
+          id='menu-account'
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'top',
@@ -71,25 +72,22 @@ class AccountMenu extends Component {
         >
           <MenuItem
             className={classes.menu}
-            component={Link}
-            to='/profile'>
+            onClick={() => { dispatch(push('/profile')) }}>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
             <ListItemText primary={
-              <Typography color="inherit" noWrap>
+              <Typography color='inherit' noWrap>
                 {username || publicKey}
               </Typography>
             } />
           </MenuItem>
-          <MenuItem 
-            component={Link}
-            to='/settings'>
+          <MenuItem onClick={() => { dispatch(push('/settings')) }}>
             <ListItemIcon>
               <Settings />
             </ListItemIcon>
             <ListItemText primary={
-              <Typography color="inherit" noWrap>
+              <Typography color='inherit' noWrap>
                 Settings
               </Typography>
             } />

@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -161,7 +160,7 @@ class Chat extends Component {
             <Grid
               container
               spacing={0}
-              justify="center"
+              justify='center'
             >
               <Grid item xs={10} lg={10} xl={8} className={classes.list}>
                 {
@@ -184,7 +183,7 @@ class Chat extends Component {
                       )
                     })
                 }
-                <Element name="bottom"></Element>
+                <Element name='bottom'></Element>
               </Grid>
             </Grid>
           </Element>
@@ -198,13 +197,13 @@ class Chat extends Component {
               <Grid
                 container
                 spacing={0}
-                justify="center"
+                justify='center'
               >
                 <Grid item xs={10} lg={10} xl={8}>
                   <Paper className={classes.root} elevation={1}>
                     <InputBase
                       className={classes.input}
-                      placeholder="Type a message here"
+                      placeholder='Type a message here'
                       value={this.state.msg}
                       onChange={this.onChange}
                       onKeyPress={this.onKeyPress}
@@ -217,7 +216,7 @@ class Chat extends Component {
                       onChange={this.upload}
                     />
                     <label htmlFor='file' className={classes.fileLabel}>
-                      <IconButton className={classes.iconButton} component="span">
+                      <IconButton className={classes.iconButton} component='span'>
                         <Description />
                       </IconButton>
                     </label>
@@ -279,4 +278,4 @@ export default compose(
     };
   }),
   withStyles(styles)
-)(withRouter(Chat));
+)(Chat);
