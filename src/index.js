@@ -17,6 +17,9 @@ const store = configureStore({
   settings: {
     mode: (urlParams.get('narrow') || '').toLowerCase() === 'true' ? 'narrow' : 'full',
     home: urlParams.get('home') || '/'
+  },
+  app: {
+    pss: urlParams.get('pss') || null
   }
 });
 

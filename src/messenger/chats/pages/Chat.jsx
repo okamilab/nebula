@@ -208,7 +208,7 @@ class Chat extends Component {
                       onChange={this.onChange}
                       onKeyPress={this.onKeyPress}
                       autoFocus />
-                    <input
+                    {/* <input
                       type='file'
                       name='file'
                       id='file'
@@ -220,7 +220,7 @@ class Chat extends Component {
                         <Description />
                       </IconButton>
                     </label>
-                    <Divider className={classes.divider} />
+                    <Divider className={classes.divider} /> */}
                     <IconButton
                       className={classes.iconButton}
                       onClick={this.send}
