@@ -18,7 +18,7 @@ function decodePssEvent(data) {
 }
 
 function getChat(key, chats) {
-  const chat = chats.find(c => c.key === key);
+  const chat = chats[key];
   if (!chat) {
     throw new Error('Chat is not found');
   }
@@ -50,10 +50,11 @@ async function createSubscription(client, chat) {
 function handler(dispatch, getState) {
   return async (event) => {
     const { chats } = getState();
-    const chat = getChat(event.key, chats);
+    const hash = sum(event.key);
+    const chat = getChat(hash, chats);
 
     const message = {
-      sender: sum(event.key),
+      sender: hash,
       isRead: false,
       text: event.payload.text,
       timestamp: event.utc_timestamp,
@@ -64,7 +65,7 @@ function handler(dispatch, getState) {
       return;
     }
 
-    dispatch({ type: CHAT_RECEIVE_MESSAGE, key: chat.key, message });
+    dispatch({ type: CHAT_RECEIVE_MESSAGE, hash, message });
   }
 }
 
@@ -78,14 +79,14 @@ function subscribe(chat) {
 }
 
 function subscribeAll(dispatch, chats) {
-  chats.map(chat => dispatch(subscribe(chat)));
+  Object.values(chats).map(chat => dispatch(subscribe(chat)));
 }
 
 export function restoreChats(publicKey) {
   return async (dispatch, getState) => {
     const { app } = getState();
     const session = app[publicKey] || {};
-    const chats = session.chats || [];
+    const chats = session.chats || {};
     dispatch({ type: CHATS_RESTORE, chats });
     subscribeAll(dispatch, chats);
   };
@@ -94,18 +95,19 @@ export function restoreChats(publicKey) {
 export function createChat(contact) {
   return async (dispatch, getState) => {
     const { account } = getState();
+    const hash = sum(contact.key);
     const chat = {
       key: contact.key,
       topic: contact.topic,
       address: contact.address,
       participants: {
-        [sum(contact.key)]: contact.key,
+        [hash]: contact.key,
         [sum(account.publicKey)]: account.publicKey,
       },
       messages: {}
     }
 
-    dispatch({ type: CHAT_CREATE, chat });
+    dispatch({ type: CHAT_CREATE, chats: { [hash]: chat } });
     dispatch(subscribe(chat));
   };
 }
@@ -125,7 +127,7 @@ async function send(dispatch, client, chat, publicKey, text) {
     text
   }
 
-  dispatch({ type: CHAT_SEND_MESSAGE, key: chat.key, message });
+  dispatch({ type: CHAT_SEND_MESSAGE, hash: sum(chat.key), message });
 }
 
 export function sendMessage(key, text) {

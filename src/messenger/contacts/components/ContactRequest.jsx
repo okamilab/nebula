@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import { acceptContact, declineContact } from './../actions';
 
@@ -32,8 +34,14 @@ class ContactRequest extends Component {
     const { publicKey } = this.props;
 
     return (
-      <div onClick={this.toggle}>
-        <Typography noWrap>{publicKey}</Typography>
+      <ListItem button onClick={this.toggle}>
+        <ListItemText
+          disableTypography
+          primary={
+            <Typography color='inherit' noWrap>
+              {publicKey}
+            </Typography>
+          } />
         <Dialog
           open={this.state.modal}
           onClose={this.toggle}
@@ -59,7 +67,7 @@ class ContactRequest extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-      </div>
+      </ListItem>
     );
   }
 

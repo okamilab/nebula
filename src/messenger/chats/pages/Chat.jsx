@@ -268,10 +268,10 @@ export default compose(
       account: {},
       contacts: {}
     };
-    const key = props.match.params.key;
+    const hash = props.match.params.key;
     return {
-      id: key,
-      chat: chats.find(c => c.key === key),
+      id: hash,
+      chat: chats[hash],
       account,
       contacts
     };

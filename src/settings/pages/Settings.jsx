@@ -88,6 +88,7 @@ class Settings extends Component {
                   id='pss'
                   onChange={(e) => this.setState({ pss: e.target.value })}
                   defaultValue={settings.pss}
+                  disabled={settings.isPssLocked}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -215,6 +216,7 @@ export default compose(
       settings: {
         pss: DEFAULT_SETTINGS.pss,
         bzz: DEFAULT_SETTINGS.bzz,
+        isPssLocked: false,
         revealAddress: DEFAULT_SETTINGS.revealAddress,
         size: 0
       },

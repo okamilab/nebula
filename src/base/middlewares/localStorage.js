@@ -94,11 +94,19 @@ export default class LocalStorageMiddleware {
     const state = this.unpack(raw);
 
     const { app, settings, ...rest } = preloadedState;
+    const { pss } = app;
+
     return {
-      app: { ...app, raw, ...state },
+      app: {
+        ...app,
+        ...state,
+        raw,
+        pss /* preloadedState.app.pss parameter has high priority */
+      },
       settings: {
         ...settings,
-        pss: state.pss || DEFAULT_SETTINGS.pss,
+        isPssLocked: !!pss,
+        pss: pss || state.pss || DEFAULT_SETTINGS.pss,
         bzz: state.bzz || DEFAULT_SETTINGS.bzz,
         revealAddress: state.revealAddress === undefined ? DEFAULT_SETTINGS.revealAddress : state.revealAddress,
         size: (raw || '').length,

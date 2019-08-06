@@ -7,28 +7,23 @@ import {
   CHAT_RECEIVE_MESSAGE
 } from './actions';
 
-export const initialState = [];
+export const initialState = {};
 
 export default function reduce(state = initialState, action) {
   switch (action.type) {
-    case CHATS_RESTORE: {
-      return Object.assign([], state, [
-        ...action.chats
-      ]);
-    }
+    case CHATS_RESTORE:
     case CHAT_CREATE: {
-      return [...state, action.chat];
+      return Object.assign({}, state, {
+        ...action.chats
+      });
     }
     case CHAT_SEND_MESSAGE:
     case CHAT_RECEIVE_MESSAGE: {
-      return state.map((chat) => {
-        if (chat.key !== action.key) {
-          return chat
-        }
+      const { [action.hash]: chat, ...chats } = state;
+      const newChat = Object.assign({}, chat);
 
-        chat.messages[sum(action.message)] = action.message;
-        return { ...chat };
-      })
+      newChat.messages[sum(action.message)] = action.message;
+      return Object.assign({}, { [action.hash]: newChat }, chats);
     }
     default:
       return state;

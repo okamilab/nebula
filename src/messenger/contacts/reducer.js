@@ -15,11 +15,14 @@ export default function reduce(state = initialState, action) {
     case CONTACT_REQUEST:
     case CONTACT_RECEIVE:
     case CONTACT_MUTATE:
-    case CONTACT_ACCEPT:
-    case CONTACT_DECLINE: {
+    case CONTACT_ACCEPT: {
       return Object.assign({}, state, {
         ...action.contacts
       });
+    }
+    case CONTACT_DECLINE: {
+      const { [action.hash]: _, ...rest } = state;
+      return Object.assign({}, rest);
     }
     default:
       return state;

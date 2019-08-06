@@ -2,35 +2,43 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
-const styles = theme => ({
-  container: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    overflow: 'hidden'
-  }
+const styles = _ => ({
 });
 
 class ContactListGroup extends Component {
   render() {
-    const { list, title, renderItem, classes } = this.props;
+    const { list, title, renderItem } = this.props;
     if (!list || !list.length) {
       return null;
     }
 
     const items = list.map(renderItem);
     return (
-      <div className={classes.container}>
-        <Typography variant="subtitle1" color="inherit">{title}</Typography>
+      <List subheader={<ListSubheader>{title}</ListSubheader>}>
         {items}
-      </div>
+      </List>
     );
   }
 }
 
 ContactListGroup.defaultProps = {
-  renderItem: (c, i) => <Typography key={i} noWrap>{c.key}</Typography>
+  renderItem: (c, i) =>
+    <ListItem key={i} button>
+      <ListItemText
+        disableTypography
+        primary={
+          <Typography color='inherit' noWrap>
+            {c.key}
+          </Typography>
+        } />
+    </ListItem>
 };
+
 
 ContactListGroup.propTypes = {
   classes: PropTypes.object.isRequired,

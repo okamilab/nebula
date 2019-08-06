@@ -41,7 +41,12 @@ class ContactInvite extends Component {
     this.onKeyPress = this.onKeyPress.bind(this);
   }
 
-  toggle() {
+  toggle(e) {
+    if (e) {
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+    }
+
     this.setState({
       error: null,
       modal: !this.state.modal

@@ -65,23 +65,43 @@ function handler(dispatch, getState) {
 
       dispatch({ type: CONTACT_RECEIVE, contacts: { [hash]: contact } });
     } else if (
-      event.type === 'contact_response' &&
-      existing != null &&
-      (existing.type === 'sent_declined' ||
-        existing.type === 'sent_request')
+      event.type === 'contact_request' &&
+      (existing == null || existing.type === 'added')
     ) {
-      // Response from contact, set type to 'added' or 'sent_declined' accordingly
+      // Automatically accept exesting contact
       const contact = {
         ...existing,
-        type: event.payload.contact === true ? 'added' : 'sent_declined',
+        topic: event.payload.topic,
         username: event.payload.username,
         address: event.payload.overlay_address,
       }
 
       dispatch({ type: CONTACT_MUTATE, contacts: { [hash]: contact } });
-      if (event.payload.contact) {
-        dispatch(createChat(contact));
+      dispatch(acceptContact(event.key, event.payload.overlay_address));
+    } else if (
+      event.type === 'contact_response' &&
+      event.payload.contact &&
+      existing != null &&
+      (existing.type === 'sent_declined' || existing.type === 'sent_request')
+    ) {
+      // Response from contact, set type to 'added'
+      const contact = {
+        ...existing,
+        type: 'added',
+        username: event.payload.username,
+        address: event.payload.overlay_address,
       }
+
+      dispatch({ type: CONTACT_MUTATE, contacts: { [hash]: contact } });
+      dispatch(createChat(contact));
+    } else if (
+      event.type === 'contact_response' &&
+      !event.payload.contact &&
+      existing != null &&
+      (existing.type === 'sent_declined' || existing.type === 'sent_request')
+    ) {
+      // Declined contact should be erased from the contact list
+      dispatch({ type: CONTACT_DECLINE, hash });
     } else {
       console.error('unhandled event', event);
       return;
@@ -194,16 +214,10 @@ export function acceptContact(publicKey, address) {
 
 export function declineContact(publicKey, address) {
   return async (dispatch, getState, resolve) => {
-    const { contacts } = getState();
     const { client } = resolve();
     await sendResponse(client, getState, publicKey, address, false);
 
     const hash = sum(publicKey);
-    const contact = {
-      ...contacts[hash],
-      type: 'received_declined'
-    };
-
-    dispatch({ type: CONTACT_DECLINE, contacts: { [hash]: contact } });
+    dispatch({ type: CONTACT_DECLINE, hash });
   }
 }

@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { push } from 'connected-react-router';
+import sum from 'hash-sum';
 
 import Layout from './../../components/Layout';
 import Identicon from './../../../base/components/Identicon';
@@ -89,7 +90,7 @@ class Contact extends Component {
                 variant='contained'
                 color='primary'
                 className={classes.button}
-                onClick={() => { dispatch(push(`/messenger/chat/${key}`)) }}>
+                onClick={() => { dispatch(push(`/messenger/chat/${sum(key)}`)) }}>
                 Chat
               </Button>
             </div>
