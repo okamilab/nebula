@@ -16,9 +16,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const store = configureStore({
   settings: {
     mode: (urlParams.get('narrow') || '').toLowerCase() === 'true' ? 'narrow' : 'full',
-    home: urlParams.get('home') || '/'
-  },
-  app: {
+    home: urlParams.get('home') || '/',
     pss: urlParams.get('pss') || null
   }
 });

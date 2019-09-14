@@ -5,7 +5,6 @@ import { routerMiddleware } from 'connected-react-router';
 
 import reducer from './reducer';
 import LocalStorageMiddleware from './middlewares/localStorage';
-import { DEFAULT_SETTINGS } from './default';
 import ClientResolver from './client';
 
 export const history = createHashHistory();
@@ -21,8 +20,8 @@ export function configureStore(initialState) {
   initialState = localStorageMiddleware.deriveInitialState(initialState);
 
   const config = {
-    bzz: initialState.app.bzz || DEFAULT_SETTINGS.bzz,
-    ws: initialState.app.pss || DEFAULT_SETTINGS.pss,
+    bzz: initialState.settings.bzz,
+    ws: initialState.settings.pss,
   };
   const clientResolver = new ClientResolver(config);
 

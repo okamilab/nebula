@@ -93,16 +93,11 @@ export default class LocalStorageMiddleware {
     const raw = localStorage.getItem(this.key);
     const state = this.unpack(raw);
 
-    const { app, settings, ...rest } = preloadedState;
-    const { pss } = app;
+    const { settings, ...rest } = preloadedState;
+    const { pss } = settings;
 
     return {
-      app: {
-        ...app,
-        ...state,
-        raw,
-        pss /* preloadedState.app.pss parameter has high priority */
-      },
+      app: { ...state, raw },
       settings: {
         ...settings,
         isPssLocked: !!pss,
