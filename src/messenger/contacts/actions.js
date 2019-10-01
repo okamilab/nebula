@@ -66,7 +66,7 @@ function handler(dispatch, getState) {
       dispatch({ type: CONTACT_RECEIVE, contacts: { [hash]: contact } });
     } else if (
       event.type === 'contact_request' &&
-      (existing == null || existing.type === 'added')
+      (existing == null || existing.type === 'added' || existing.type === 'sent_request')
     ) {
       // Automatically accept exesting contact
       const contact = {
