@@ -141,7 +141,17 @@ export function inviteContact(publicKey, address) {
     const publicKeyHex = hexValueType(publicKey);
     const hash = sum(publicKeyHex);
 
-    keyUtils.isValidPubKey(publicKeyHex, account.publicKey, contacts[hash]);
+    keyUtils.isValidPubKey(publicKeyHex, account.publicKey);
+
+    const contact = contacts[hash];
+    if (contact && contact.type === 'received_request') {
+      dispatch(acceptContact(publicKeyHex, address));
+      return;
+    }
+
+    if (contact && contact.type !== 'sent_request') {
+      throw new Error('The contact already present in your list of contacts');
+    }
 
     const { client } = resolve();
     const [contactTopic, sharedTopic] = await Promise.all([
@@ -162,13 +172,16 @@ export function inviteContact(publicKey, address) {
     };
     await client.pss.sendAsym(publicKeyHex, contactTopic, pssMessage);
 
-    const contact = {
-      key: publicKeyHex,
-      topic: sharedTopic,
-      type: 'sent_request'
-    };
-
-    dispatch({ type: CONTACT_REQUEST, contacts: { [hash]: contact } });
+    dispatch({
+      type: CONTACT_REQUEST,
+      contacts: {
+        [hash]: {
+          key: publicKeyHex,
+          topic: sharedTopic,
+          type: 'sent_request'
+        }
+      }
+    });
   };
 }
 

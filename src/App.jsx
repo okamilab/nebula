@@ -8,7 +8,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import Layout from './base/containers/Layout';
-import Home from './base/pages/Home';
+// import Home from './base/pages/Home';
 import Settings from './settings/pages/Settings';
 import Profile from './account/pages/Profile';
 import Messenger from './messenger';
@@ -28,10 +28,11 @@ function App({ settings }) {
       <Helmet titleTemplate='Nebula - %s' />
       <Layout isNarrow={isNarrow}>
         <Switch>
-          <Route exact path={settings.home} component={Home} />
+          {/* <Route exact path={settings.home} component={Home} /> */}
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/profile' component={Profile} />
-          <Route exact path='/messenger' render={(props) => (<Messenger {...props} isNarrow={isNarrow} />)} />
+          {/* <Route exact path='/messenger' render={(props) => (<Messenger {...props} isNarrow={isNarrow} />)} /> */}
+          <Route exact path='/' render={(props) => (<Messenger {...props} isNarrow={isNarrow} />)} />
           <Route exact path='/messenger/contact/:key' render={(props) => (<Contact {...props} isNarrow={isNarrow} />)} />
           <Route exact path='/messenger/chat/:key' render={(props) => (<Chat {...props} isNarrow={isNarrow} />)} />
           <Route exact path='/messenger/control' render={(props) => (<ControlPanel {...props} isNarrow={isNarrow} />)} />
