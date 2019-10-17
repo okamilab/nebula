@@ -10,6 +10,11 @@ You can run the dapp http://nebuladapp.net. In order to run swarm take a look [#
 
 **NOTE:** You need to force insecure connection (`http://`) in order to connect to swarm WebSocket (`ws://`). It is not possible to connect to secure WebSocket at the moment.
 
+# Playground
+In order to play with Nebula you can use predefined nodes:
+* http://nebuladapp.net/?pss=ws://77.120.119.9:8547
+* http://nebuladapp.net/?pss=ws://77.120.119.9:8548
+
 # Roadmap
 * Improvements
 	* [x] Restore connection after lose [#21](https://github.com/okamilab/nebula/issues/21)
@@ -45,7 +50,7 @@ You can run the dapp http://nebuladapp.net. In order to run swarm take a look [#
 	* Notification
 		* [ ] Contact mutations (received request, added or declined request events)
 		* [ ] Chat mutations (received message, contact left events)
-		* [ ] DApp events (connection lost, etc.)
+		* [x] DApp events (connection lost, etc.)
 		
 * ENS
 	* [ ] Investigate possibility of ENS integration, using ENS for contacts and onw PSS address
@@ -70,7 +75,7 @@ You can run the dapp http://nebuladapp.net. In order to run swarm take a look [#
 
 * Hosting
 	* [x] Buy ENS name
-	* [ ] Buy domain name (?)
+	* [x] Buy domain name
 	* [ ] Proxy from domain name to ENS (?)
 
 ## Introduction
