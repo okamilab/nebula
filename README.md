@@ -53,7 +53,7 @@ In order to play with Nebula you can use predefined nodes:
 		* [x] DApp events (connection lost, etc.)
 		
 * ENS
-	* [ ] Investigate possibility of ENS integration, using ENS for contacts and onw PSS address
+	* [ ] Investigate possibility of ENS integration, using ENS for contacts and own PSS address
 	* [ ] Experiment with ENS by extending the protocol for using PSS addresses
 	
 * Research

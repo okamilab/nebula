@@ -81,7 +81,7 @@ class Contact extends Component {
                   <Key
                     name='address'
                     value={address}
-                    label='Address' />
+                    label='Overlay address' />
                 </Grid>
               </Grid>
             </Paper>

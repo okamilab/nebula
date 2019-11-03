@@ -49,7 +49,7 @@ class Profile extends Component {
       <Grid
         container
         spacing={0}
-        justify="center"
+        justify='center'
         style={{ paddingTop: 10 }}
       >
         <Grid item md={6} sm={8} xs={11}>
@@ -67,16 +67,16 @@ class Profile extends Component {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  id="username"
-                  label="User name"
+                  id='username'
+                  label='User name'
                   onChange={(e) => this.setState({ username: e.target.value })}
                   defaultValue={username}
                 />
               </Grid>
               <Grid item xs={3}>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   onClick={this.save}
                   className={classes.button}
                   disabled={!this.state.username}>
@@ -86,16 +86,16 @@ class Profile extends Component {
               <Grid item xs={3}></Grid>
               <Grid item xs={9}>
                 <Key
-                  name="publicKey"
+                  name='publicKey'
                   value={publicKey}
-                  label="Public key" />
+                  label='Public key' />
               </Grid>
               <Grid item xs={3}></Grid>
               <Grid item xs={9}>
                 <Key
-                  name="overlayAddress"
+                  name='overlayAddress'
                   value={overlayAddress}
-                  label="Address" />
+                  label='Overlay address' />
               </Grid>
             </Grid>
           </Paper>

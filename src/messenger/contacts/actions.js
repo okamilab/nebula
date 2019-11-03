@@ -5,6 +5,7 @@ import sum from 'hash-sum';
 import keyUtils from './../../base/key';
 import { createChat } from './../chats/actions';
 import { getAddress } from './../../base/fn';
+import * as api from './api';
 
 export const CONTACTS_RESTORE = 'CONTACTS_RESTORE';
 export const CONTACT_SUBSCRIBE = 'CONTACT_SUBSCRIBE';
@@ -135,13 +136,25 @@ function createRandomString() {
     .slice(2);
 }
 
-export function inviteContact(publicKey, address) {
+export function inviteContact(query, address) {
   return async (dispatch, getState, resolve) => {
+    const { httpClient, client } = resolve();
+
+    let publicKey = query;
+    if (!keyUtils.isValidPubKey(publicKey)) {
+      const data = await api.fetchPublicKey(httpClient, query);
+      if (!data || !data.publicKey) {
+        throw new Error('Public key not found');
+      }
+
+      publicKey = keyUtils.ensurePrefix(data.publicKey);
+    }
+
     const { account, contacts, settings } = getState();
     const publicKeyHex = hexValueType(publicKey);
     const hash = sum(publicKeyHex);
 
-    keyUtils.isValidPubKey(publicKeyHex, account.publicKey);
+    keyUtils.validatePubKey(publicKeyHex, account.publicKey);
 
     const contact = contacts[hash];
     if (contact && contact.type === 'received_request') {
@@ -153,7 +166,6 @@ export function inviteContact(publicKey, address) {
       throw new Error('The contact already present in your list of contacts');
     }
 
-    const { client } = resolve();
     const [contactTopic, sharedTopic] = await Promise.all([
       client.pss.stringToTopic(publicKeyHex),
       client.pss.stringToTopic(createRandomString()),

@@ -5,11 +5,11 @@ import { routerMiddleware } from 'connected-react-router';
 
 import reducer from './reducer';
 import LocalStorageMiddleware from './middlewares/localStorage';
-import ClientResolver from './client';
+import ClientResolver from './clientResolver';
 
 export const history = createHashHistory();
 
-export function configureStore(initialState) {
+export function configureStore(initialState, httpClient) {
   // Use compose function provided by Redux DevTools if the extension is installed.
   const compose = (process.env.NODE_ENV === 'development'
     && typeof window === 'object'
@@ -31,7 +31,8 @@ export function configureStore(initialState) {
     thunk.withExtraArgument(() => {
       return {
         client: clientResolver.client,
-        connection: clientResolver.subject.connectionStatus
+        connection: clientResolver.subject.connectionStatus,
+        httpClient
       }
     })
   ];

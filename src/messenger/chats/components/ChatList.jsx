@@ -47,12 +47,12 @@ class ChatList extends Component {
 ChatList.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  chats: PropTypes.array,
+  chats: PropTypes.object,
 };
 
 export default compose(
   connect((state) => {
-    const { chats } = state || [];
+    const { chats } = state || {};
     return { chats };
   }),
   withStyles(styles)
