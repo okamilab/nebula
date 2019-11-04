@@ -16,6 +16,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
 import { Add, ExpandMore } from '@material-ui/icons';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { inviteContact } from './../actions';
 
@@ -94,7 +95,8 @@ class ContactInvite extends Component {
       modal: false,
       publicKey: '',
       address: '',
-      error: ''
+      error: '',
+      isInvitiong: false
     };
 
     this.toggle = this.toggle.bind(this);
@@ -108,7 +110,8 @@ class ContactInvite extends Component {
 
     this.setState({
       error: null,
-      modal: !this.state.modal
+      modal: !this.state.modal,
+      isInviting: false
     });
   }
 
@@ -120,7 +123,7 @@ class ContactInvite extends Component {
 
   render() {
     const { classes } = this.props;
-    const { error } = this.state;
+    const { error, isInviting } = this.state;
 
     return (
       <>
@@ -133,11 +136,11 @@ class ContactInvite extends Component {
           aria-labelledby="form-dialog-title"
           fullWidth={true}
           maxWidth={'sm'}
-          onClick={e => e.stopPropagation() }
+          onClick={e => e.stopPropagation()}
         >
           <DialogTitle id="form-dialog-title">Invite contact</DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText component="div">
               {error ?
                 <SnackbarContent
                   message={error.message || error}
@@ -177,11 +180,12 @@ class ContactInvite extends Component {
             </Button>
             <Button
               onClick={this.invite}
-              disabled={!this.state.publicKey}
+              disabled={!this.state.publicKey || isInviting}
               variant="contained"
               color="primary">
               Send request
             </Button>
+            {isInviting && <CircularProgress size={24} />}
           </DialogActions>
         </Dialog>
       </>
@@ -191,10 +195,10 @@ class ContactInvite extends Component {
   invite = async () => {
     try {
       const { publicKey, address } = this.state
-      this.setState({ error: null });
+      this.setState({ error: null, isInviting: true });
       await this.props.dispatch(inviteContact(publicKey, address));
     } catch (error) {
-      this.setState({ error: error.message });
+      this.setState({ error: error.message, isInviting: false });
       return;
     }
 

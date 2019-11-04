@@ -49,7 +49,7 @@ class ContactRequest extends Component {
         >
           <DialogTitle id="form-dialog-title">Received contact</DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText component="div">
               <Typography noWrap>
                 Do you want to accept request from {publicKey}?
               </Typography>
