@@ -46,14 +46,14 @@ In order to play with Nebula you can use predefined nodes:
 		* [ ] Highlighting unread messages
 		* [ ] Archive chat
 		* [ ] Images preview
-		* [ ] Smiles
+		* [ ] Smiles/Emoji
 	* Notification
 		* [ ] Contact mutations (received request, added or declined request events)
 		* [ ] Chat mutations (received message, contact left events)
 		* [x] DApp events (connection lost, etc.)
 		
 * ENS
-	* [ ] Investigate possibility of ENS integration, using ENS for contacts and own PSS address
+	* [x] Investigate possibility of ENS integration, using ENS for contacts <s>and own PSS address</s>
 	* [ ] Experiment with ENS by extending the protocol for using PSS addresses
 	
 * Research
