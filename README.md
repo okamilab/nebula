@@ -36,12 +36,12 @@ In order to play with Nebula you can use predefined nodes:
 	* [ ] Design
 		* [x] Material-UI
 	* Contact management
-		* [ ] Add posibility to change contact usename
+		* [ ] Add possibility to change contact usename
 		* [ ] Manage of declined contacts
 	* Chat management
-		* [ ] Add posibility to set chat name
-		* [ ] Add posibility to check chat info (participants, stat)
-		* [ ] Add posibility to leave chat
+		* [ ] Add possibility to set chat name
+		* [ ] Add possibility to check chat info (participants, stat)
+		* [ ] Add possibility to leave chat
 		* [ ] Optimize chat representation (render last X messages, the rest - on demand)
 		* [ ] Highlighting unread messages
 		* [ ] Archive chat
