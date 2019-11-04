@@ -46,7 +46,7 @@ In order to play with Nebula you can use predefined nodes:
 		* [ ] Highlighting unread messages
 		* [ ] Archive chat
 		* [ ] Images preview
-		* [ ] Smiles/Emoji
+		* [x] Smiles/Emoji
 	* Notification
 		* [ ] Contact mutations (received request, added or declined request events)
 		* [ ] Chat mutations (received message, contact left events)
@@ -71,7 +71,7 @@ In order to play with Nebula you can use predefined nodes:
 	* [ ] Unit/integration testing
 	* [x] Linting
 	* [ ] Investigate how to deploy the dapp properly
-	* [ ] Continuous deployment
+	* [x] Continuous deployment to GitHub pages
 
 * Hosting
 	* [x] Buy ENS name

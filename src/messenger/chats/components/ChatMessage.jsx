@@ -4,6 +4,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Emoji from 'react-emoji-render';
 
 import Identicon from './../../../base/components/Identicon';
 import { download } from './../actions';
@@ -80,7 +81,7 @@ class ChatMessage extends Component {
       default:
         return (
           <div className={`${classes.body} ${isOwn ? classes.ownedBody : null}`}>
-            {message.text}
+            <Emoji svg='true' text={message.text} />
           </div>
         );
     }

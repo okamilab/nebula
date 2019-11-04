@@ -8,13 +8,22 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
-import { Send } from '@material-ui/icons';
+import MuiMenu from '@material-ui/core/Menu';
+import { Send, Mood } from '@material-ui/icons';
 import sum from 'hash-sum';
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 import Layout from './../../components/Layout';
 import ChatDayDivider from './../components/ChatDayDivider';
 import ChatMessage from './../components/ChatMessage';
 import { sendMessage, sendFile } from './../actions';
+
+const Menu = withStyles({
+  list: {
+    padding: 0
+  }
+})(MuiMenu);
 
 const styles = theme => ({
   scrollContainer: {
@@ -70,10 +79,17 @@ class Chat extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { msg: '' };
+    this.state = {
+      msg: '',
+      anchorEP: null,
+      isOpenEP: false
+    };
 
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
+    this.showEP = this.showEP.bind(this);
+    this.hideEP = this.hideEP.bind(this);
+    this.addEmoji = this.addEmoji.bind(this);
   }
 
   componentDidMount() {
@@ -141,6 +157,23 @@ class Chat extends Component {
     return participants;
   }
 
+  showEP = event => {
+    this.setState({ anchorEP: event.currentTarget });
+  };
+
+  hideEP = () => {
+    this.setState({ anchorEP: null });
+  };
+
+  addEmoji = (emoji) => {
+    this.setState({
+      msg: this.state.msg.length ?
+        this.state.msg + ' ' + emoji.native :
+        emoji.native,
+      anchorEP: null
+    });
+  };
+
   render() {
     const { classes, isNarrow, chat, account } = this.props;
     if (!chat) {
@@ -152,6 +185,8 @@ class Chat extends Component {
       .sort((a, b) => a.timestamp - b.timestamp);
     const { publicKey } = account;
 
+    const { msg, anchorEP } = this.state;
+    const isOpenEP = Boolean(anchorEP);
     return (
       <>
         <Layout isNarrow={isNarrow}>
@@ -221,9 +256,16 @@ class Chat extends Component {
                     </label>
                     <Divider className={classes.divider} /> */}
                     <IconButton
+                      aria-owns={isOpenEP ? 'emoji-picker' : undefined}
+                      aria-haspopup='true'
+                      onClick={this.showEP}
+                      className={classes.iconButton}>
+                      <Mood />
+                    </IconButton>
+                    <IconButton
                       className={classes.iconButton}
                       onClick={this.send}
-                      disabled={!this.state.msg}>
+                      disabled={!msg}>
                       <Send />
                     </IconButton>
                   </Paper>
@@ -231,6 +273,23 @@ class Chat extends Component {
               </Grid>
             </Grid>
           </Grid>
+          <Menu
+            id='emoji-picker'
+            anchorEl={anchorEP}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={isOpenEP}
+            onClose={this.hideEP}
+            keepMounted
+          >
+            <Picker onSelect={this.addEmoji} native={true} />
+          </Menu>
         </div>
       </>
     );
