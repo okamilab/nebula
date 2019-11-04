@@ -104,7 +104,6 @@ class ContactInvite extends Component {
   toggle(e) {
     if (e) {
       e.stopPropagation();
-      e.nativeEvent.stopImmediatePropagation();
     }
 
     this.setState({
@@ -134,6 +133,7 @@ class ContactInvite extends Component {
           aria-labelledby="form-dialog-title"
           fullWidth={true}
           maxWidth={'sm'}
+          onClick={e => e.stopPropagation() }
         >
           <DialogTitle id="form-dialog-title">Invite contact</DialogTitle>
           <DialogContent>
