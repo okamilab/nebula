@@ -1,9 +1,9 @@
 [![CircleCI](https://circleci.com/gh/okamilab/nebula/tree/master.svg?style=svg)](https://circleci.com/gh/okamilab/nebula/tree/master)
 
 # Nebula
-Messenger dapp based on PSS protocol over swarm.
+Messager dapp based on PSS over Ethereum Swarm. We built a basic communication protocol over PSS which includes typed messages allowing to send invitation requests, responses and direct messages. We implemented UI for the dapp on React. The dapp contains different modules - chat, contact, setting. The setting module allows connecting the dapp to different Swarm nodes, as well as set security settings. The contact module allows managing contacts, resolving contacts by publicKey, address or ENS name. The chat module allows managing chats. 
 
-The project works with local instanse of swarm, default endpoint `ws://127.0.0.1:8546`
+As our next steps, we plan to compile Swarm to WebAssembly in order to run it in web-browser as well as build the mobile library to run the dapp on mobile.
 
 # Try it
 You can run the dapp http://nebuladapp.net. In order to run swarm take a look [#Running nebula](https://github.com/okamilab/nebula#running-nebula) section.
@@ -103,6 +103,9 @@ This will build both the server and client bundle in the `build/`
 directory.
 
 ## Running nebula
+
+The project works with local instanse of swarm, default endpoint `ws://127.0.0.1:8546`. It can be changed on settings page.
+
 1. First important step is to [run swarm](https://swarm-guide.readthedocs.io/en/latest/gettingstarted.html)
 
 	The command may look like:
